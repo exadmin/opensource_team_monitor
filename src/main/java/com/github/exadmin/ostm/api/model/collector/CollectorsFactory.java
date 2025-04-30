@@ -28,17 +28,4 @@ public class CollectorsFactory {
             collector.collectDataInto(theReportModel);
         }
     }
-
-    public void saveResults(Path outputFilePath) {
-        for (TheCategory theCat : theReportModel.getCategories()) {
-            System.out.println("Category " + theCat);
-
-            for (TheEntity entity : theCat.getEntities()) {
-                for (TheMetric metric : theCat.getMetrics()) {
-                    TheValue value = theCat.getValue(entity, metric);
-                    System.out.println("  value = " + value);
-                }
-            }
-        }
-    }
 }

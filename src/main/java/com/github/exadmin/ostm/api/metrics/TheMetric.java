@@ -2,10 +2,11 @@ package com.github.exadmin.ostm.api.metrics;
 
 public class TheMetric {
     private final String id;
-    private String title;
+    private final String title;
 
-    TheMetric(String id) {
+    TheMetric(String id, String title) {
         this.id = id;
+        this.title = title;
     }
 
     public String getId() {
@@ -16,7 +17,11 @@ public class TheMetric {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    @Override
+    public String toString() {
+        return "TheMetric{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

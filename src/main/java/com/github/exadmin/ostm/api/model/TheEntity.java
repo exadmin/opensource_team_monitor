@@ -24,4 +24,12 @@ public class TheEntity {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public String toString() {
+        return "TheEntity{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }

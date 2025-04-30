@@ -2,6 +2,7 @@ package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.api.model.TheReportModel;
 import com.github.exadmin.ostm.api.model.collector.CollectorsFactory;
+import com.github.exadmin.ostm.api.persistence.ReportModelPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 
 public class OpenSourceTeamMonitorApp {
     private static final Logger log = LoggerFactory.getLogger(OpenSourceTeamMonitorApp.class);
@@ -37,7 +37,8 @@ public class OpenSourceTeamMonitorApp {
         colFactory.runCollectors();
 
         // Step3: Persist data
-        colFactory.saveResults(outputPath);
+        ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
+        reportModelPersister.saveToFile(outputPath);
     }
 
     private static String getTokenFromFile(String fileName) {

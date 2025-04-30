@@ -11,11 +11,12 @@ import java.util.Objects;
 
 public class TheCategory {
     private final String id;
-    private String title;
-    private Map2D<TheEntity, TheMetric, TheValue> map2D;
+    private final String title;
+    private final Map2D<TheEntity, TheMetric, TheValue> map2D;
 
-    TheCategory(String id) {
+    TheCategory(String id, String title) {
         this.id = id;
+        this.title = title;
         this.map2D = new Simple2DMap<>();
     }
 
@@ -41,10 +42,6 @@ public class TheCategory {
 
     public List<TheMetric> getMetrics() {
         return map2D.getAllColumns();
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public List<TheEntity> getEntities() {
