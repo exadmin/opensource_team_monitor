@@ -1,9 +1,10 @@
 package com.github.exadmin.ostm.api.model;
 
 import com.github.exadmin.ostm.api.model.categories.TheCategory;
-import com.github.exadmin.ostm.api.metrics.TheMetric;
+import com.github.exadmin.ostm.api.model.metrics.TheMetric;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class TheReportModel {
@@ -21,6 +22,7 @@ public class TheReportModel {
     }
 
     public List<TheCategory> getCategories() {
+        if (categoriesCache == null) return Collections.emptyList();
         return categoriesCache;
     }
 }

@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.api.metrics;
+package com.github.exadmin.ostm.api.model.metrics;
 
 public class TheMetric {
     private final String id;

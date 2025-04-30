@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.api.metrics.TheMetric;
+import com.github.exadmin.ostm.api.model.metrics.TheMetric;
 import com.github.exadmin.ostm.api.model.TheEntity;
 import com.github.exadmin.ostm.api.model.TheReportModel;
 import com.github.exadmin.ostm.api.model.TheValue;
