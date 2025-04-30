@@ -1,11 +1,10 @@
-package com.github.exadmin.ostm.api.cache;
+package com.github.exadmin.ostm.api.github.cache;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.api.model.categories.CategoriesFactory;
-import com.github.exadmin.ostm.api.model.collector.Context;
+import com.github.exadmin.ostm.api.model.collector.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +19,10 @@ public class CacheManager {
     private static final Logger log = LoggerFactory.getLogger(CacheManager.class);
     private static final TypeReference<CacheContainer> TYPE_REFERENCE = new TypeReference<CacheContainer>() {};
 
-    public static List<Map<String, Object>> getFromCache(String httpGetQueryUrl, Context context) {
+    public static List<Map<String, Object>> getFromCache(String httpGetQueryUrl, ApplicationContext applicationContext) {
         try {
             log.trace("Attepmt to load data from cache for the url = '{}'", httpGetQueryUrl);
-            Path cacheDir = context.getCacheDir();
+            Path cacheDir = applicationContext.getCacheDir();
             Path filePath = Paths.get(cacheDir.toString(), getFileName(httpGetQueryUrl));
             if (!filePath.toFile().exists() || !filePath.toFile().isFile()) {
                 log.trace("No cache file is found for url = '{}'", httpGetQueryUrl);
@@ -48,14 +47,14 @@ public class CacheManager {
         }
     }
 
-    public static void putToCache(String httpGetQueryUrl, List<Map<String, Object>> dataMapList, long ttlSeconds, Context context) {
+    public static void putToCache(String httpGetQueryUrl, List<Map<String, Object>> dataMapList, long ttlSeconds, ApplicationContext applicationContext) {
         CacheContainer cacheContainer = new CacheContainer();
         cacheContainer.setCreatedWhen(System.currentTimeMillis());
         cacheContainer.setHttpGetQueryUrl(httpGetQueryUrl);
         cacheContainer.setTtlInSeconds(ttlSeconds);
         cacheContainer.setDataMapList(dataMapList);
 
-        Path cacheDir = context.getCacheDir();
+        Path cacheDir = applicationContext.getCacheDir();
         Path filePath = Paths.get(cacheDir.toString(), getFileName(httpGetQueryUrl));
         File file = filePath.toFile();
         if (file.isFile() && file.exists()) {

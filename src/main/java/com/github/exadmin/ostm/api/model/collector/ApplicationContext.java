@@ -2,7 +2,7 @@ package com.github.exadmin.ostm.api.model.collector;
 
 import java.nio.file.Path;
 
-public class Context {
+public class ApplicationContext {
     private String gitHubToken;
     private Path cacheDir;
 

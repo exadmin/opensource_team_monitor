@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractCollector {
     private Logger log;
 
-    public abstract void collectDataInto(TheReportModel theReportModel, Context context);
+    public abstract void collectDataInto(TheReportModel theReportModel, ApplicationContext applicationContext);
 
     protected Logger getLog() {
         if (log == null) {

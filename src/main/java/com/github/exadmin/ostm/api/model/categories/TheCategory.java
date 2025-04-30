@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.api.model.categories;
 
-import com.github.exadmin.ostm.api.model.metrics.TheMetric;
 import com.github.exadmin.ostm.api.model.TheEntity;
 import com.github.exadmin.ostm.api.model.TheValue;
+import com.github.exadmin.ostm.api.model.metrics.TheMetric;
 import com.github.exadmin.ostm.api.utils.Map2D;
 import com.github.exadmin.ostm.api.utils.Simple2DMap;
 

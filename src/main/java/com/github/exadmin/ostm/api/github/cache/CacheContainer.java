@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.api.cache;
+package com.github.exadmin.ostm.api.github.cache;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

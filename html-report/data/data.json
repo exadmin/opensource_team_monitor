@@ -1,1 +1,1 @@
-{"tables":[{"title":"Team Summary","columns":[{"data":"metric:github-login","title":"GitHub login"}],"data":[{"metric:github-login":"name1"},{"metric:github-login":"name2"},{"metric:github-login":"name3"},{"metric:github-login":"name4"},{"metric:github-login":"name5"}]}]}
+{"tables":[{"title":"Team Summary","columns":[{"data":"metric:github-login","title":"GitHub login"}],"data":[{"metric:github-login":"lis0x90"},{"metric:github-login":"TaurMorchant"},{"metric:github-login":"dependabot[bot]"},{"metric:github-login":"web-flow"}]}]}

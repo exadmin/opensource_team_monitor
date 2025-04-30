@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.api.model.TheReportModel;
+import com.github.exadmin.ostm.api.model.collector.ApplicationContext;
 import com.github.exadmin.ostm.api.model.collector.CollectorsFactory;
-import com.github.exadmin.ostm.api.model.collector.Context;
 import com.github.exadmin.ostm.api.persistence.ReportModelPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +18,14 @@ public class OpenSourceTeamMonitorApp {
 
     public static void main(String[] args) {
         // Step1: Initiate applciation
-        final Context context = new Context();
+        final ApplicationContext applicationContext = new ApplicationContext();
         if (args.length != 2) {
             log.error("Usage: OpenSourceTeamMonitorApp $FILE_WITH_GITHUB_TOKEN_TO_READ$ $FILE_TO_WRITE_RESULTS_INTO$");
             System.exit(-1);
         }
 
         final String gitHubToken = getTokenFromFile(args[0]);
-        context.setGitHubToken(gitHubToken);
+        applicationContext.setGitHubToken(gitHubToken);
         if (gitHubToken == null || gitHubToken.isEmpty()) {
             log.error("GitHub token is required for the processing. Provide it via external file. Terminating");
             System.exit(-1);
@@ -34,7 +34,7 @@ public class OpenSourceTeamMonitorApp {
         // Step2: Prepare cache folder (if not exsits)
         Path cacheFolder = Paths.get("./cache");
         cacheFolder.toFile().mkdirs();
-        context.setCacheDir(cacheFolder);
+        applicationContext.setCacheDir(cacheFolder);
 
         final Path outputPath = Paths.get(args[1]);
 
@@ -44,7 +44,7 @@ public class OpenSourceTeamMonitorApp {
         CollectorsFactory colFactory = new CollectorsFactory(reportModel);
 
         // Step2: Run collectors
-        colFactory.runCollectors(context);
+        colFactory.runCollectors(applicationContext);
 
         // Step3: Persist data
         ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);

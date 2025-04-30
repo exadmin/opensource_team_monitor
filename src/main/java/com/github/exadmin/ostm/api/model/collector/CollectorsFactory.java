@@ -20,9 +20,9 @@ public class CollectorsFactory {
         this.theReportModel = theReportModel;
     }
 
-    public void runCollectors(Context context) {
+    public void runCollectors(ApplicationContext applicationContext) {
         for (AbstractCollector collector : collectors) {
-            collector.collectDataInto(theReportModel, context);
+            collector.collectDataInto(theReportModel, applicationContext);
         }
     }
 }
