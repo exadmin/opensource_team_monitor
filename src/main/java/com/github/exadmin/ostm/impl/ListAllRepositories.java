@@ -25,16 +25,16 @@ public class ListAllRepositories extends BasicAbstractCollector {
             newSheet.setTitle("All Repositories");
         });
 
-        final TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
-            newColumn.setTitle("Repository Name");
-            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(1);
-        });
-
         final TheColumn colRepoNumber = theSheet.getColumn("column:number", newColumn -> {
             newColumn.setTitle("Number");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
             newColumn.setRenderingOrder(0);
+        });
+
+        final TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
+            newColumn.setTitle("Repository Name");
+            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+            newColumn.setRenderingOrder(1);
         });
 
         // fetch all repositories
