@@ -46,7 +46,7 @@ public class TheSheet {
         return new ArrayList<>(rows);
     }
 
-    public List<String> getRowsDirectly() {
+    List<String> getRowsDirectly() {
         return rows;
     }
 
@@ -67,5 +67,36 @@ public class TheSheet {
 
         columns.add(theColumn);
         return theColumn;
+    }
+
+    public void sortBy(TheColumn column, Comparator<TheCellValue> comparator) {
+        // define keys which are know and unknown to the mentioned column (as sheet can contain more data than exists in the column)
+        Set<String> mentionedColumnKeys = column.getDataMap().keySet();
+        List<String> unknownToColumnKeys = new ArrayList<>(rows);
+        unknownToColumnKeys.removeAll(mentionedColumnKeys);
+
+        // fulfill column with null for each unknown key
+        List<Map.Entry<String, TheCellValue>> entryList = new ArrayList<>(column.getDataMap().entrySet());
+        for (String rowId : unknownToColumnKeys) {
+            Map.Entry<String, TheCellValue> me = new AbstractMap.SimpleEntry<>(rowId, new TheCellValue(""));
+            entryList.add(me);
+        }
+
+        // do sorting
+        entryList.sort((entry1, entry2) -> {
+            return comparator.compare(entry1.getValue(), entry2.getValue());
+        });
+
+        // refill rows & column data-map by reordered values
+        column.getDataMap().clear();
+        rows.clear();
+
+        for (Map.Entry<String, TheCellValue> entry : entryList) {
+            column.getDataMap().put(entry.getKey(), entry.getValue());
+            rows.add(entry.getKey());
+        }
+
+        // drop values from mentioned column for unexisted keys (can be done on prev step actually)
+        column.getDataMap().keySet().retainAll(rows);
     }
 }

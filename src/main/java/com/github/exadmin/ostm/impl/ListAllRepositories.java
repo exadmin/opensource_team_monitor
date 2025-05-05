@@ -9,7 +9,7 @@ import com.github.exadmin.ostm.api.model.TheColumn;
 import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.api.model.TheSheet;
 
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,11 @@ public class ListAllRepositories extends BasicAbstractCollector {
 
         final TheSheet theSheet = theReportTable.getSheet("sheet:all-repos", newSheet -> {
             newSheet.setTitle("All Repositories");
+        });
 
+        final TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
+            newColumn.setTitle("Repository Name");
+            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         // fetch all repositories
@@ -35,11 +39,6 @@ public class ListAllRepositories extends BasicAbstractCollector {
                 String foundRepositoryName = map.get("name").toString();
                 String rowId = "row:" + foundRepositoryName;
 
-                TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
-                    newColumn.setTitle("Repository Name");
-                    newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-                });
-
                 TheCellValue cellValue = new TheCellValue(foundRepositoryName);
                 colRepoName.addValue(rowId, cellValue);
             }
@@ -48,7 +47,7 @@ public class ListAllRepositories extends BasicAbstractCollector {
         }
 
         // sort repositories and assign line numbers to them
-        Collections.sort(theSheet.getRowsDirectly());
+        theSheet.sortBy(colRepoName, Comparator.comparing(v -> v.getValue() == null ? "" : v.getValue().toLowerCase()));
 
         int number = 1;
         for (String rowId : theSheet.getRows()) {

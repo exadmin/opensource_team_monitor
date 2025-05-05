@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.api.model;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class TheColumn {
@@ -15,7 +15,7 @@ public class TheColumn {
 
     TheColumn(String id, TheSheet parent) {
         this.id = id;
-        this.dataMap = new HashMap<>();
+        this.dataMap = new LinkedHashMap<>();
         this.cssClassName = TD_CENTER_MIDDLE;
         this.parent = parent;
     }
@@ -52,5 +52,9 @@ public class TheColumn {
 
     public TheCellValue getValue(String rowId) {
         return dataMap.get(rowId);
+    }
+
+    Map<String, TheCellValue> getDataMap() {
+        return dataMap;
     }
 }
