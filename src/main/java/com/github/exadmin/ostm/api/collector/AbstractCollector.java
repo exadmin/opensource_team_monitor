@@ -1,13 +1,13 @@
-package com.github.exadmin.ostm.api.model.collector;
+package com.github.exadmin.ostm.api.collector;
 
-import com.github.exadmin.ostm.api.model.TheReportModel;
+import com.github.exadmin.ostm.api.model.TheReportTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class AbstractCollector {
     private Logger log;
 
-    public abstract void collectDataInto(TheReportModel theReportModel, ApplicationContext applicationContext);
+    public abstract void collectDataInto(TheReportTable theReportTable, ApplicationContext applicationContext);
 
     protected Logger getLog() {
         if (log == null) {

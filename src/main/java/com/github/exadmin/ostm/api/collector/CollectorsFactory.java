@@ -1,6 +1,6 @@
-package com.github.exadmin.ostm.api.model.collector;
+package com.github.exadmin.ostm.api.collector;
 
-import com.github.exadmin.ostm.api.model.TheReportModel;
+import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.impl.ListAllRepositories;
 import com.github.exadmin.ostm.impl.TeamKnownNames;
 
@@ -14,15 +14,15 @@ public class CollectorsFactory {
         collectors.add(new ListAllRepositories());
     }
 
-    private TheReportModel theReportModel;
+    private TheReportTable theReportTable;
 
-    public CollectorsFactory(TheReportModel theReportModel) {
-        this.theReportModel = theReportModel;
+    public CollectorsFactory(TheReportTable theReportTable) {
+        this.theReportTable = theReportTable;
     }
 
     public void runCollectors(ApplicationContext applicationContext) {
         for (AbstractCollector collector : collectors) {
-            collector.collectDataInto(theReportModel, applicationContext);
+            collector.collectDataInto(theReportTable, applicationContext);
         }
     }
 }

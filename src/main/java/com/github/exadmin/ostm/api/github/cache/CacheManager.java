@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.api.model.collector.ApplicationContext;
+import com.github.exadmin.ostm.api.collector.ApplicationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

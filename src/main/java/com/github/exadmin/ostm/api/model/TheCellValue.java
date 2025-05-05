@@ -1,9 +1,9 @@
 package com.github.exadmin.ostm.api.model;
 
-public class TheValue {
+public class TheCellValue {
     private String value;
 
-    public TheValue(String value) {
+    public TheCellValue(String value) {
         this.value = value;
     }
 
@@ -17,8 +17,6 @@ public class TheValue {
 
     @Override
     public String toString() {
-        return "TheValue{" +
-                "value='" + value + '\'' +
-                '}';
+        return value;
     }
 }

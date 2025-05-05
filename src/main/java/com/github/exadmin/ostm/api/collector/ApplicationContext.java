@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.api.model.collector;
+package com.github.exadmin.ostm.api.collector;
 
 import java.nio.file.Path;
 

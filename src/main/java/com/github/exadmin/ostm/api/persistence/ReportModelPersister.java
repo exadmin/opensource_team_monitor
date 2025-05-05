@@ -4,11 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.api.model.TheEntity;
-import com.github.exadmin.ostm.api.model.TheReportModel;
-import com.github.exadmin.ostm.api.model.TheValue;
-import com.github.exadmin.ostm.api.model.categories.TheCategory;
-import com.github.exadmin.ostm.api.model.metrics.TheMetric;
+import com.github.exadmin.ostm.api.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,34 +15,34 @@ import java.util.Map;
 public class ReportModelPersister {
     private static final Logger log = LoggerFactory.getLogger(ReportModelPersister.class);
 
-    private final TheReportModel reportModel;
+    private final TheReportTable reportModel;
 
-    public ReportModelPersister(TheReportModel reportModel) {
+    public ReportModelPersister(TheReportTable reportModel) {
         this.reportModel = reportModel;
     }
 
     public void saveToFile(Path outputFilePath) {
         JsonRootContainer rootContainer = new JsonRootContainer();
 
-        for (TheCategory cat : reportModel.getCategories()) {
+        for (TheSheet sheet : reportModel.getSheets()) {
             JsonTable jsonTable = new JsonTable(rootContainer);
-            jsonTable.setTitle(cat.getTitle());
+            jsonTable.setTitle(sheet.getTitle());
 
             // register metric-columns in the current table
-            for (TheMetric metric : cat.getMetrics()) {
+            for (TheColumn theColumn : sheet.getColumns()) {
                 JsonColumn jsonColumn = new JsonColumn(jsonTable);
-                jsonColumn.setData(metric.getId());
-                jsonColumn.setTitle(metric.getTitle());
-                jsonColumn.setClassName(jsonColumn.getClassName());
+                jsonColumn.setData(theColumn.getId());
+                jsonColumn.setTitle(theColumn.getTitle());
+                jsonColumn.setClassName(theColumn.getCssClassName());
             }
 
             // add data
-            for (TheEntity entity : cat.getEntities()) {
+            for (String rowId : sheet.getRows()) {
                 Map<String, Object> dataMap = new HashMap<>();
 
-                for (TheMetric metric : cat.getMetrics()) {
-                    TheValue value = cat.getValue(entity, metric);
-                    dataMap.put(metric.getId(), value.getValue());
+                for (TheColumn theColumn : sheet.getColumns()) {
+                    TheCellValue theCellValue = theColumn.getValue(rowId);
+                    dataMap.put(theColumn.getId(), theCellValue.getValue());
                 }
 
                 jsonTable.addDataMap(dataMap);

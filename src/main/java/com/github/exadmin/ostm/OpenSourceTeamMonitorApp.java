@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm;
 
-import com.github.exadmin.ostm.api.model.TheReportModel;
-import com.github.exadmin.ostm.api.model.collector.ApplicationContext;
-import com.github.exadmin.ostm.api.model.collector.CollectorsFactory;
+import com.github.exadmin.ostm.api.collector.ApplicationContext;
+import com.github.exadmin.ostm.api.collector.CollectorsFactory;
+import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.api.persistence.ReportModelPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ public class OpenSourceTeamMonitorApp {
 
 
 
-        TheReportModel reportModel = new TheReportModel();
+        TheReportTable reportModel = new TheReportTable();
         CollectorsFactory colFactory = new CollectorsFactory(reportModel);
 
         // Step2: Run collectors
