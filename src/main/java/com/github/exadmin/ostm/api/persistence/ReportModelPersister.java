@@ -28,6 +28,9 @@ public class ReportModelPersister {
             JsonTable jsonTable = new JsonTable(rootContainer);
             jsonTable.setTitle(sheet.getTitle());
 
+            // do columns sorting to define rendering order
+            sheet.sortColumnsByRenderingOrder();
+
             // register metric-columns in the current table
             for (TheColumn theColumn : sheet.getColumns()) {
                 JsonColumn jsonColumn = new JsonColumn(jsonTable);

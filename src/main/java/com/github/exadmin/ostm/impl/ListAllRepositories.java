@@ -28,6 +28,13 @@ public class ListAllRepositories extends BasicAbstractCollector {
         final TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
             newColumn.setTitle("Repository Name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+            newColumn.setRenderingOrder(1);
+        });
+
+        final TheColumn colRepoNumber = theSheet.getColumn("column:number", newColumn -> {
+            newColumn.setTitle("Number");
+            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+            newColumn.setRenderingOrder(0);
         });
 
         // fetch all repositories
@@ -51,11 +58,6 @@ public class ListAllRepositories extends BasicAbstractCollector {
 
         int number = 1;
         for (String rowId : theSheet.getRows()) {
-            TheColumn colRepoNumber = theSheet.getColumn("column:number", newColumn -> {
-                newColumn.setTitle("Number");
-                newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            });
-
             TheCellValue cellValue = new TheCellValue("" + number);
             colRepoNumber.addValue(rowId, cellValue);
 

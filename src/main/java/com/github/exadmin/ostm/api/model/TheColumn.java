@@ -12,6 +12,7 @@ public class TheColumn {
     private final Map<String, TheCellValue> dataMap;
     private String cssClassName;
     private final TheSheet parent;
+    private int renderingOrder;
 
     TheColumn(String id, TheSheet parent) {
         this.id = id;
@@ -56,5 +57,13 @@ public class TheColumn {
 
     Map<String, TheCellValue> getDataMap() {
         return dataMap;
+    }
+
+    public int getRenderingOrder() {
+        return renderingOrder;
+    }
+
+    public void setRenderingOrder(int renderingOrder) {
+        this.renderingOrder = renderingOrder;
     }
 }

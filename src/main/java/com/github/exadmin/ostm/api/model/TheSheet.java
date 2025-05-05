@@ -99,4 +99,15 @@ public class TheSheet {
         // drop values from mentioned column for unexisted keys (can be done on prev step actually)
         column.getDataMap().keySet().retainAll(rows);
     }
+
+    public void sortColumnsByRenderingOrder() {
+        columns.sort((column1, column2) -> {
+            int result = column1.getRenderingOrder() - column2.getRenderingOrder();
+            if (result != 0) return result;
+            String title1 = column1.getTitle() == null ? "" : column1.getTitle();
+            String title2 = column2.getTitle() == null ? "" : column2.getTitle();
+
+            return title1.compareTo(title2);
+        });
+    }
 }
