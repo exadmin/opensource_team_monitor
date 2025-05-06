@@ -1,9 +1,8 @@
 package com.github.exadmin.ostm.impl;
 
-import com.github.exadmin.ostm.api.collector.ApplicationContext;
 import com.github.exadmin.ostm.api.collector.BasicAbstractCollector;
-import com.github.exadmin.ostm.api.github.GitHubRESTApiCaller;
-import com.github.exadmin.ostm.api.github.GitHubResponse;
+import com.github.exadmin.ostm.api.github.GitHubFacade;
+import com.github.exadmin.ostm.api.github.GitHubRepository;
 import com.github.exadmin.ostm.api.model.TheCellValue;
 import com.github.exadmin.ostm.api.model.TheColumn;
 import com.github.exadmin.ostm.api.model.TheReportTable;
@@ -11,16 +10,11 @@ import com.github.exadmin.ostm.api.model.TheSheet;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 public class ListAllRepositories extends BasicAbstractCollector {
 
     @Override
-    public void collectDataInto(TheReportTable theReportTable, ApplicationContext applicationContext) {
-        GitHubRESTApiCaller ghCaller = new GitHubRESTApiCaller(applicationContext);
-        ghCaller.setAutoPaging(true);
-        ghCaller.setItemsPerPage(50);
-
+    public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
         final TheSheet theSheet = theReportTable.getSheet("sheet:all-repos", newSheet -> {
             newSheet.setTitle("All Repositories");
         });
@@ -37,20 +31,12 @@ public class ListAllRepositories extends BasicAbstractCollector {
             newColumn.setRenderingOrder(1);
         });
 
-        // fetch all repositories
-        GitHubResponse ghResponse = ghCaller.doGetWithAutoPaging("https://api.github.com/orgs/Netcracker/repos", 30 * 60);
-        if (ghResponse.getDataMap() != null) {
-            List<Map<String, Object>> list = ghResponse.getDataMap();
+        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
+        for (GitHubRepository nextRepo : allRepos) {
+            String rowId = nextRepo.getId();
 
-            for (Map<String, Object> map : list) {
-                String foundRepositoryName = map.get("name").toString();
-                String rowId = "row:" + foundRepositoryName;
-
-                TheCellValue cellValue = new TheCellValue(foundRepositoryName);
-                colRepoName.addValue(rowId, cellValue);
-            }
-
-            getLog().info("Data collected, size = {}, data = {}", list.size(), list);
+            TheCellValue cellValue = new TheCellValue(nextRepo.getName());
+            colRepoName.addValue(rowId, cellValue);
         }
 
         // sort repositories and assign line numbers to them

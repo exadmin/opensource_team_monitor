@@ -1,53 +1,29 @@
 package com.github.exadmin.ostm.impl;
 
-import com.github.exadmin.ostm.api.collector.ApplicationContext;
 import com.github.exadmin.ostm.api.collector.BasicAbstractCollector;
-import com.github.exadmin.ostm.api.github.GitHubRESTApiCaller;
-import com.github.exadmin.ostm.api.github.GitHubResponse;
+import com.github.exadmin.ostm.api.github.GitHubContributorData;
+import com.github.exadmin.ostm.api.github.GitHubFacade;
+import com.github.exadmin.ostm.api.github.GitHubRepository;
 import com.github.exadmin.ostm.api.model.TheCellValue;
 import com.github.exadmin.ostm.api.model.TheColumn;
 import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.api.model.TheSheet;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TeamKnownNames extends BasicAbstractCollector {
 
     @Override
-    public void collectDataInto(TheReportTable theReportTable, ApplicationContext applicationContext) {
-        GitHubRESTApiCaller ghCaller = new GitHubRESTApiCaller(applicationContext);
-
-        // list all repositories first
-        // fetch all repositories
-        List<String> allRepositories = new ArrayList<>();
-        {
-            GitHubResponse ghResponse = ghCaller.doGetWithAutoPaging("https://api.github.com/orgs/Netcracker/repos", 30 * 60);
-            if (ghResponse.getDataMap() != null) {
-                List<Map<String, Object>> list = ghResponse.getDataMap();
-
-                for (Map<String, Object> map : list) {
-                    String foundRepositoryName = map.get("name").toString();
-                    allRepositories.add(foundRepositoryName);
-                }
-            }
-        }
-
-        // For each found repository - fetch users who contributed into it
+    public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
         Set<String> uniqueLogins = new HashSet<>();
-        for (String repoName : allRepositories) {
-            GitHubResponse ghResponse = ghCaller.doGet("https://api.github.com/repos/Netcracker/" + repoName +"/contributors", 30 * 60);
-            if (ghResponse.getHttpCode() == 200) {
-                List<Map<String, Object>> listOfMaps = ghResponse.getDataMap();
-                for (Map<String, Object> map : listOfMaps) {
-                    for (Map.Entry<String, Object> me : map.entrySet()) {
-                        if ("login".equals(me.getKey())) {
-                            String login = me.getValue().toString();
-                            uniqueLogins.add(login);
-                        }
-                    }
-                }
-            } else {
-                getLog().error("Unexpected http code: {}", ghResponse.getHttpCode());
+
+        List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
+        for (GitHubRepository ghRepo : allRepositories) {
+            List<GitHubContributorData> ghContributionDataList = gitHubFacade.getContributionsForRepository("Netcracker", ghRepo.getName());
+            for (GitHubContributorData data: ghContributionDataList) {
+                uniqueLogins.add(data.getLogin());
             }
         }
 

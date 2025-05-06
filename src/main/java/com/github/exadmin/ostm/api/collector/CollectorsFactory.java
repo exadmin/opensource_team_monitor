@@ -1,5 +1,6 @@
 package com.github.exadmin.ostm.api.collector;
 
+import com.github.exadmin.ostm.api.github.GitHubFacade;
 import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.impl.ListAllRepositories;
 import com.github.exadmin.ostm.impl.TeamKnownNames;
@@ -20,9 +21,9 @@ public class CollectorsFactory {
         this.theReportTable = theReportTable;
     }
 
-    public void runCollectors(ApplicationContext applicationContext) {
+    public void runCollectors(GitHubFacade gitHubFacade) {
         for (AbstractCollector collector : collectors) {
-            collector.collectDataInto(theReportTable, applicationContext);
+            collector.collectDataInto(theReportTable, gitHubFacade);
         }
     }
 }

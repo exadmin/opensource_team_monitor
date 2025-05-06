@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.api.github;
+package com.github.exadmin.ostm.api.github.rest;
 
 import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;

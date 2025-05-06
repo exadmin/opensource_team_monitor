@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.api.github;
+package com.github.exadmin.ostm.api.github.rest;
 
 import java.util.List;
 import java.util.Map;

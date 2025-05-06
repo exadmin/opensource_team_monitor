@@ -2,6 +2,7 @@ package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.api.collector.ApplicationContext;
 import com.github.exadmin.ostm.api.collector.CollectorsFactory;
+import com.github.exadmin.ostm.api.github.GitHubFacade;
 import com.github.exadmin.ostm.api.model.TheReportTable;
 import com.github.exadmin.ostm.api.persistence.ReportModelPersister;
 import org.slf4j.Logger;
@@ -38,13 +39,15 @@ public class OpenSourceTeamMonitorApp {
 
         final Path outputPath = Paths.get(args[1]);
 
+        GitHubFacade gitHubFacade = new GitHubFacade(applicationContext);
+
 
 
         TheReportTable reportModel = new TheReportTable();
         CollectorsFactory colFactory = new CollectorsFactory(reportModel);
 
         // Step2: Run collectors
-        colFactory.runCollectors(applicationContext);
+        colFactory.runCollectors(gitHubFacade);
 
         // Step3: Persist data
         ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
