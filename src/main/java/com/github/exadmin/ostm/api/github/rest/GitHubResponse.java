@@ -1,15 +1,29 @@
 package com.github.exadmin.ostm.api.github.rest;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.List;
 import java.util.Map;
 
 public class GitHubResponse {
+    private static final TypeReference<List<Map<String, Object>>> type = new TypeReference<>() {};
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static {
+        OBJECT_MAPPER.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
+    }
+
     private int httpCode;
     private List<Map<String, Object>> dataMap;
 
-    public GitHubResponse(int httpCode, List<Map<String, Object>> dataMap) {
-        this.httpCode = httpCode;
-        this.dataMap = dataMap;
+    public GitHubResponse(int httpCode, String jsonResponse) {
+        try {
+            this.httpCode = httpCode;
+            this.dataMap  = OBJECT_MAPPER.readValue(jsonResponse, type);
+        } catch (Exception ex) {
+            throw new IllegalStateException(ex);
+        }
     }
 
     public int getHttpCode() {

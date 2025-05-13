@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.exadmin.ostm.api.collector.ApplicationContext;
-import com.github.exadmin.ostm.api.github.cache.CacheManager;
+import com.github.exadmin.ostm.api.github.cache.NewCacheManager;
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.slf4j.Logger;
@@ -30,16 +29,14 @@ public class GitHubRESTApiCaller {
         OBJECT_MAPPER.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
     }
 
-    private final ApplicationContext applicationContext;
-    private boolean autoPaging = false;
     private int itemsPerPage = 50;
 
-    public GitHubRESTApiCaller(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
+    private NewCacheManager cacheManager;
+    private String authToken;
 
-    public void setAutoPaging(boolean autoPaging) {
-        this.autoPaging = autoPaging;
+    public GitHubRESTApiCaller(ApplicationContext applicationContext) {
+        this.cacheManager = new NewCacheManager(applicationContext.getCacheDir());
+        this.authToken = applicationContext.getGitHubToken();
     }
 
     public void setItemsPerPage(int itemsPerPage) {
@@ -47,50 +44,54 @@ public class GitHubRESTApiCaller {
     }
 
     public GitHubResponse doGet(String httpGetQueryUrl, long ttlForCacheInSeconds) {
-        List<Map<String, Object>> cachedData = CacheManager.getFromCache(httpGetQueryUrl, applicationContext);
-        if (cachedData != null) {
-            return new GitHubResponse(200, cachedData); // todo: check http-code
+        log.trace("GET {}", httpGetQueryUrl);
+
+        String responseBody = cacheManager.getFromCache(httpGetQueryUrl, "");
+        if (responseBody != null) {
+            log.trace("Response is returned from cache");
+            return new GitHubResponse(200, responseBody);
         }
 
+        log.trace("No actual cache is found");
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             // HttpPost httpPost = new HttpPost(url);
             HttpUriRequestBase httpRequest = new HttpGet(httpGetQueryUrl);
 
             httpRequest.setHeader("Accept", "application/vnd.github+json");
-            httpRequest.setHeader("Authorization", "Bearer " + applicationContext.getGitHubToken());
+            httpRequest.setHeader("Authorization", "Bearer " + authToken);
             httpRequest.setHeader("X-GitHub-Api-Version", "2022-11-28");
 
+            int httpCode = 0;
+            String responseBodyStr = "[]";
             try (CloseableHttpResponse response = httpClient.execute(httpRequest)) {
-                int httpCode = response.getCode();
-                if (httpCode == 200) {
+                httpCode = response.getCode();
+
+
+                if (httpCode != 204) {
                     HttpEntity responseEntity = response.getEntity();
-                    String str = EntityUtils.toString(responseEntity);
-                    log.debug("Response = '{}'", str);
-                    List<Map<String, Object>> dataMap = OBJECT_MAPPER.readValue(str, type);
-
+                    responseBodyStr = EntityUtils.toString(responseEntity);
                     EntityUtils.consume(responseEntity);
-
-                    if (ttlForCacheInSeconds > 0) {
-                        CacheManager.putToCache(httpGetQueryUrl, dataMap, ttlForCacheInSeconds, applicationContext);
-                    }
-                    return new GitHubResponse(httpCode, dataMap);
                 }
 
-                log.warn("Unexpected answer: http-code = {}", httpCode);
-                return new GitHubResponse(httpCode, null);
+                if (httpCode == 200) {
+                    cacheManager.putToCache(httpGetQueryUrl, "", responseBodyStr, ttlForCacheInSeconds);
+                }
+
+                return new GitHubResponse(httpCode, responseBodyStr);
+            } catch (Exception ex) {
+                log.error("Error while performing GET request to {}, HTTP Code = {}", httpGetQueryUrl, httpCode, ex);
+                return emptyResponse();
             }
 
         } catch (IOException ex) {
             log.error("Error while calling URL '{}'", httpGetQueryUrl, ex);
-        } catch (ParseException pe) {
-            log.error("Error while parsing response", pe);
         }
 
-        return new GitHubResponse(0, null);
+        return emptyResponse();
     }
 
     public GitHubResponse doGetWithAutoPaging(String httpGetQueryUrl, long ttlForCacheInSeconds) {
-        GitHubResponse ghResponse = new GitHubResponse(0, null);
+        GitHubResponse ghResponse = emptyResponse();
 
         try {
             URIBuilder uriBuilder = new URIBuilder(httpGetQueryUrl);
@@ -119,7 +120,11 @@ public class GitHubRESTApiCaller {
             return ghResponse;
         } catch (Exception ex) {
             log.error("Error while processing URL = '{}' in auto-paging mode", httpGetQueryUrl, ex);
-            return new GitHubResponse(0, null);
+            return emptyResponse();
         }
+    }
+
+    private static GitHubResponse emptyResponse() {
+        return new GitHubResponse(0, "[]");
     }
 }

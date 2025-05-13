@@ -15,7 +15,6 @@ public class GitHubFacade {
 
     public GitHubFacade(ApplicationContext applicationContext) {
         this.ghCaller = new GitHubRESTApiCaller(applicationContext);
-        this.ghCaller.setAutoPaging(true);
         this.ghCaller.setItemsPerPage(50);
     }
 
