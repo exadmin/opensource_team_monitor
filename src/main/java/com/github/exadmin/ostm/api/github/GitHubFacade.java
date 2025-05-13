@@ -12,10 +12,12 @@ import java.util.Map;
 public class GitHubFacade {
     private static final int CACHE_TTL_SECONDS = 5/*hours*/ * 60/*minutes*/ * 60/*seconds*/;
     private final GitHubRESTApiCaller ghCaller;
+    private ApplicationContext applicationContext; // todo: remove
 
     public GitHubFacade(ApplicationContext applicationContext) {
         this.ghCaller = new GitHubRESTApiCaller(applicationContext);
         this.ghCaller.setItemsPerPage(50);
+        this.applicationContext = applicationContext;
     }
 
     /**
@@ -89,5 +91,10 @@ public class GitHubFacade {
         Object value = map.get(keyName);
         if (value == null) return 0;
         return Integer.parseInt(value.toString());
+    }
+
+    @Deprecated // todo: remove
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 }

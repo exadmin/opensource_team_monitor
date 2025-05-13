@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,14 @@ public class GitHubResponse {
     public GitHubResponse(int httpCode, String jsonResponse) {
         try {
             this.httpCode = httpCode;
-            this.dataMap  = OBJECT_MAPPER.readValue(jsonResponse, type);
+            Object obj = OBJECT_MAPPER.readValue(jsonResponse, Object.class);
+
+            this.dataMap = null;
+            if (obj instanceof List) this.dataMap = (List<Map<String, Object>>) obj;
+            if (obj instanceof Map) this.dataMap = List.of((Map<String, Object>) obj);
+
+            if (dataMap == null) throw new IllegalStateException("Unsupported type of response: " + obj.getClass());
+
         } catch (Exception ex) {
             throw new IllegalStateException(ex);
         }

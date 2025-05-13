@@ -15,17 +15,17 @@ public class ListAllRepositories extends BasicAbstractCollector {
 
     @Override
     public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
-        final TheSheet theSheet = theReportTable.getSheet("sheet:all-repos", newSheet -> {
+        final TheSheet theSheet = theReportTable.findSheet("sheet:all-repos", newSheet -> {
             newSheet.setTitle("All Repositories");
         });
 
-        final TheColumn colRepoNumber = theSheet.getColumn("column:number", newColumn -> {
+        final TheColumn colRepoNumber = theSheet.findColumn("column:number", newColumn -> {
             newColumn.setTitle("Number");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
             newColumn.setRenderingOrder(0);
         });
 
-        final TheColumn colRepoName = theSheet.getColumn("column:name", newColumn -> {
+        final TheColumn colRepoName = theSheet.findColumn("column:name", newColumn -> {
             newColumn.setTitle("Repository Name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
             newColumn.setRenderingOrder(1);

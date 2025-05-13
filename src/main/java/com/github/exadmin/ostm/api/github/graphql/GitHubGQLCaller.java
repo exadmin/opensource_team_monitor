@@ -3,6 +3,7 @@ package com.github.exadmin.ostm.api.github.graphql;
 import com.github.exadmin.ostm.api.collector.ApplicationContext;
 import com.github.exadmin.ostm.api.github.cache.NewCacheManager;
 import com.github.exadmin.ostm.api.github.rest.GitHubResponse;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -62,7 +63,11 @@ public class GitHubGQLCaller {
             httpRequest.setHeader("Accept", "application/vnd.github+json");
             httpRequest.setHeader("Authorization", "Bearer " + authToken);
             httpRequest.setHeader("X-GitHub-Api-Version", "2022-11-28");
-            httpRequest.setEntity(new StringEntity(query));
+
+            String preparedStr = StringEscapeUtils.escapeJson(query);
+            String finalQuery = "{\"query\":\"" + preparedStr + "\"}";
+
+            httpRequest.setEntity(new StringEntity(finalQuery));
 
             try (CloseableHttpResponse response = httpClient.execute(httpRequest)) {
                 HttpEntity responseEntity = response.getEntity();

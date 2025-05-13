@@ -10,7 +10,7 @@ public class TheReportTable {
         return new ArrayList<>(sheets);
     }
 
-    public TheSheet getSheet(String sheetId, OnCreateListener<TheSheet> listener) {
+    public TheSheet findSheet(String sheetId, OnCreateListener<TheSheet> listener) {
         // find existed sheet by id
         for (TheSheet next : sheets) {
             if (next.getId().equals(sheetId)) return next;

@@ -48,6 +48,13 @@
             <version>5.3.1</version>
         </dependency>
 
+        <!-- Escaping utils -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+
 
     </dependencies>
 

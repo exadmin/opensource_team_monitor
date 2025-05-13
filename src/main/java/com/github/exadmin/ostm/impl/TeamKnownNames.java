@@ -28,11 +28,11 @@ public class TeamKnownNames extends BasicAbstractCollector {
         }
 
         // create report
-        final TheSheet theSheet = theReportTable.getSheet("sheet:team-summary", newSheet -> {
+        final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> {
             newSheet.setTitle("Team Summary");
         });
 
-        final TheColumn theColumn = theSheet.getColumn("column:login", newColumn -> {
+        final TheColumn theColumn = theSheet.findColumn("column:login", newColumn -> {
             newColumn.setTitle("Login Name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });

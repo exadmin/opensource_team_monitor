@@ -55,7 +55,7 @@ public class TheSheet {
         return id;
     }
 
-    public TheColumn getColumn(String columnId, OnCreateListener<TheColumn> listener) {
+    public TheColumn findColumn(String columnId, OnCreateListener<TheColumn> listener) {
         // try find existed column by provided id
         for (TheColumn next : columns) {
             if (next.getId().equals(columnId)) return next;
