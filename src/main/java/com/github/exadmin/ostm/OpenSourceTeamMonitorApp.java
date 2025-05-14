@@ -1,10 +1,10 @@
 package com.github.exadmin.ostm;
 
-import com.github.exadmin.ostm.api.collector.ApplicationContext;
-import com.github.exadmin.ostm.api.collector.CollectorsFactory;
-import com.github.exadmin.ostm.api.github.GitHubFacade;
-import com.github.exadmin.ostm.api.model.TheReportTable;
-import com.github.exadmin.ostm.api.persistence.ReportModelPersister;
+import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
+import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
+import com.github.exadmin.ostm.github.cache.NewCacheManager;
+import com.github.exadmin.ostm.model.TheReportTable;
+import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,40 +18,33 @@ public class OpenSourceTeamMonitorApp {
     private static final Logger log = LoggerFactory.getLogger(OpenSourceTeamMonitorApp.class);
 
     public static void main(String[] args) {
-        // Step1: Initiate applciation
-        final ApplicationContext applicationContext = new ApplicationContext();
-        if (args.length != 2) {
-            log.error("Usage: OpenSourceTeamMonitorApp $FILE_WITH_GITHUB_TOKEN_TO_READ$ $FILE_TO_WRITE_RESULTS_INTO$");
+        // Step1: Initiate application
+        if (args.length != 3) {
+            log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
+                    "arg1 - file (readonly) with GitHub token to use\n" +
+                    "arg2 - output file (read-write) to write results into\n" +
+                    "arg3 - cache directory (read-write) to store responses from github");
             System.exit(-1);
         }
 
         final String gitHubToken = getTokenFromFile(args[0]);
-        applicationContext.setGitHubToken(gitHubToken);
         if (gitHubToken == null || gitHubToken.isEmpty()) {
             log.error("GitHub token is required for the processing. Provide it via external file. Terminating");
             System.exit(-1);
         }
+        GitHubRequestBuilder.setAuthenticationToken(gitHubToken);
 
-        // Step2: Prepare cache folder (if not exsits)
-        Path cacheFolder = Paths.get("./cache");
-        cacheFolder.toFile().mkdirs();
-        applicationContext.setCacheDir(cacheFolder);
-
-        final Path outputPath = Paths.get(args[1]);
-
-        GitHubFacade gitHubFacade = new GitHubFacade(applicationContext);
-
-
-
-        TheReportTable reportModel = new TheReportTable();
-        CollectorsFactory colFactory = new CollectorsFactory(reportModel);
+        final Path outputFilePath = Paths.get(args[1]);
+        NewCacheManager.setCacheDirectoryPath(args[2]);
 
         // Step2: Run collectors
-        colFactory.runCollectors(gitHubFacade);
+        TheReportTable reportModel = new TheReportTable();
+        CollectorsFactory colFactory = new CollectorsFactory(reportModel);
+        colFactory.runCollectors();
 
         // Step3: Persist data
         ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
-        reportModelPersister.saveToFile(outputPath);
+        reportModelPersister.saveToFile(outputFilePath);
     }
 
     private static String getTokenFromFile(String fileName) {
