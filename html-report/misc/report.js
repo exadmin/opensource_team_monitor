@@ -12,33 +12,33 @@ function defaultRender (data, type, row, meta) {
 //      "href": "<url>",        # Link in cell
 //      "value": "string"       # Value of cell
 //   }
-if (data.title && data.href) {
-    return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a></div>';
-} else if (data.title) {
-    return '<div title="' + data.title + '">' + (data.value || '&nbsp;') + '</div>';
-} else if (data.href) {
-    return '<a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a>';
-} else if (data.value) {
-           return String(data.value);
-} else {
-    return String(data);
-}
+    if (data.title && data.href) {
+        return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a></div>';
+    } else if (data.title) {
+        return '<div title="' + data.title + '">' + (data.value || '&nbsp;') + '</div>';
+    } else if (data.href) {
+        return '<a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a>';
+    } else if (data.value) {
+               return String(data.value);
+    } else {
+        return String(data);
+    }
 }
 
 $(document).ready(function() {
 // Add custom sorting for 'only-numbers'
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
-    "only-numbers-asc": function ( a,b ) {
-        var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-        var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-        return x - y;
-    },
-    "only-numbers-desc": function ( a,b ) {
-        var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-        var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-        return y - x;
-    }
-} );
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        "only-numbers-asc": function ( a,b ) {
+            var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
+            var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
+            return x - y;
+        },
+        "only-numbers-desc": function ( a,b ) {
+            var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
+            var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
+            return y - x;
+        }
+    } );
 
 $.getJSON('./data/data.json', function(data) {
     const reportName = data.reportName;
@@ -99,50 +99,12 @@ $.getJSON('./data/data.json', function(data) {
     );
 });
 
-$(function() {
-  $(document).tooltip({
-    content: function() {
-      // Keep this code - to force JQueryUI render <br> as a new line!
-      return $(this).prop('title');
-    }
-  });
-});
-});
-
-let replaceMacrosIsDone = false;
-
-// Function to fetch JSON data and replace macros
-async function replaceMacros() {
-    if (replaceMacrosIsDone) return;
-
-    try {
-        replaceMacrosIsDone = true;
-
-        // 1. Fetch the external JSON file
-        const response = await fetch('./data/macros.json');
-        if (!response.ok) {
-            throw new Error('Failed to load data');
+    $(function() {
+      $(document).tooltip({
+        content: function() {
+          // Keep this code - to force JQueryUI render <br> as a new line!
+          return $(this).prop('title');
         }
-        const data = await response.json();
-
-        // 2. Get the entire HTML content
-        let html = document.documentElement.outerHTML;
-
-        // 3. Replace all macros with values from the JSON data
-        for (const [key, value] of Object.entries(data)) {
-            const macro = `{{${key}}}`;
-            const regex = new RegExp(macro, 'g');
-            html = html.replace(regex, value);
-        }
-
-        // 4. Update the document with the replaced content
-        document.open();
-        document.write(html);
-        document.close();
-
-    } catch (error) {
-        console.error('Error replacing macros:', error);
-    }
-}
-
-window.addEventListener('DOMContentLoaded', replaceMacros);
+      });
+    });
+});
