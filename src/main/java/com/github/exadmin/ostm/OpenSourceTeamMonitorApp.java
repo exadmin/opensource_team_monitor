@@ -21,13 +21,13 @@ public class OpenSourceTeamMonitorApp {
         // Step1: Initiate application
         if (args.length != 3) {
             log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
-                    "arg1 - file (readonly) with GitHub token to use\n" +
+                    "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
                     "arg2 - output file (read-write) to write results into\n" +
                     "arg3 - cache directory (read-write) to store responses from github");
             System.exit(-1);
         }
 
-        final String gitHubToken = getTokenFromFile(args[0]);
+        final String gitHubToken = getTokenFromArg(args[0]);
         if (gitHubToken == null || gitHubToken.isEmpty()) {
             log.error("GitHub token is required for the processing. Provide it via external file. Terminating");
             System.exit(-1);
@@ -47,11 +47,13 @@ public class OpenSourceTeamMonitorApp {
         reportModelPersister.saveToFile(outputFilePath);
     }
 
-    private static String getTokenFromFile(String fileName) {
+    private static String getTokenFromArg(String argumentValue) {
         try {
-            return Files.readString(Paths.get(fileName), StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            log.error("Error while loading token from file {}", fileName, ex);
+            if (argumentValue.startsWith("ghp_")) return argumentValue;
+
+            return Files.readString(Paths.get(argumentValue), StandardCharsets.UTF_8);
+        } catch (IOException | NullPointerException ex) {
+            log.error("Error while loading token from file {}", argumentValue, ex);
         }
 
         return null;
