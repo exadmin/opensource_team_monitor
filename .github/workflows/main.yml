@@ -49,7 +49,6 @@ jobs:
           git config user.email github-actions@github.com
                     
           git add ./../html-report/data/data.json          
-          
-          date=$(date + "%d-%m-%Y %H-%M-%S")
-          git commit -m "data.json is updated at $date"
+                    
+          git commit -m "data.json is updated at $(date)"
           git push
