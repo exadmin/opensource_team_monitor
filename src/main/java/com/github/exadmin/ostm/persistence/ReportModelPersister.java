@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.model.TheCellValue;
-import com.github.exadmin.ostm.model.TheColumn;
-import com.github.exadmin.ostm.model.TheReportTable;
-import com.github.exadmin.ostm.model.TheSheet;
+import com.github.exadmin.ostm.uimodel.TheCellValue;
+import com.github.exadmin.ostm.uimodel.TheColumn;
+import com.github.exadmin.ostm.uimodel.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheSheet;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,17 @@ public class ReportModelPersister {
 
                 for (TheColumn theColumn : sheet.getColumns()) {
                     TheCellValue theCellValue = theColumn.getValue(rowId);
-                    dataMap.put(theColumn.getId(), theCellValue.getValue());
+                    if (theCellValue == null) {
+                        log.warn("No cell value is registered for sheet '{}', column '{}', rowId '{}'", sheet, theColumn, rowId);
+                    }
+                    String valueAsStr = theCellValue == null ? "null" : theCellValue.getValue();
+                    String toolTip = theCellValue == null ? null : theCellValue.getToolTipText();
+
+                    Map<String, String> cellValueJson = new HashMap<>();
+                    cellValueJson.put("value", valueAsStr);
+                    if (StringUtils.isNotEmpty(toolTip)) cellValueJson.put("title", toolTip);
+
+                    dataMap.put(theColumn.getId(), cellValueJson);
                 }
 
                 jsonTable.addDataMap(dataMap);

@@ -1,7 +1,8 @@
-package com.github.exadmin.ostm.model;
+package com.github.exadmin.ostm.uimodel;
 
 public class TheCellValue {
     private String value;
+    private String toolTipText;
 
     public TheCellValue(String value) {
         this.value = value;
@@ -18,5 +19,13 @@ public class TheCellValue {
     @Override
     public String toString() {
         return value;
+    }
+
+    public String getToolTipText() {
+        return toolTipText;
+    }
+
+    public void setToolTipText(String toolTipText) {
+        this.toolTipText = toolTipText;
     }
 }

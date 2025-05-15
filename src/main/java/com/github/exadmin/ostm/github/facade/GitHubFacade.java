@@ -4,10 +4,7 @@ import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GitHubFacade {
     private static final int CACHE_TTL_SECONDS = 5/*hours*/ * 60/*minutes*/ * 60/*seconds*/;
@@ -89,6 +86,25 @@ public class GitHubFacade {
         }
 
         return Collections.emptyList();
+    }
+
+    /**
+     * Returns list of unique logins which were found as contributors to all public repositories for the specified OWNER
+     * @param ownerName GitHub owner of repositories, i.e. https://github.com/OWNER/repos
+     * @return List of Strings
+     */
+    public List<String> getUniqueUsers(String ownerName) {
+        Set<String> uniqueLogins = new HashSet<>();
+
+        List<GitHubRepository> allRepositories = getAllRepositories(ownerName);
+        for (GitHubRepository ghRepo : allRepositories) {
+            List<GitHubContributorData> ghContributionDataList = getContributionsForRepository(ownerName, ghRepo.getName());
+            for (GitHubContributorData data: ghContributionDataList) {
+                uniqueLogins.add(data.getLogin());
+            }
+        }
+
+        return new ArrayList<>(uniqueLogins);
     }
 
     private static String getStrValue(Map<String, Object> map, String keyName) {

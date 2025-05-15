@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.model;
+package com.github.exadmin.ostm.uimodel;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

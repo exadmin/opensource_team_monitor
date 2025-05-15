@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.api;
 
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.model.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheReportTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -27,13 +27,15 @@ import java.util.Map;
 
 public class GitHubRequestExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(GitHubRequestExecutor.class);
-    private static final int CACHE_TTL_IN_SECONDS = 24/*hours*/ * 60/*minutes*/ * 60/*seconds*/;
+    private static final int CACHE_TTL_IN_SECONDS = 7/*days*/ * 24/*hours*/ * 60/*minutes*/ * 60/*seconds*/;
     private final NewCacheManager cacheManager = new NewCacheManager();
 
     GitHubRequestExecutor() {
     }
 
     GitHubResponse execute(GitHubRequest request) {
+        LOG.debug("Executing request to {}", request.url);
+
         // if multi-paging request
         if (request.method.equals(Method.GET) && request.fromPage > 0 && request.toPage > request.fromPage) {
             try {

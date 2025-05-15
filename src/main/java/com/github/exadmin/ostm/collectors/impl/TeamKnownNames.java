@@ -4,10 +4,10 @@ import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubContributorData;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
-import com.github.exadmin.ostm.model.TheCellValue;
-import com.github.exadmin.ostm.model.TheColumn;
-import com.github.exadmin.ostm.model.TheReportTable;
-import com.github.exadmin.ostm.model.TheSheet;
+import com.github.exadmin.ostm.uimodel.TheCellValue;
+import com.github.exadmin.ostm.uimodel.TheColumn;
+import com.github.exadmin.ostm.uimodel.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheSheet;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +31,7 @@ public class TeamKnownNames extends AbstractCollector {
         final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
 
         final TheColumn theColumn = theSheet.findColumn("column:login", newColumn -> {
-            newColumn.setTitle("Login Name");
+            newColumn.setTitle("GitHub login");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 

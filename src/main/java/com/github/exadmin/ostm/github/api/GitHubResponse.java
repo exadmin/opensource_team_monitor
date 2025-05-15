@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GitHubResponse {
     private static final Logger log = LoggerFactory.getLogger(GitHubResponse.class);
@@ -65,7 +62,7 @@ public class GitHubResponse {
      * @return single value of required type
      */
     @SuppressWarnings("unchecked")
-    public <T> T getSingleValue(String ... keys) {
+    public <T> T getObject(String ... keys) {
         Map<String, Object> currentMap = dataMap.getFirst();
         Object currentObj = null;
 

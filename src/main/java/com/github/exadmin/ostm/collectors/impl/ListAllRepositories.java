@@ -3,10 +3,10 @@ package com.github.exadmin.ostm.collectors.impl;
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
-import com.github.exadmin.ostm.model.TheCellValue;
-import com.github.exadmin.ostm.model.TheColumn;
-import com.github.exadmin.ostm.model.TheReportTable;
-import com.github.exadmin.ostm.model.TheSheet;
+import com.github.exadmin.ostm.uimodel.TheCellValue;
+import com.github.exadmin.ostm.uimodel.TheColumn;
+import com.github.exadmin.ostm.uimodel.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheSheet;
 
 import java.util.Comparator;
 import java.util.List;

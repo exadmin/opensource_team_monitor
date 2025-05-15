@@ -14,10 +14,12 @@ function defaultRender (data, type, row, meta) {
 //   }
 if (data.title && data.href) {
     return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a></div>';
-} else if  (data.title) {
-    return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>">' + (data.value || '&nbsp;') + '</div>';
+} else if (data.title) {
+    return '<div title="' + data.title + '">' + (data.value || '&nbsp;') + '</div>';
 } else if (data.href) {
     return '<a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a>';
+} else if (data.value) {
+           return String(data.value);
 } else {
     return String(data);
 }
@@ -106,3 +108,41 @@ $(function() {
   });
 });
 });
+
+let replaceMacrosIsDone = false;
+
+// Function to fetch JSON data and replace macros
+async function replaceMacros() {
+    if (replaceMacrosIsDone) return;
+
+    try {
+        replaceMacrosIsDone = true;
+
+        // 1. Fetch the external JSON file
+        const response = await fetch('./data/macros.json');
+        if (!response.ok) {
+            throw new Error('Failed to load data');
+        }
+        const data = await response.json();
+
+        // 2. Get the entire HTML content
+        let html = document.documentElement.outerHTML;
+
+        // 3. Replace all macros with values from the JSON data
+        for (const [key, value] of Object.entries(data)) {
+            const macro = `{{${key}}}`;
+            const regex = new RegExp(macro, 'g');
+            html = html.replace(regex, value);
+        }
+
+        // 4. Update the document with the replaced content
+        document.open();
+        document.write(html);
+        document.close();
+
+    } catch (error) {
+        console.error('Error replacing macros:', error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', replaceMacros);

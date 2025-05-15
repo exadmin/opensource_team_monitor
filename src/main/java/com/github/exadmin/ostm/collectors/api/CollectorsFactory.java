@@ -2,9 +2,10 @@ package com.github.exadmin.ostm.collectors.api;
 
 import com.github.exadmin.ostm.collectors.impl.CountNumberOfCommitsPerUser;
 import com.github.exadmin.ostm.collectors.impl.ListAllRepositories;
+import com.github.exadmin.ostm.collectors.impl.NumberOfCommitsPerWeekPerUser;
 import com.github.exadmin.ostm.collectors.impl.TeamKnownNames;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.model.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheReportTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ public class CollectorsFactory {
         collectors.add(new TeamKnownNames());
         collectors.add(new ListAllRepositories());
         collectors.add(new CountNumberOfCommitsPerUser());
+        collectors.add(new NumberOfCommitsPerWeekPerUser());
     }
 
     private final TheReportTable theReportTable;

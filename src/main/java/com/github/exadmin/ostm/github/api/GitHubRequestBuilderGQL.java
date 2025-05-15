@@ -7,6 +7,7 @@ import org.apache.hc.core5.http.Method;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
+// play at: https://docs.github.com/ru/graphql/overview/explorer
 public class GitHubRequestBuilderGQL extends GitHubRequestBuilder {
     protected static final String GRAPH_QL_END_POINT = "https://api.github.com/graphql";
 
