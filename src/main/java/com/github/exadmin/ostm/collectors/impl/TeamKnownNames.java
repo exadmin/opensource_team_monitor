@@ -9,11 +9,49 @@ import com.github.exadmin.ostm.uimodel.TheColumn;
 import com.github.exadmin.ostm.uimodel.TheReportTable;
 import com.github.exadmin.ostm.uimodel.TheSheet;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TeamKnownNames extends AbstractCollector {
+    private static final Map<String, String> ALIAS_TO_NAME = new HashMap<>();
+    static {
+        ALIAS_TO_NAME.put("alagishev", "Aleksandr Agishev");
+        ALIAS_TO_NAME.put("kagw95", "Aleksandr Kapustin");
+        ALIAS_TO_NAME.put("al-matushkin", "Aleksandr Matushkin");
+        ALIAS_TO_NAME.put("karpov-aleksandr", "Aleksandr V Karpov");
+        ALIAS_TO_NAME.put("b41ex", "Alexey Bochencev");
+        ALIAS_TO_NAME.put("ifdru74", "Alexey Shtykov");
+        ALIAS_TO_NAME.put("andyroode", "Andrei Rudchenko");
+        ALIAS_TO_NAME.put("Anton-Pecherskikh", "Anton Pecherskikh");
+        ALIAS_TO_NAME.put("borislavr", "Boris Lavrishchev");
+        ALIAS_TO_NAME.put("denifilatoff", "Denis Filatov");
+        ALIAS_TO_NAME.put("AkhDmitrii", "Dmitrii Akhtyrskii");
+        ALIAS_TO_NAME.put("dmitriipisarev", "Dmitrii Pisarev");
+        ALIAS_TO_NAME.put("egbu", "Egor Budrin");
+        ALIAS_TO_NAME.put("popoveugene", "Evgenii A. Popov");
+        ALIAS_TO_NAME.put("estetsenko", "Evgenii Stetsenko");
+        ALIAS_TO_NAME.put("FedorProshin", "Fedor Proshin");
+        ALIAS_TO_NAME.put("IldarMinaev", "Ildar Minaev");
+        ALIAS_TO_NAME.put("exadmin", "Ilya Smirnov");
+        ALIAS_TO_NAME.put("iurii-golovinskii", "Iurii Golovinskii");
+        ALIAS_TO_NAME.put("Sid775", "Ivan Sviridov");
+        ALIAS_TO_NAME.put("NikolaiKuziaevQubership", "Nikolai Kuziaev");
+        ALIAS_TO_NAME.put("nookyo", "Pavel Anikin");
+        ALIAS_TO_NAME.put("PavelYadrov", "Pavel Iadrov");
+        ALIAS_TO_NAME.put("makeev-pavel", "Pavel Makeev");
+        ALIAS_TO_NAME.put("KryukovaPolina", "Polina Kriukova");
+        ALIAS_TO_NAME.put("RomanB89", "Roman Barmin");
+        ALIAS_TO_NAME.put("kichasov", "Roman Kichasov");
+        ALIAS_TO_NAME.put("rparf", "Roman Parfinenko");
+        ALIAS_TO_NAME.put("SSNikolaevich", "Sergei Skuratovich");
+        ALIAS_TO_NAME.put("pankratovsa", "Sergey Pankratov");
+        ALIAS_TO_NAME.put("Beauline", "Valentina Feshina");
+        ALIAS_TO_NAME.put("viacheslav-lunev", "Viacheslav Lunev");
+        ALIAS_TO_NAME.put("shumnic", "Viktor Solovev");
+        ALIAS_TO_NAME.put("vlsi", "Vladimir Sitnikov");
+        ALIAS_TO_NAME.put("TaurMorchant", "Vladislav Larkin");
+        ALIAS_TO_NAME.put("Vladislav-Romanov27", "Vladislav Romanov");
+
+    }
 
     @Override
     public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
@@ -30,16 +68,28 @@ public class TeamKnownNames extends AbstractCollector {
         // create report
         final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
 
-        final TheColumn theColumn = theSheet.findColumn("column:login", newColumn -> {
+        final TheColumn colLogin = theSheet.findColumn("column:login", newColumn -> {
             newColumn.setTitle("GitHub login");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+            newColumn.setRenderingOrder(-1000);
+        });
+
+        final TheColumn colRealName = theSheet.findColumn("column:real-name", newColumn -> {
+            newColumn.setTitle("Real name");
+            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+            newColumn.setRenderingOrder(-900);
         });
 
         for (String login : uniqueLogins) {
-            TheCellValue cellValue = new TheCellValue(login);
             String rowId = "row:" + login;
 
-            theColumn.addValue(rowId, cellValue);
+            TheCellValue cvLogin = new TheCellValue(login);
+            colLogin.addValue(rowId, cvLogin);
+
+            String realName = ALIAS_TO_NAME.get(login);
+            if (realName == null) realName = "---";
+            TheCellValue cvRealName = new TheCellValue(realName);
+            colRealName.addValue(rowId, cvRealName);
         }
     }
 }
