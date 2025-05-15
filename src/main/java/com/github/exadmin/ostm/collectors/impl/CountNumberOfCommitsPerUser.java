@@ -21,27 +21,26 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
         final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
 
         final TheColumn theColumn = theSheet.findColumn("column:contributions_count", newColumn -> {
-            newColumn.setTitle("Contributions Count");
-            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(10);
+            newColumn.setTitle("Total Contributions Count");
+            newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
+            newColumn.setRenderingOrder(-800);
         });
 
-
-        String gqlQuery = "{\n" +
-                "  user(login: \"XXXXX\") {\n" +
-                "    contributionsCollection(\n" +
-                "      organizationID: \"O_kgDOBQbhhA\"\n" +
-                "    ) {\n" +
-                "      contributionCalendar {\n" +
-                "        totalContributions               \n" +
-                "      }\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+        String gqlQuery = """
+                {
+                  user(login: "XXXXX") {
+                    contributionsCollection(
+                      organizationID: "O_kgDOBQbhhA"
+                    ) {
+                      contributionCalendar {
+                        totalContributions
+                      }
+                    }
+                  }
+                }""";
 
         for (String login : uniqueLogins) {
             String newQuery = gqlQuery.replace("XXXXX", login);
-            // GitHubResponse ghResponse = gqlCaller.doCall(newQuery, 8 * 60 * 60);
 
             GitHubRequest request = GitHubRequestBuilder
                     .graphQL()

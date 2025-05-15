@@ -1,0 +1,55 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  # note - time in UTC
+  schedule:
+    - cron: "25 3 * * *"
+
+  # todo: apply new java code in the github actions
+
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 24
+        uses: actions/setup-java@v4
+        with:
+          java-version: '24'
+          distribution: 'temurin'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      - name: Build with Maven
+        run: |
+          mvn -B package --file pom.xml
+
+      - name: Run reports
+        run: |
+          cd ./target          
+          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} ./data.json ./cache
+          
+          cp ./data.json ./../html-report/data/data.json                    
+
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+                    
+          git add ./../html-report/data/data.json          
+          
+          date=$(date + "%d-%m-%Y %H-%M-%S")
+          git commit -m "data.json is updated at $date"
+          git push

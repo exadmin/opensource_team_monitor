@@ -23,7 +23,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
     public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
         final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
 
-        LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+        LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
         LocalDate fromDate  = todayDate.minusMonths(3).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         String fromStr = dateToStr(fromDate);
