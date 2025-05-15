@@ -26,7 +26,6 @@ public class GitHubFacade {
 
         GitHubResponse response = request.execute();
 
-        // GitHubResponse ghResponse = ghCaller.doGetWithAutoPaging("https://api.github.com/orgs/" + ownerName + "/repos", CACHE_TTL_SECONDS);
         if (response.getDataMap() != null) {
             List<Map<String, Object>> listOfMaps = response.getDataMap();
 
@@ -38,9 +37,15 @@ public class GitHubFacade {
                 String repoUrl  = getStrValue(repoMap, "url");
                 String repoCloneUrl = getStrValue(repoMap, "clone_url");
 
+                // remove k8-conformance as it brings lotof non intresting data
+                if ("k8s-conformance".equals(repoName)) continue;
+
                 GitHubRepository ghRepo = new GitHubRepository(repoId, repoName, repoUrl, repoCloneUrl);
                 result.add(ghRepo);
             }
+
+
+
 
             return result;
         }
