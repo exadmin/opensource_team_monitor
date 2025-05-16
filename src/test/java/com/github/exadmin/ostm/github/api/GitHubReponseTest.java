@@ -205,7 +205,7 @@ public class GitHubReponseTest {
                 """;
 
         GitHubResponse response = new GitHubResponse(200, responseBody);
-        List<Map<String, Object>> listOfMaps = response.getObject("data", "user", "contributionsCollection", "contributionCalendar", "weeks");
+        List<Map<String, Object>> listOfMaps = response.getObject("/data/user/contributionsCollection/contributionCalendar/weeks");
         assertNotNull(listOfMaps);
     }
 }

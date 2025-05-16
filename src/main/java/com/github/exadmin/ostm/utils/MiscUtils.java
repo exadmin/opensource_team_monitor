@@ -6,6 +6,14 @@ import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MiscUtils {
     private static final Logger log = LoggerFactory.getLogger(MiscUtils.class);
@@ -35,5 +43,64 @@ public class MiscUtils {
             hexString.append(hex);
         }
         return hexString.toString();
+    }
+
+    public static String dateToStr(LocalDate date) {
+        return date.atStartOfDay(ZoneOffset.UTC)
+                .format(DateTimeFormatter.ISO_INSTANT);
+    }
+
+    public static LocalDate strToDate(String strDateISO6801) {
+        if (strDateISO6801.length() == 10) strDateISO6801 = strDateISO6801 + "T00:00:00.000+00:00"; // to fix strange case for graphQL response from GitHub
+
+        return OffsetDateTime.parse(strDateISO6801).toLocalDate();
+    }
+
+    /**
+     * Goes over data-map by path provided as string with "/" or "\" delimiters
+     * @param fromMap source map to start navigation deep into by keys
+     * @param path String path which represents keys
+     * @return instance of required type or null of somewhere null will be met
+     */
+    public static <T> T getValue(Map<String, Object> fromMap, String path) {
+        // normalize paths delimiters to "/"
+        path = path.replace("\\", "/");
+
+        String[] keys = path.split("/");
+        keys = Arrays.stream(keys).filter(Predicate.not(String::isEmpty)).toList().toArray(new String[0]);
+        return getObject(fromMap, keys);
+    }
+
+    /**
+     * Goes over data-map by path provided with keys and returns found result
+     * @param keys list of key names.
+     * @return single value of required type
+     */
+    @SuppressWarnings("unchecked")
+    private static <T> T getObject(Map<String, Object> dataMap, String ... keys) {
+        final Map<String, Object> sourceMapForDebugging = dataMap;
+
+        Object currentObj = null;
+
+        for (String key : keys) {
+            if (dataMap == null) return null;
+            currentObj = dataMap.get(key);
+
+            if (currentObj == null) return null;
+            if (currentObj instanceof Map) {
+                dataMap = (Map<String, Object>) currentObj;
+            } else {
+                dataMap = null;
+            }
+        }
+
+        try {
+            if (currentObj == null) return null;
+
+            return (T) currentObj;
+        } catch (ClassCastException ex) {
+            log.error("Class-cast exception while returning value from data-map. Current value is {}, type is {}", currentObj, currentObj.getClass(), ex);
+            throw new IllegalStateException(ex);
+        }
     }
 }

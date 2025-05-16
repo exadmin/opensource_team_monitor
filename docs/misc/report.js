@@ -40,64 +40,64 @@ $(document).ready(function() {
         }
     } );
 
-$.getJSON('./data/data.json', function(data) {
-    const reportName = data.reportName;
-    const reportDate = data.reportDate;
-    const tables = data.tables;
+    $.getJSON('./data/data.json', function(data) {
+        const reportName = data.reportName;
+        const reportDate = data.reportDate;
+        const tables = data.tables;
 
-    // document.title = `Report ${reportName} on ${reportDate}`;
-    // $('#report-name').text(`Report: ${reportName} generated at ${reportDate}`);
+        // document.title = `Report ${reportName} on ${reportDate}`;
+        // $('#report-name').text(`Report: ${reportName} generated at ${reportDate}`);
 
-    let tabList = $('#tab-list');
-    let tabsContainer = $('#tabs');
+        let tabList = $('#tab-list');
+        let tabsContainer = $('#tabs');
 
-    tables.forEach((tableData, index) => {
-        // Add tab
-        tabList.append(`<li><a href="#tabs-${index + 1}">${tableData.title || index + 1}</a></li>`);
+        tables.forEach((tableData, index) => {
+            // Add tab
+            tabList.append(`<li><a href="#tabs-${index + 1}">${tableData.title || index + 1}</a></li>`);
 
-        // Add tab content with table
-        tabsContainer.append(`<div id="tabs-${index + 1}"><table id="table-${index + 1}" class="display"></table></div>`);
+            // Add tab content with table
+            tabsContainer.append(`<div id="tabs-${index + 1}"><table id="table-${index + 1}" class="display"></table></div>`);
 
-        // Add help urls to column titles if exists
-        tableData.columns.forEach(column => {
-            if (column.help_url) {
-                column.title += `<a href="${column.help_url}" target="_blank" class="help-icon">❔</a>`;
-            }
-            column.render = window[column.render] || defaultRender;
-        });
+            // Add help urls to column titles if exists
+            tableData.columns.forEach(column => {
+                if (column.help_url) {
+                    column.title += `<a href="${column.help_url}" target="_blank" class="help-icon">❔</a>`;
+                }
+                column.render = window[column.render] || defaultRender;
+            });
 
-        // Initialize DataTable
-        $(`#table-${index + 1}`).DataTable({
-            data: tableData.data,
-            columns: tableData.columns,
-            pageLength: -1,
-            autoWidth: false,
-            search: {
-                search: getSearchParam('search')
-            }
-        });
-        $(`#table-${index + 1}`).on('search.dt', function syncSearches() {
-            searchValue = $(this).DataTable().search();
-            window.history.replaceState(null, null, `?search=${encodeURIComponent(searchValue)}` + window.location.hash);
-            $.fn.dataTable.tables().forEach(function(table) {
-                if (table !== this) {
-                    $(table).off('search.dt');
-                    $('#'+table.id+'_filter input')[0].value = searchValue;
-                    $(table).DataTable().search(searchValue).draw();
-                    $(table).on('search.dt', syncSearches);
+            // Initialize DataTable
+            $(`#table-${index + 1}`).DataTable({
+                data: tableData.data,
+                columns: tableData.columns,
+                pageLength: -1,
+                autoWidth: false,
+                search: {
+                    search: getSearchParam('search')
                 }
             });
+            $(`#table-${index + 1}`).on('search.dt', function syncSearches() {
+                searchValue = $(this).DataTable().search();
+                window.history.replaceState(null, null, `?search=${encodeURIComponent(searchValue)}` + window.location.hash);
+                $.fn.dataTable.tables().forEach(function(table) {
+                    if (table !== this) {
+                        $(table).off('search.dt');
+                        $('#'+table.id+'_filter input')[0].value = searchValue;
+                        $(table).DataTable().search(searchValue).draw();
+                        $(table).on('search.dt', syncSearches);
+                    }
+                });
+            });
         });
-    });
 
-    // Initialize tabs
-    $("#tabs").tabs({
-            activate: function(event, ui) {
-                window.location.hash = ui.newPanel.attr('id');
+        // Initialize tabs
+        $("#tabs").tabs({
+                activate: function(event, ui) {
+                    window.location.hash = ui.newPanel.attr('id');
+                }
             }
-        }
-    );
-});
+        );
+    });
 
     $(function() {
       $(document).tooltip({
@@ -107,4 +107,27 @@ $.getJSON('./data/data.json', function(data) {
         }
       });
     });
+
+    $( function() {
+        $( document ).tooltip({
+          position: {
+            my: "center bottom-20",
+            at: "center top",
+            using: function( position, feedback ) {
+              $( this ).css( position );
+              $( "<div>" )
+                .addClass( "arrow" )
+                .addClass( feedback.vertical )
+                .addClass( feedback.horizontal )
+                .appendTo( this );
+            }
+          }
+        });
+      } );
+
+/*    $('[title]').tooltip({
+        classes: {
+            "ui-tooltip": "my-custom-tooltip"
+        }
+    });*/
 });

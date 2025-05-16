@@ -3,7 +3,9 @@ package com.github.exadmin.ostm.github.facade;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
+import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 
 public class GitHubFacade {
@@ -122,5 +124,108 @@ public class GitHubFacade {
         Object value = map.get(keyName);
         if (value == null) return 0;
         return Integer.parseInt(value.toString());
+    }
+
+    private static final String GQL_QUERY_GET_COMMITS_PER_USER =
+            """
+                    query  {
+                      user(login: "USERXXX") {
+                        contributionsCollection(
+                          from: "FROMXXX"
+                          to: "TOXXX"
+                        ) {
+                          commitContributionsByRepository {
+                            repository {
+                              name
+                              owner {
+                                login
+                              }
+                              url         \s
+                            }
+                            contributions{
+                              totalCount
+                            }
+                          }
+                          pullRequestContributionsByRepository {
+                            repository {
+                              name
+                              owner {
+                                login
+                              }
+                              url
+                            }
+                            contributions {
+                              totalCount
+                            }
+                          }
+                          issueContributionsByRepository {
+                            repository {
+                              name
+                              owner {
+                                login
+                              }
+                              url
+                            }
+                            contributions {
+                              totalCount
+                            }
+                          }
+                        }
+                      }
+                    }                    
+            """;
+
+    public GitHubCommitsForPeriod getNumberOfCommitsForPeriod(String login, LocalDate fromDate, LocalDate toDate) {
+
+        String query = GQL_QUERY_GET_COMMITS_PER_USER;
+        query = query.replace("USERXXX", login);
+        query = query.replace("FROMXXX", MiscUtils.dateToStr(fromDate));
+        query = query.replace("TOXXX", MiscUtils.dateToStr(toDate));
+
+        GitHubRequest request = GitHubRequestBuilder.graphQL().useQuery(query).build();
+        GitHubResponse response = request.execute();
+
+        GitHubCommitsForPeriod result = new GitHubCommitsForPeriod(login);
+
+        // commits
+        {
+            List<Map<String, Object>> listOfMaps = response.getObject("/data/user/contributionsCollection/commitContributionsByRepository");
+            if (listOfMaps != null) {
+                for (Map<String, Object> map : listOfMaps) {
+                    String url = MiscUtils.getValue(map, "/repository/url");
+                    Integer count = MiscUtils.getValue(map, "/contributions/totalCount");
+
+                    result.addCommitsCounter(url, count);
+                }
+            }
+        }
+
+        // PRs
+        {
+            List<Map<String, Object>> listOfMaps = response.getObject("/data/user/contributionsCollection/pullRequestContributionsByRepository");
+            if (listOfMaps != null) {
+                for (Map<String, Object> map : listOfMaps) {
+                    String url = MiscUtils.getValue(map, "/repository/url");
+                    Integer count = MiscUtils.getValue(map, "/contributions/totalCount");
+
+                    result.addPRsCounter(url, count);
+                }
+            }
+        }
+
+        // issue reports
+        {
+            List<Map<String, Object>> listOfMaps = response.getObject("/data/user/contributionsCollection/issueContributionsByRepository");
+            if (listOfMaps != null) {
+                for (Map<String, Object> map : listOfMaps) {
+                    String url = MiscUtils.getValue(map, "/repository/url");
+                    Integer count = MiscUtils.getValue(map, "/contributions/totalCount");
+
+                    result.addIssuesCounter(url, count);
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -3,6 +3,7 @@ package com.github.exadmin.ostm.github.api;
 import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.exadmin.ostm.utils.MiscUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,35 +57,7 @@ public class GitHubResponse {
         this.dataMap = dataMap;
     }
 
-    /**
-     * Goes over data-maps by path provided with keys and returns found result
-     * @param keys list of key names.
-     * @return single value of required type
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T getObject(String ... keys) {
-        Map<String, Object> currentMap = dataMap.getFirst();
-        Object currentObj = null;
-
-        for (String key : keys) {
-            if (currentMap == null) throw new IllegalArgumentException("Incorrect path for the map: " + Arrays.toString(keys));
-            currentObj = currentMap.get(key);
-
-            if (currentObj == null) return null;
-            if (currentObj instanceof Map) {
-                currentMap = (Map<String, Object>) currentObj;
-            } else {
-                currentMap = null;
-            }
-        }
-
-        try {
-            if (currentObj == null) return null;
-
-            return (T) currentObj;
-        } catch (ClassCastException ex) {
-            log.error("Class-cast exception while returning value from data-map. Current value is {}, type is {}", currentObj, currentObj.getClass(), ex);
-            throw new IllegalStateException(ex);
-        }
+    public <T> T getObject(String path) {
+        return MiscUtils.getValue(dataMap.getFirst(), path);
     }
 }

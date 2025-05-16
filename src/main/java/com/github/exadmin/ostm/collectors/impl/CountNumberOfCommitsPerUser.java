@@ -21,7 +21,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
         final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
 
         final TheColumn theColumn = theSheet.findColumn("column:contributions_count", newColumn -> {
-            newColumn.setTitle("Total Contributions Count");
+            newColumn.setTitle("Contributions for All Times");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
             newColumn.setRenderingOrder(-800);
         });
@@ -49,7 +49,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
 
             GitHubResponse ghResponse = request.execute();
 
-            Integer count = ghResponse.getObject("data", "user", "contributionsCollection", "contributionCalendar", "totalContributions");
+            Integer count = ghResponse.getObject("/data/user/contributionsCollection/contributionCalendar/totalContributions");
             if (count == null) count = 0;
 
             TheCellValue cellValue = new TheCellValue("" + count);
