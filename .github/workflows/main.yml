@@ -43,12 +43,12 @@ jobs:
           cd ./target          
           java -jar ostm.jar ${{secrets.OSTM_TOKEN}} ./data.json ./cache
           
-          cp ./data.json ./../html-report/data/data.json                    
+          cp ./data.json ./../docs/data/data.json                    
 
           git config user.name github-actions
           git config user.email github-actions@github.com
                     
-          git add ./../html-report/data/data.json          
+          git add ./../docs/data/data.json          
                     
-          git commit -m "data.json is updated at $(date)"
+          git commit -m "./docs/data/data.json is updated at $(date)"
           git push
