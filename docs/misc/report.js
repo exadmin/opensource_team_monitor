@@ -26,7 +26,7 @@ function defaultRender (data, type, row, meta) {
 }
 
 $(document).ready(function() {
-// Add custom sorting for 'only-numbers'
+    // Add custom sorting for 'only-numbers'
     jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         "only-numbers-asc": function ( a,b ) {
             var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;

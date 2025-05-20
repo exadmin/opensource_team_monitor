@@ -1,13 +1,10 @@
-package com.github.exadmin.ostm.collectors.impl;
+package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubContributorData;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
-import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportTable;
-import com.github.exadmin.ostm.uimodel.TheSheet;
+import com.github.exadmin.ostm.uimodel.*;
 
 import java.util.*;
 
@@ -54,7 +51,7 @@ public class TeamKnownNames extends AbstractCollector {
     }
 
     @Override
-    public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
         Set<String> uniqueLogins = new HashSet<>();
 
         List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
@@ -66,19 +63,8 @@ public class TeamKnownNames extends AbstractCollector {
         }
 
         // create report
-        final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
-
-        final TheColumn colLogin = theSheet.findColumn("column:login", newColumn -> {
-            newColumn.setTitle("GitHub login");
-            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(-1000);
-        });
-
-        final TheColumn colRealName = theSheet.findColumn("column:real-name", newColumn -> {
-            newColumn.setTitle("Real name");
-            newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(-900);
-        });
+        final TheColumn colLogin = theReportModel.findColumn(GrandReportFactory.COL_USER_LOGIN);
+        final TheColumn colRealName = theReportModel.findColumn(GrandReportFactory.COL_USER_REAL_NAME);
 
         for (String login : uniqueLogins) {
             String rowId = "row:" + login;

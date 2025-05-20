@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.collectors.impl;
+package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
@@ -6,10 +6,7 @@ import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubCommitsForPeriod;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportTable;
-import com.github.exadmin.ostm.uimodel.TheSheet;
+import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.time.DayOfWeek;
@@ -18,17 +15,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
-    @Override
-    public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
-        final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
-
-        LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
-        LocalDate fromDate  = todayDate.minusMonths(3).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-
-        String fromStr = MiscUtils.dateToStr(fromDate);
-        String toStr  = MiscUtils.dateToStr(todayDate);
-
-        final String queryTemplate = """
+    private static final String GQL_QUERY_TEMPLATE = """
                 {
                   user(login: "USERXXX") {
                     contributionsCollection(
@@ -50,6 +37,14 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                 }
                 """;
 
+    @Override
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+        LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        LocalDate fromDate  = todayDate.minusMonths(3).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+
+        String fromStr = MiscUtils.dateToStr(fromDate);
+        String toStr  = MiscUtils.dateToStr(todayDate);
+
         List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");
 
         // there can be no respose for some users - but we need to fulfill them with zeros or some other stubs
@@ -58,7 +53,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
         Set<TheColumn> columns = new HashSet<>();
 
         for (String login : uniqueUsers) {
-            String query = queryTemplate.replace("USERXXX", login);
+            String query = GQL_QUERY_TEMPLATE.replace("USERXXX", login);
             query = query.replace("FROMXXX", fromStr);
             query = query.replace("TOXXX", toStr);
 
@@ -71,6 +66,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                 continue;
             }
 
+            int weekBackNumber = 1;
             for (Map<String, Object> weekMap : weeksMap) {
                 List<Map<String, Object>> weekDays = (List<Map<String, Object>>) weekMap.get("contributionDays");
 
@@ -88,14 +84,14 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                     totalCount = totalCount + count;
                 }
 
+                final TheColumn theColumn = theReportModel.findColumn(GrandReportFactory.COL_WEEK_BACK_ID_PREFIX + weekBackNumber);
+                if (theColumn == null) throw new IllegalStateException("Can't find column for week with number = " + weekBackNumber);
+                weekBackNumber++;
+
                 // here we have date of week beginning and total contributiones cound per that week
                 String weekShortDateStr = MiscUtils.dateToStr(weekBeginingDate).substring(0, 10);
-                String weekName = "column:week:" + weekShortDateStr;
-                final TheColumn theColumn = theSheet.findColumn(weekName, newColumn -> {
-                    newColumn.setTitle("Week " + weekShortDateStr);
-                    newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-                    // newColumn.setRenderingOrder(10);
-                });
+                String weekName = "Week " + weekShortDateStr;
+                theColumn.setTitle(weekName);
 
                 columns.add(theColumn);
 

@@ -56,6 +56,21 @@ public class GitHubFacade {
     }
 
     /**
+     * Returns repository meta-data.
+     * @param owner String owner name of repository
+     * @param repoShortName String repository name to return data for
+     * @return GitHubRepository instance or null if nothing is found
+     */
+    public GitHubRepository getGitHubRepository(String owner, String repoShortName) {
+        List<GitHubRepository> allRepositories = getAllRepositories(owner);
+        for (GitHubRepository repository : allRepositories) {
+            if (repoShortName.equals(repository.getName())) return repository;
+        }
+
+        return null;
+    }
+
+    /**
      * Returns contributions info for requested repository
      * @param owner String short name of OWNER of repositories
      * @param repositoryName String short name of the repository to request data for

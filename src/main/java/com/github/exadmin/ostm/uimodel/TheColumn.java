@@ -1,6 +1,8 @@
 package com.github.exadmin.ostm.uimodel;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TheColumn {
@@ -11,14 +13,13 @@ public class TheColumn {
     private String title;
     private final Map<String, TheCellValue> dataMap;
     private String cssClassName;
-    private final TheSheet parent;
+
     private int renderingOrder;
 
-    TheColumn(String id, TheSheet parent) {
+    TheColumn(String id) {
         this.id = id;
         this.dataMap = new LinkedHashMap<>();
         this.cssClassName = TD_CENTER_MIDDLE;
-        this.parent = parent;
     }
 
     public String getId() {
@@ -39,7 +40,6 @@ public class TheColumn {
     }
 
     public void addValue(String rowId, TheCellValue cellValue) {
-        if (!parent.getRowsDirectly().contains(rowId)) parent.getRowsDirectly().add(rowId);
         dataMap.put(rowId, cellValue);
     }
 
@@ -65,5 +65,9 @@ public class TheColumn {
 
     public void setRenderingOrder(int renderingOrder) {
         this.renderingOrder = renderingOrder;
+    }
+
+    public List<String> getRows() {
+        return new ArrayList<>(dataMap.keySet());
     }
 }

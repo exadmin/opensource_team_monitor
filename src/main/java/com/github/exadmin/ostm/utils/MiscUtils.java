@@ -10,8 +10,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -102,5 +101,18 @@ public class MiscUtils {
             log.error("Class-cast exception while returning value from data-map. Current value is {}, type is {}", currentObj, currentObj.getClass(), ex);
             throw new IllegalStateException(ex);
         }
+    }
+
+    public static <K, V> Map<K, V> sortMapByValues(Map<K, V> sourceMap, Comparator<Map.Entry<K, V>> comparator) {
+        List<Map.Entry<K, V>> list = new ArrayList<>(sourceMap.entrySet());
+
+        list.sort(comparator);
+
+        Map<K, V> sortedMap = new LinkedHashMap<>();
+        for (Map.Entry<K, V> entry : list) {
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+
+        return sortedMap;
     }
 }

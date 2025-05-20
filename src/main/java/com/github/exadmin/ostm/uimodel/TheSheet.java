@@ -5,13 +5,13 @@ import java.util.*;
 public class TheSheet {
     private final String id;
     private String title;
+
     private final List<TheColumn> columns;
-    private final List<String> rows;
+    private TheColumn baseColumn;
 
     TheSheet(String id) {
         this.id = id;
         this.columns = new ArrayList<>();
-        this.rows    = new ArrayList<>();
     }
 
     @Override
@@ -42,70 +42,26 @@ public class TheSheet {
         return new ArrayList<>(columns);
     }
 
-    public List<String> getRows() {
-        return new ArrayList<>(rows);
-    }
-
-    List<String> getRowsDirectly() {
-        return rows;
-    }
-
     @Override
     public String toString() {
         return id;
     }
 
-    public TheColumn findColumn(String columnId, OnCreateListener<TheColumn> listener) {
-        // try find existed column by provided id
-        for (TheColumn next : columns) {
-            if (next.getId().equals(columnId)) return next;
-        }
-
-        // creating new column
-        TheColumn theColumn = new TheColumn(columnId, this);
-        listener.process(theColumn);
-
+    /**
+     * Register column to be rendered within this sheet.
+     * @param theColumn TheColumn instance to be included into the sheet rendering procedure
+     * @param definesInitialRenderingOrder if true - then this column will be used as an ordering base for all rows.
+     */
+    public void registerColumn(TheColumn theColumn, boolean definesInitialRenderingOrder) {
         columns.add(theColumn);
-        return theColumn;
+        if (definesInitialRenderingOrder) baseColumn = theColumn;
     }
 
-    public void sortBy(TheColumn column, Comparator<TheCellValue> comparator) {
-        // define keys which are know and unknown to the mentioned column (as sheet can contain more data than exists in the column)
-        Set<String> mentionedColumnKeys = column.getDataMap().keySet();
-        List<String> unknownToColumnKeys = new ArrayList<>(rows);
-        unknownToColumnKeys.removeAll(mentionedColumnKeys);
-
-        // fulfill column with null for each unknown key
-        List<Map.Entry<String, TheCellValue>> entryList = new ArrayList<>(column.getDataMap().entrySet());
-        for (String rowId : unknownToColumnKeys) {
-            Map.Entry<String, TheCellValue> me = new AbstractMap.SimpleEntry<>(rowId, new TheCellValue(""));
-            entryList.add(me);
-        }
-
-        // do sorting
-        entryList.sort((entry1, entry2) -> comparator.compare(entry1.getValue(), entry2.getValue()));
-
-        // refill rows & column data-map by reordered values
-        column.getDataMap().clear();
-        rows.clear();
-
-        for (Map.Entry<String, TheCellValue> entry : entryList) {
-            column.getDataMap().put(entry.getKey(), entry.getValue());
-            rows.add(entry.getKey());
-        }
-
-        // drop values from mentioned column for unexisted keys (can be done on prev step actually)
-        column.getDataMap().keySet().retainAll(rows);
-    }
-
-    public void sortColumnsByRenderingOrder() {
-        columns.sort((column1, column2) -> {
-            int result = column1.getRenderingOrder() - column2.getRenderingOrder();
-            if (result != 0) return result;
-            String title1 = column1.getTitle() == null ? "" : column1.getTitle();
-            String title2 = column2.getTitle() == null ? "" : column2.getTitle();
-
-            return title1.compareTo(title2);
-        });
+    /**
+     * Returns column instance which will be used as a base column to order rows by.
+     * @return TheColumn instance
+     */
+    public TheColumn getBaseColumn() {
+        return baseColumn;
     }
 }

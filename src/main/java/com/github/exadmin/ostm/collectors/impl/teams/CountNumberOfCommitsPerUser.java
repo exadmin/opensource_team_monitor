@@ -1,32 +1,16 @@
-package com.github.exadmin.ostm.collectors.impl;
+package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportTable;
-import com.github.exadmin.ostm.uimodel.TheSheet;
+import com.github.exadmin.ostm.uimodel.*;
 
 import java.util.List;
 
 public class CountNumberOfCommitsPerUser extends AbstractCollector {
-    @Override
-    public void collectDataInto(TheReportTable theReportTable, GitHubFacade gitHubFacade) {
-        List<String> uniqueLogins = gitHubFacade.getUniqueUsers("Netcracker");
-
-        // create report
-        final TheSheet theSheet = theReportTable.findSheet("sheet:team-summary", newSheet -> newSheet.setTitle("Team Summary"));
-
-        final TheColumn theColumn = theSheet.findColumn("column:contributions_count", newColumn -> {
-            newColumn.setTitle("Contributions for All Times");
-            newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-            newColumn.setRenderingOrder(-800);
-        });
-
-        String gqlQuery = """
+    private static final String GQL_QUERY_TEMPLATE = """
                 {
                   user(login: "XXXXX") {
                     contributionsCollection(
@@ -39,8 +23,14 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
                   }
                 }""";
 
+    @Override
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+        List<String> uniqueLogins = gitHubFacade.getUniqueUsers("Netcracker");
+
+        final TheColumn theColumn = theReportModel.findColumn(GrandReportFactory.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
+
         for (String login : uniqueLogins) {
-            String newQuery = gqlQuery.replace("XXXXX", login);
+            String newQuery = GQL_QUERY_TEMPLATE.replace("XXXXX", login);
 
             GitHubRequest request = GitHubRequestBuilder
                     .graphQL()

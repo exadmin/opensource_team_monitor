@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.exadmin.ostm.uimodel.TheCellValue;
 import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportTable;
+import com.github.exadmin.ostm.uimodel.TheReportModel;
 import com.github.exadmin.ostm.uimodel.TheSheet;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -19,9 +19,9 @@ import java.util.Map;
 public class ReportModelPersister {
     private static final Logger log = LoggerFactory.getLogger(ReportModelPersister.class);
 
-    private final TheReportTable reportModel;
+    private final TheReportModel reportModel;
 
-    public ReportModelPersister(TheReportTable reportModel) {
+    public ReportModelPersister(TheReportModel reportModel) {
         this.reportModel = reportModel;
     }
 
@@ -32,9 +32,6 @@ public class ReportModelPersister {
             JsonTable jsonTable = new JsonTable(rootContainer);
             jsonTable.setTitle(sheet.getTitle());
 
-            // do columns sorting to define rendering order
-            sheet.sortColumnsByRenderingOrder();
-
             // register metric-columns in the current table
             for (TheColumn theColumn : sheet.getColumns()) {
                 JsonColumn jsonColumn = new JsonColumn(jsonTable);
@@ -43,8 +40,10 @@ public class ReportModelPersister {
                 jsonColumn.setClassName(theColumn.getCssClassName());
             }
 
+            // collect all rowidsd
+
             // add data
-            for (String rowId : sheet.getRows()) {
+            for (String rowId : sheet.getBaseColumn().getRows()) {
                 Map<String, Object> dataMap = new HashMap<>();
 
                 for (TheColumn theColumn : sheet.getColumns()) {
