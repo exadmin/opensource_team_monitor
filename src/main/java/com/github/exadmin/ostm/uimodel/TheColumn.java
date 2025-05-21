@@ -16,8 +16,8 @@ public class TheColumn {
 
     private int renderingOrder;
 
-    TheColumn(String id) {
-        this.id = id;
+    TheColumn(TheColumId id) {
+        this.id = id.getId();
         this.dataMap = new LinkedHashMap<>();
         this.cssClassName = TD_CENTER_MIDDLE;
     }

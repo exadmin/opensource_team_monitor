@@ -20,6 +20,7 @@ public class GitHubResponse {
 
     private int httpCode;
     private List<Map<String, Object>> dataMap;
+    private boolean isFromCache;
 
     public GitHubResponse(int httpCode, String jsonResponse) {
         try {
@@ -59,5 +60,14 @@ public class GitHubResponse {
 
     public <T> T getObject(String path) {
         return MiscUtils.getValue(dataMap.getFirst(), path);
+    }
+
+    public boolean isFromCache() {
+        return isFromCache;
+    }
+
+    GitHubResponse setFromCache(boolean fromCache) {
+        isFromCache = fromCache;
+        return this;
     }
 }

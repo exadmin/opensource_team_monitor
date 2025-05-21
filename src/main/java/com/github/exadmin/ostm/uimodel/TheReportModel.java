@@ -22,7 +22,7 @@ public class TheReportModel {
      * @param listener in case new sheet is created - this listener is called to fulfill new sheet instance
      * @return TheSheet instance.
      */
-    TheSheet allocateSheet(String sheetId, OnCreateListener<TheSheet> listener) {
+    TheSheet allocateSheet(TheSheetId sheetId, OnCreateListener<TheSheet> listener) {
         TheSheet existedSheet = findSheet(sheetId);
         if (existedSheet != null) return existedSheet;
 
@@ -30,7 +30,7 @@ public class TheReportModel {
         TheSheet sheet = new TheSheet(sheetId);
         listener.process(sheet);
 
-        sheetsMap.put(sheetId, sheet);
+        sheetsMap.put(sheetId.getId(), sheet);
         return sheet;
     }
 
@@ -39,11 +39,11 @@ public class TheReportModel {
      * @param sheetId String sheet-id to try to return
      * @return TheSheet instance or null if nothing is found.
      */
-    public TheSheet findSheet(String sheetId) {
-        return sheetsMap.get(sheetId);
+    public TheSheet findSheet(TheSheetId sheetId) {
+        return sheetsMap.get(sheetId.getId());
     }
 
-    TheColumn allocateColumn(String columnId, OnCreateListener<TheColumn> listener) {
+    TheColumn allocateColumn(TheColumId columnId, OnCreateListener<TheColumn> listener) {
         TheColumn existedColumn = findColumn(columnId);
         if (existedColumn != null) return existedColumn;
 
@@ -51,7 +51,7 @@ public class TheReportModel {
         TheColumn theColumn = new TheColumn(columnId);
         listener.process(theColumn);
 
-        columnsMap.put(columnId, theColumn);
+        columnsMap.put(columnId.getId(), theColumn);
         return theColumn;
     }
 
@@ -60,7 +60,8 @@ public class TheReportModel {
      * @param columnId String colum id to do searching by.
      * @return TheColumn instance or null if nothing is found.
      */
-    public TheColumn findColumn(String columnId) {
-        return columnsMap.get(columnId);
+    public TheColumn findColumn(TheColumId columnId) {
+        if (columnId == null) return null;
+        return columnsMap.get(columnId.getId());
     }
 }

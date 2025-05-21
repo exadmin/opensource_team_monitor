@@ -1,9 +1,9 @@
 package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
-import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
+import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
-import com.github.exadmin.ostm.uimodel.GrandReportFactory;
+import com.github.exadmin.ostm.uimodel.GrandReportModel;
 import com.github.exadmin.ostm.uimodel.TheReportModel;
 import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import org.slf4j.Logger;
@@ -33,13 +33,13 @@ public class OpenSourceTeamMonitorApp {
             log.error("GitHub token is required for the processing. Provide it via external file. Terminating");
             System.exit(-1);
         }
-        GitHubRequestBuilder.setAuthenticationToken(gitHubToken);
+        HttpRequestBuilder.setAuthenticationToken(gitHubToken);
 
         final Path outputFilePath = Paths.get(args[1]);
         NewCacheManager.setCacheDirectoryPath(args[2]);
 
         // Step2: Run collectors
-        TheReportModel reportModel = GrandReportFactory.getGrandReportInstance();
+        TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
         CollectorsFactory colFactory = new CollectorsFactory(reportModel);
         colFactory.runCollectors();
 

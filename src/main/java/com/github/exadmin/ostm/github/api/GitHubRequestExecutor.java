@@ -84,7 +84,7 @@ public class GitHubRequestExecutor {
         // check cache first
         String responseBody = cacheManager.getFromCache(request.url, request.bodyText);
         if (responseBody != null) {
-            return new GitHubResponse(200, responseBody);
+            return (new GitHubResponse(200, responseBody)).setFromCache(true);
         }
 
         // do real request in case nothing was found in the cache
@@ -96,11 +96,11 @@ public class GitHubRequestExecutor {
             cacheManager.putToCache(request.url, request.bodyText, result.getValue(), CACHE_TTL_IN_SECONDS);
         }
 
-        return new GitHubResponse(result.getKey(), result.getValue());
+        return (new GitHubResponse(result.getKey(), result.getValue())).setFromCache(false);
     }
 
     private static GitHubResponse emptyResponse() {
-        return new GitHubResponse(0, "[]");
+        return (new GitHubResponse(0, "[]")).setFromCache(false);
     }
 
     private Map.Entry<Integer, String> executeNoCache(GitHubRequest request) {
@@ -109,7 +109,7 @@ public class GitHubRequestExecutor {
 
             httpRequest.setHeader("Accept", "application/vnd.github+json");
             httpRequest.setHeader("X-GitHub-Api-Version", "2022-11-28");
-            if (StringUtils.isNotEmpty(request.token)) httpRequest.setHeader("Authorization", "Bearer " + request.token);
+            if (StringUtils.isNotEmpty(request.token) && !TempConstants.NO_TOKEN.equals(request.token)) httpRequest.setHeader("Authorization", "Bearer " + request.token);
             if (StringUtils.isNotEmpty(request.bodyText)) {
                 httpRequest.setEntity(new StringEntity(request.bodyText));
             }

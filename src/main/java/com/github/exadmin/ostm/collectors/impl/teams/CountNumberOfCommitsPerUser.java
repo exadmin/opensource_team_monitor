@@ -2,7 +2,7 @@ package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
-import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
+import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.uimodel.*;
@@ -27,13 +27,13 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
         List<String> uniqueLogins = gitHubFacade.getUniqueUsers("Netcracker");
 
-        final TheColumn theColumn = theReportModel.findColumn(GrandReportFactory.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
+        final TheColumn theColumn = theReportModel.findColumn(TheColumId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
 
         for (String login : uniqueLogins) {
             String newQuery = GQL_QUERY_TEMPLATE.replace("XXXXX", login);
 
-            GitHubRequest request = GitHubRequestBuilder
-                    .graphQL()
+            GitHubRequest request = HttpRequestBuilder
+                    .gitHubGraphQLCall()
                     .useQuery(newQuery)
                     .build();
 

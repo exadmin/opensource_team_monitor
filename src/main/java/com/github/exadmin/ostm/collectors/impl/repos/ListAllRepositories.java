@@ -12,8 +12,8 @@ public class ListAllRepositories extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
-        final TheColumn colRepoNumber = theReportModel.findColumn(GrandReportFactory.COL_REPO_NUMBER);
-        final TheColumn colRepoName = theReportModel.findColumn(GrandReportFactory.COL_REPO_NAME);
+        final TheColumn colRepoNumber = theReportModel.findColumn(TheColumId.COL_REPO_NUMBER);
+        final TheColumn colRepoName = theReportModel.findColumn(TheColumId.COL_REPO_NAME);
 
         // Collect known repositories into the map
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");

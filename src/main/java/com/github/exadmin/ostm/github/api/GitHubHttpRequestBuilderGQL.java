@@ -8,23 +8,23 @@ import org.apache.hc.core5.http.Method;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 // play at: https://docs.github.com/ru/graphql/overview/explorer
-public class GitHubRequestBuilderGQL extends GitHubRequestBuilder {
+public class GitHubHttpRequestBuilderGQL extends HttpRequestBuilder {
     protected static final String GRAPH_QL_END_POINT = "https://api.github.com/graphql";
 
     protected GitHubRequest request;
 
-    GitHubRequestBuilderGQL(String token) {
+    GitHubHttpRequestBuilderGQL(String token) {
         this.request = new GitHubRequest();
         this.request.method = Method.POST;
         this.request.url = GRAPH_QL_END_POINT;
         this.request.token = token;
     }
 
-    protected GitHubRequestBuilderGQL getThis() {
+    protected GitHubHttpRequestBuilderGQL getThis() {
         return this;
     }
 
-    public GitHubRequestBuilderGQL useQuery(String gqlQuery) {
+    public GitHubHttpRequestBuilderGQL useQuery(String gqlQuery) {
         this.request.bodyText = gqlQuery;
 
         return getThis();

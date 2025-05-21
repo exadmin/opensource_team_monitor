@@ -9,8 +9,8 @@ public class TheSheet {
     private final List<TheColumn> columns;
     private TheColumn baseColumn;
 
-    TheSheet(String id) {
-        this.id = id;
+    TheSheet(TheSheetId id) {
+        this.id = id.getId();
         this.columns = new ArrayList<>();
     }
 
@@ -24,10 +24,6 @@ public class TheSheet {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getTitle() {

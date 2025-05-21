@@ -4,21 +4,21 @@ import org.apache.hc.core5.http.Method;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-public class GitHubRequestBuilderREST extends GitHubRequestBuilder {
+public class GitHubHttpRequestBuilderREST extends HttpRequestBuilder {
     protected GitHubRequest request;
 
-    GitHubRequestBuilderREST(String token) {
+    GitHubHttpRequestBuilderREST(String token) {
         this.request = new GitHubRequest();
         this.request.method   = Method.GET;
         this.request.bodyText = "";
         this.request.token    = token;
     }
 
-    protected GitHubRequestBuilderREST getThis() {
+    protected GitHubHttpRequestBuilderREST getThis() {
         return this;
     }
 
-    public GitHubRequestBuilderREST fetchPages(int itemsPerPage, int fromPage, int toPage) {
+    public GitHubHttpRequestBuilderREST fetchPages(int itemsPerPage, int fromPage, int toPage) {
         this.request.fromPage = fromPage;
         this.request.toPage   = toPage;
         this.request.itemsPerPage = itemsPerPage;
@@ -26,7 +26,7 @@ public class GitHubRequestBuilderREST extends GitHubRequestBuilder {
         return getThis();
     }
 
-    public GitHubRequestBuilderREST toURL(String url) {
+    public GitHubHttpRequestBuilderREST toURL(String url) {
         this.request.url = url;
 
         return getThis();

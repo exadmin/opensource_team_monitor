@@ -2,7 +2,7 @@ package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
-import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
+import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubCommitsForPeriod;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
@@ -57,7 +57,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
             query = query.replace("FROMXXX", fromStr);
             query = query.replace("TOXXX", toStr);
 
-            GitHubRequest request = GitHubRequestBuilder.graphQL().useQuery(query).build();
+            GitHubRequest request = HttpRequestBuilder.gitHubGraphQLCall().useQuery(query).build();
             GitHubResponse response = request.execute();
 
             List<Map<String, Object>> weeksMap = response.getObject("/data/user/contributionsCollection/contributionCalendar/weeks");
@@ -68,6 +68,8 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
 
             int weekBackNumber = 1;
             for (Map<String, Object> weekMap : weeksMap) {
+                if (weekBackNumber > 12) break;
+
                 List<Map<String, Object>> weekDays = (List<Map<String, Object>>) weekMap.get("contributionDays");
 
                 int totalCount = 0;
@@ -84,7 +86,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                     totalCount = totalCount + count;
                 }
 
-                final TheColumn theColumn = theReportModel.findColumn(GrandReportFactory.COL_WEEK_BACK_ID_PREFIX + weekBackNumber);
+                final TheColumn theColumn = theReportModel.findColumn(TheColumId.findById("column:week_back_" + weekBackNumber));
                 if (theColumn == null) throw new IllegalStateException("Can't find column for week with number = " + weekBackNumber);
                 weekBackNumber++;
 

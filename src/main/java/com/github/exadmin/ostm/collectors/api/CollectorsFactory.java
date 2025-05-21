@@ -1,5 +1,7 @@
 package com.github.exadmin.ostm.collectors.api;
 
+import com.github.exadmin.ostm.collectors.impl.repos.SonarCodeCoverage;
+import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
 import com.github.exadmin.ostm.collectors.impl.repos.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.teams.NumberOfCommitsPerWeekPerUser;
@@ -17,6 +19,8 @@ public class CollectorsFactory {
         collectors.add(new ListAllRepositories());
         collectors.add(new CountNumberOfCommitsPerUser());
         collectors.add(new NumberOfCommitsPerWeekPerUser());
+        collectors.add(new TopicAndTeamPerRepository());
+        collectors.add(new SonarCodeCoverage());
     }
 
     private final TheReportModel theReportModel;

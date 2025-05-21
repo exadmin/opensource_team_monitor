@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.github.facade;
 
 import com.github.exadmin.ostm.github.api.GitHubRequest;
-import com.github.exadmin.ostm.github.api.GitHubRequestBuilder;
+import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
@@ -20,8 +20,8 @@ public class GitHubFacade {
      * @return List of GitHubRepository
      */
     public List<GitHubRepository> getAllRepositories(String ownerName) {
-        GitHubRequest request = GitHubRequestBuilder
-                .rest()
+        GitHubRequest request = HttpRequestBuilder
+                .gitHubRESTCall()
                 .toURL("https://api.github.com/orgs/" + ownerName + "/repos")
                 .fetchPages(50, 1, 1024)
                 .build();
@@ -38,16 +38,15 @@ public class GitHubFacade {
                 String repoName = getStrValue(repoMap, "name");
                 String repoUrl  = getStrValue(repoMap, "url");
                 String repoCloneUrl = getStrValue(repoMap, "clone_url");
+                List<String> topics = getListValue(repoMap, "topics");
 
                 // remove k8-conformance as it brings lotof non intresting data
                 if ("k8s-conformance".equals(repoName)) continue;
 
                 GitHubRepository ghRepo = new GitHubRepository(repoId, repoName, repoUrl, repoCloneUrl);
+                topics.forEach(ghRepo::addTopic);
                 result.add(ghRepo);
             }
-
-
-
 
             return result;
         }
@@ -79,8 +78,8 @@ public class GitHubFacade {
     public List<GitHubContributorData> getContributionsForRepository(String owner, String repositoryName) {
         // GitHubResponse ghResponse = ghCaller.doGet("https://api.github.com/repos/" + owner + "/" + repositoryName +"/contributors", CACHE_TTL_SECONDS);
 
-        GitHubRequest request = GitHubRequestBuilder
-                .rest()
+        GitHubRequest request = HttpRequestBuilder
+                .gitHubRESTCall()
                 .toURL("https://api.github.com/repos/" + owner + "/" + repositoryName +"/contributors")
                 .build();
 
@@ -141,6 +140,17 @@ public class GitHubFacade {
         return Integer.parseInt(value.toString());
     }
 
+    @SuppressWarnings("unchecked")
+    private static <T> List<T> getListValue(Map<String, Object> map, String keyName) {
+        Object value = map.get(keyName);
+        if (value == null) return Collections.emptyList();
+        if (value instanceof List) {
+            return (List<T>) value;
+        }
+
+        throw new IllegalArgumentException("List is expected but " + value.getClass() + " is found.");
+    }
+
     private static final String GQL_QUERY_GET_COMMITS_PER_USER =
             """
                     query  {
@@ -197,7 +207,7 @@ public class GitHubFacade {
         query = query.replace("FROMXXX", MiscUtils.dateToStr(fromDate));
         query = query.replace("TOXXX", MiscUtils.dateToStr(toDate));
 
-        GitHubRequest request = GitHubRequestBuilder.graphQL().useQuery(query).build();
+        GitHubRequest request = HttpRequestBuilder.gitHubGraphQLCall().useQuery(query).build();
         GitHubResponse response = request.execute();
 
         GitHubCommitsForPeriod result = new GitHubCommitsForPeriod(login);
