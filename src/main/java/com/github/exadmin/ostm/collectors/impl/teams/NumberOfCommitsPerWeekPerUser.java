@@ -116,7 +116,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                     sbTooltip.append("&nbsp;&nbsp;").append(noDomain(me.getKey())).append(": ").append(me.getValue()).append("<br>");
                 }
 
-                TheCellValue cellValue = new TheCellValue("" + totalCount, "" + totalCount);
+                TheCellValue cellValue = new TheCellValue(totalCount, totalCount, SeverityLevel.INFO);
                 cellValue.setToolTipText(sbTooltip.toString());
                 String rowId = "row:" + login;
 
@@ -127,7 +127,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
 
         for (String login : usersWithNoResponse) {
             for (TheColumn theColumn : columns) {
-                TheCellValue cellValue = new TheCellValue("No data", "0");
+                TheCellValue cellValue = new TheCellValue("No data", "0", SeverityLevel.WARN);
                 String rowId = "row:" + login;
 
                 theColumn.addValue(rowId, cellValue);

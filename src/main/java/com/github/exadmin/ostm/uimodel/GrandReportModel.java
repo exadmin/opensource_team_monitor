@@ -63,6 +63,12 @@ public class GrandReportModel {
             newColumn.setRenderingOrder(2);
         });
 
+        TheColumn colOpenedPRs = theReportModel.allocateColumn(COL_REPO_OPENED_PULL_REQUESTS_COUNT, newColumn -> {
+            newColumn.setTitle("Opened Pull Requests Count");
+            newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
+            newColumn.setRenderingOrder(3);
+        });
+
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
             newSheet.setTitle("Repositories check list");
         });
@@ -104,6 +110,7 @@ public class GrandReportModel {
         sheetAllRepos.registerColumn(colRepoName, true);
         sheetAllRepos.registerColumn(colTopics, false);
         sheetAllRepos.registerColumn(colSonarMetric, false);
+        sheetAllRepos.registerColumn(colOpenedPRs, false);
 
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);

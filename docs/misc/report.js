@@ -17,14 +17,24 @@ function defaultRender (data, type, row, meta) {
         return data.sortByValue;
     }
 
+    // Be aligned with com.github.exadmin.ostm.uimodel.SeverityLevel
+    let value = data.value || '&nbsp;';
+    if (data.severity == 'OK') value = value + '&nbsp;✅';
+    if (data.severity == 'ERR') value = value + '&nbsp;❌';
+    if (data.severity == 'WARN') value = value + '&nbsp;⛅';
+    if (data.severity == 'INFO') value = value + '';
+    if (data.severity == 'SEC') value = value + '&nbsp;&#128561;';
+    if (data.severity == 'SKIP') value = value + '&nbsp;&#x1F4A4;';
+
+
     if (data.title && data.href) {
-        return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a></div>';
+        return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + value + '</a></div>';
     } else if (data.title) {
-        return '<div title="' + data.title + '">' + (data.value || '&nbsp;') + '</div>';
+        return '<div title="' + data.title + '">' + value + '</div>';
     } else if (data.href) {
-        return '<a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a>';
-    } else if (data.value) {
-        return String(data.value);
+        return '<a href="' + data.href + '" target="_blank">' + value + '</a>';
+    } else if (value) {
+        return String(value);
     } else {
         return String(data);
     }

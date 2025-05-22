@@ -8,6 +8,9 @@ import com.github.exadmin.ostm.utils.MiscUtils;
 import java.time.LocalDate;
 import java.util.*;
 
+import static com.github.exadmin.ostm.utils.MiscUtils.getIntValue;
+import static com.github.exadmin.ostm.utils.MiscUtils.getStrValue;
+
 public class GitHubFacade {
     private static final int CACHE_TTL_SECONDS = 5/*hours*/ * 60/*minutes*/ * 60/*seconds*/;
 
@@ -34,17 +37,11 @@ public class GitHubFacade {
             List<GitHubRepository> result = new ArrayList<>();
 
             for (Map<String, Object> repoMap : listOfMaps) {
-                String repoId   = getStrValue(repoMap, "id");
-                String repoName = getStrValue(repoMap, "name");
-                String repoUrl  = getStrValue(repoMap, "url");
-                String repoCloneUrl = getStrValue(repoMap, "clone_url");
-                List<String> topics = getListValue(repoMap, "topics");
+                GitHubRepository ghRepo = new GitHubRepository(repoMap);
 
                 // remove k8-conformance as it brings lotof non intresting data
-                if ("k8s-conformance".equals(repoName)) continue;
+                if (ghRepo.getName().equals("k8s-conformance")) continue;
 
-                GitHubRepository ghRepo = new GitHubRepository(repoId, repoName, repoUrl, repoCloneUrl);
-                topics.forEach(ghRepo::addTopic);
                 result.add(ghRepo);
             }
 
@@ -128,28 +125,9 @@ public class GitHubFacade {
         return new ArrayList<>(uniqueLogins);
     }
 
-    private static String getStrValue(Map<String, Object> map, String keyName) {
-        Object value = map.get(keyName);
-        if (value == null) return null;
-        return value.toString();
-    }
 
-    private static int getIntValue(Map<String, Object> map, String keyName) {
-        Object value = map.get(keyName);
-        if (value == null) return 0;
-        return Integer.parseInt(value.toString());
-    }
 
-    @SuppressWarnings("unchecked")
-    private static <T> List<T> getListValue(Map<String, Object> map, String keyName) {
-        Object value = map.get(keyName);
-        if (value == null) return Collections.emptyList();
-        if (value instanceof List) {
-            return (List<T>) value;
-        }
 
-        throw new IllegalArgumentException("List is expected but " + value.getClass() + " is found.");
-    }
 
     private static final String GQL_QUERY_GET_COMMITS_PER_USER =
             """

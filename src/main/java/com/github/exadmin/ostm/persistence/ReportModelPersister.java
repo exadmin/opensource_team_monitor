@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportModel;
-import com.github.exadmin.ostm.uimodel.TheSheet;
+import com.github.exadmin.ostm.uimodel.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +59,9 @@ public class ReportModelPersister {
 
                     String toolTip = theCellValue == null ? null : theCellValue.getToolTipText();
                     if (StringUtils.isNotEmpty(toolTip)) cellValueJson.put("title", toolTip);
+
+                    SeverityLevel level = theCellValue == null ? SeverityLevel.ERROR : theCellValue.getSeverityLevel();
+                    cellValueJson.put("severity", level.toString());
 
                     dataMap.put(theColumn.getId(), cellValueJson);
                 }

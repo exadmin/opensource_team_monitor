@@ -1,5 +1,6 @@
 package com.github.exadmin.ostm.collectors.api;
 
+import com.github.exadmin.ostm.collectors.impl.repos.NumberOfOpenedPullRequests;
 import com.github.exadmin.ostm.collectors.impl.repos.SonarCodeCoverage;
 import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
@@ -21,6 +22,7 @@ public class CollectorsFactory {
         collectors.add(new NumberOfCommitsPerWeekPerUser());
         collectors.add(new TopicAndTeamPerRepository());
         collectors.add(new SonarCodeCoverage());
+        collectors.add(new NumberOfOpenedPullRequests());
     }
 
     private final TheReportModel theReportModel;

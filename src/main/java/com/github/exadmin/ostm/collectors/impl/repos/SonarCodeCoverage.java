@@ -11,10 +11,7 @@ import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
-import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumId;
-import com.github.exadmin.ostm.uimodel.TheColumn;
-import com.github.exadmin.ostm.uimodel.TheReportModel;
+import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.util.Comparator;
@@ -76,7 +73,7 @@ public class SonarCodeCoverage extends AbstractCollector {
                         String component = (String) mData.get("component");
 
                         String rowId = componentToRowIdMap.remove(component);
-                        column.addValue(rowId, new TheCellValue(value + "%", value));
+                        column.addValue(rowId, new TheCellValue(value + "%", value, SeverityLevel.INFO));
                     }
                 }
             }
@@ -89,7 +86,7 @@ public class SonarCodeCoverage extends AbstractCollector {
 
         // at this step - componenToRowIdMap contains list of components with absent data
         for (Map.Entry<String, String> me : componentToRowIdMap.entrySet()) {
-            column.addValue(me.getValue(), new TheCellValue("Not Registered", "0"));
+            column.addValue(me.getValue(), new TheCellValue("Not Registered", 0, SeverityLevel.ERROR));
         }
     }
 }

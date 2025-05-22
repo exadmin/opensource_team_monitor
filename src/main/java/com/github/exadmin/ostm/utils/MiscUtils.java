@@ -140,4 +140,27 @@ public class MiscUtils {
             ie.printStackTrace();
         }
     }
+
+    public static String getStrValue(Map<String, Object> map, String keyName) {
+        Object value = map.get(keyName);
+        if (value == null) return null;
+        return value.toString();
+    }
+
+    public static int getIntValue(Map<String, Object> map, String keyName) {
+        Object value = map.get(keyName);
+        if (value == null) return 0;
+        return Integer.parseInt(value.toString());
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> List<T> getListValue(Map<String, Object> map, String keyName) {
+        Object value = map.get(keyName);
+        if (value == null) return Collections.emptyList();
+        if (value instanceof List) {
+            return (List<T>) value;
+        }
+
+        throw new IllegalArgumentException("List is expected but " + value.getClass() + " is found.");
+    }
 }

@@ -24,7 +24,8 @@ public enum TheColumId {
     COL_REPO_NUMBER("column:repo_number"),
     COL_REPO_NAME("column:repo_name"),
     COL_REPO_TOPICS("column:repo_topics"),
-    COL_REPO_SONAR_CODE_COVERAGE_METRIC("column:sonar_metrics_code_coverage");
+    COL_REPO_SONAR_CODE_COVERAGE_METRIC("column:sonar_metrics_code_coverage"),
+    COL_REPO_OPENED_PULL_REQUESTS_COUNT("column:opened_pull_requests_count");
 
     private final String id;
 

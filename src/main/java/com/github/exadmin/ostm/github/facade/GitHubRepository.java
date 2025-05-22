@@ -1,44 +1,41 @@
 package com.github.exadmin.ostm.github.facade;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static com.github.exadmin.ostm.utils.MiscUtils.getListValue;
+import static com.github.exadmin.ostm.utils.MiscUtils.getStrValue;
 
 public class GitHubRepository {
-    private final String id;
-    private final String name;
-    private final String url;
-    private final String cloneUrl;
-    private final List<String> topics;
+    private final Map<String, Object> dataMap;
 
-    public GitHubRepository(String id, String name, String url, String cloneUrl) {
-        this.id = id;
-        this.name = name;
-        this.url = url;
-        this.cloneUrl = cloneUrl;
-        this.topics = new ArrayList<>();
+    public GitHubRepository(Map<String, Object> dataMap) {
+        this.dataMap = dataMap;
     }
 
     public String getId() {
-        return id;
+        return getStrValue(dataMap, "id");
     }
 
     public String getName() {
-        return name;
+        return getStrValue(dataMap, "name");
     }
 
     public String getUrl() {
-        return url;
+        return getStrValue(dataMap, "url");
     }
 
     public String getCloneUrl() {
-        return cloneUrl;
+        return getStrValue(dataMap, "clone_url");
+    }
+
+    public String getPullsUrl() {
+        return getStrValue(dataMap, "pulls_url");
     }
 
     public List<String> getTopics() {
-        return new ArrayList<>(topics);
+        return getListValue(dataMap, "topics");
     }
 
-    public void addTopic(String topic) {
-        topics.add(topic);
-    }
+
 }
