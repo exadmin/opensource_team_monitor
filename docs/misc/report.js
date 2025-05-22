@@ -12,6 +12,11 @@ function defaultRender (data, type, row, meta) {
 //      "href": "<url>",        # Link in cell
 //      "value": "string"       # Value of cell
 //   }
+    // console.log("defaultRenderer is called with type = " + type);
+    if (type == 'sort') {
+        return data.sortByValue;
+    }
+
     if (data.title && data.href) {
         return '<div title="<p class=\'my-tooltip\'>' + data.title + '</p>"><a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a></div>';
     } else if (data.title) {
@@ -19,7 +24,7 @@ function defaultRender (data, type, row, meta) {
     } else if (data.href) {
         return '<a href="' + data.href + '" target="_blank">' + (data.value || '&nbsp;') + '</a>';
     } else if (data.value) {
-               return String(data.value);
+        return String(data.value);
     } else {
         return String(data);
     }

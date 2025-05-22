@@ -27,8 +27,8 @@ public class ListAllRepositories extends AbstractCollector {
 
         int number = 1;
         for (Map.Entry<String, String> me : repoNames.entrySet()) {
-            colRepoNumber.addValue(me.getKey(), new TheCellValue("" + number));
-            colRepoName.addValue(me.getKey(), new TheCellValue(me.getValue()));
+            colRepoNumber.addValue(me.getKey(), new TheCellValue("" + number, "" + number));
+            colRepoName.addValue(me.getKey(), new TheCellValue(me.getValue(), me.getValue()));
 
             number++;
         }

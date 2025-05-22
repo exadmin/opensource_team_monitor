@@ -69,12 +69,12 @@ public class TeamKnownNames extends AbstractCollector {
         for (String login : uniqueLogins) {
             String rowId = "row:" + login;
 
-            TheCellValue cvLogin = new TheCellValue(login);
+            TheCellValue cvLogin = new TheCellValue(login, login);
             colLogin.addValue(rowId, cvLogin);
 
             String realName = ALIAS_TO_NAME.get(login);
             if (realName == null) realName = "---";
-            TheCellValue cvRealName = new TheCellValue(realName);
+            TheCellValue cvRealName = new TheCellValue(realName, realName);
             colRealName.addValue(rowId, cvRealName);
         }
     }

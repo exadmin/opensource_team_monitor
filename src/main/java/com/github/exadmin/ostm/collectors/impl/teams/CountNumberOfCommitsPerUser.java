@@ -42,7 +42,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
             Integer count = ghResponse.getObject("/data/user/contributionsCollection/contributionCalendar/totalContributions");
             if (count == null) count = 0;
 
-            TheCellValue cellValue = new TheCellValue("" + count);
+            TheCellValue cellValue = new TheCellValue("" + count, "" + count);
             String rowId = "row:" + login;
 
             theColumn.addValue(rowId, cellValue);

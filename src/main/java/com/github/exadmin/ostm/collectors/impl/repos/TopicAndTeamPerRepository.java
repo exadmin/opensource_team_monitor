@@ -19,7 +19,7 @@ public class TopicAndTeamPerRepository extends AbstractCollector {
         List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repository : repoList) {
             String rowId = repository.getId();
-            TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()));
+            TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()), "");
             colTopics.addValue(rowId, cellValue);
         }
     }

@@ -51,11 +51,16 @@ public class ReportModelPersister {
                     if (theCellValue == null) {
                         log.warn("No cell value is registered for sheet '{}', column '{}', rowId '{}'", sheet, theColumn, rowId);
                     }
-                    String valueAsStr = theCellValue == null ? "null" : theCellValue.getValue();
-                    String toolTip = theCellValue == null ? null : theCellValue.getToolTipText();
 
                     Map<String, String> cellValueJson = new HashMap<>();
-                    cellValueJson.put("value", valueAsStr);
+
+                    String visualValue = theCellValue == null ? "null" : theCellValue.getVisualValue();
+                    cellValueJson.put("value", visualValue);
+
+                    String techValue   = theCellValue == null ? "null" : theCellValue.getSortByValue();
+                    cellValueJson.put("sortByValue", techValue);
+
+                    String toolTip = theCellValue == null ? null : theCellValue.getToolTipText();
                     if (StringUtils.isNotEmpty(toolTip)) cellValueJson.put("title", toolTip);
 
                     dataMap.put(theColumn.getId(), cellValueJson);
