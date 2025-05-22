@@ -80,7 +80,9 @@ public class NewCacheManager {
      * Utility methods
      */
     private static String getFileNameBy(String httpGetQueryUrl) {
-        return httpGetQueryUrl.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+        String fileName = httpGetQueryUrl.replaceAll("[^a-zA-Z0-9-_\\.]", "_");
+        int length = Math.min(fileName.length(), 128);
+        return fileName.substring(0, length);
     }
 
     private static synchronized void deleteCachedEntity(File file) {

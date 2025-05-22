@@ -10,10 +10,9 @@ public class GrandReportModel {
     public static TheReportModel getGrandReportInstance() {
         TheReportModel theReportModel = new TheReportModel();
 
-
         // ***** "TEAM SUMMARY" SHEET *****
         TheSheet sheetTeamSummary = theReportModel.allocateSheet(SHEET_TEAM_SUMMARY_ID,
-                newInstance -> newInstance.setTitle("Team Summary"));
+                newInstance -> newInstance.setTitle("Qubership Team"));
 
         // User login column
         TheColumn colGitHubLogin = theReportModel.allocateColumn(COL_USER_LOGIN, newColumn -> {
@@ -38,7 +37,7 @@ public class GrandReportModel {
 
         // ***** "ALL REPOSITORIES" SHEET *****
         TheSheet sheetAllRepos = theReportModel.allocateSheet(SHEET_ALL_REPOSITORIES,
-                newSheet -> newSheet.setTitle("All Repositories"));
+                newSheet -> newSheet.setTitle("Code Quality"));
 
         TheColumn colRepoNumber = theReportModel.allocateColumn(COL_REPO_NUMBER, newColumn -> {
             newColumn.setTitle("Number");
@@ -64,7 +63,13 @@ public class GrandReportModel {
             newColumn.setRenderingOrder(2);
         });
 
-        // Build Grand report structure
+        TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
+            newSheet.setTitle("Repositories check list");
+        });
+
+        // ********************************
+        // * Build Grand report structure *
+        // ********************************
         sheetTeamSummary.registerColumn(colGitHubLogin, true);
         sheetTeamSummary.registerColumn(colUserRealName, false);
         sheetTeamSummary.registerColumn(colUserAllContribs, false);
@@ -99,6 +104,10 @@ public class GrandReportModel {
         sheetAllRepos.registerColumn(colRepoName, true);
         sheetAllRepos.registerColumn(colTopics, false);
         sheetAllRepos.registerColumn(colSonarMetric, false);
+
+        sheetCheckList.registerColumn(colRepoNumber, true);
+        sheetCheckList.registerColumn(colRepoName, false);
+        sheetCheckList.registerColumn(colTopics, false);
 
         return theReportModel;
     }

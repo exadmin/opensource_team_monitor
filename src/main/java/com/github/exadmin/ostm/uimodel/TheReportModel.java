@@ -1,12 +1,9 @@
 package com.github.exadmin.ostm.uimodel;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TheReportModel {
-    private final Map<String, TheSheet> sheetsMap = new HashMap<>();
+    private final Map<String, TheSheet> sheetsMap = new LinkedHashMap<>();
     private final Map<String, TheColumn> columnsMap = new HashMap<>();
 
     TheReportModel() {
