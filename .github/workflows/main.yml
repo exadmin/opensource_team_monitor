@@ -37,13 +37,28 @@ jobs:
       - name: Build with Maven
         run: |
           mvn -B package --file pom.xml
+          mkdir -p /tmp/WORKDIR
+          cp ./target/ostm.jar /tmp/WORKDIR/ostm.jar          
+
+      - name: Download all repositories
+        run: |
+          mkdir -p /tmp/WORKDIR/ALL_REPOSITORIES
+          cp ./clone_all.sh /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
+          cp ./clone_or_pull.sh /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
+          chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
+          chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
+          cd /tmp/WORKDIR/ALL_REPOSITORIES/
+          ./clone_all.sh        
 
       - name: Run reports
         run: |
-          cd ./target          
-          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} ./data.json ./cache
+          CURRENT_DIR=$(pwd)
+          cd cd /tmp/WORKDIR
           
-          cp ./data.json ./../docs/data/data.json                    
+          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES/ ./data.json ./cache
+          cp ./data.json ${CURRENT_DIR}/docs/data/data.json
+          
+          cd ${CURRENT_DIR}
 
           git config user.name github-actions
           git config user.email github-actions@github.com
