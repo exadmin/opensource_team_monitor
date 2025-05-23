@@ -53,7 +53,7 @@ jobs:
       - name: Run reports
         run: |
           CURRENT_DIR=$(pwd)
-          cd cd /tmp/WORKDIR
+          cd /tmp/WORKDIR
           
           java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache
           cp ./data.json ${CURRENT_DIR}/docs/data/data.json
