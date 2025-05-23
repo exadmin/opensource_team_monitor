@@ -25,7 +25,18 @@ public enum TheColumId {
     COL_REPO_NAME("column:repo_name"),
     COL_REPO_TOPICS("column:repo_topics"),
     COL_REPO_SONAR_CODE_COVERAGE_METRIC("column:sonar_metrics_code_coverage"),
-    COL_REPO_OPENED_PULL_REQUESTS_COUNT("column:opened_pull_requests_count");
+    COL_REPO_OPENED_PULL_REQUESTS_COUNT("column:opened_pull_requests_count"),
+    COL_REPO_LICENSE_FILE("column:license_file"),
+    COL_REPO_README_FILE("column:readme_file"),
+    COL_REPO_CLA_FILE("column:cla_file"),
+    COL_REPO_CODE_OWNERS_FILE("column:code_owners_file"),
+    COL_REPO_CONVENTIONAL_COMMITS_ACTION("column:conventional_commits_action"),
+    COL_REPO_LINTER("column:super_linter_or_prettier"),
+    COL_REPO_LABELER("column:labeler"),
+    COL_REPO_LINT_TITLE("column:lint_title"),
+    COL_REPO_SEC_PROFINITY("colummn:profinity_action"),
+    COL_REPO_SEC_MAIN_IS_PROTECTED("column:main_branch_is_protected"),
+    COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker");
 
     private final String id;
 

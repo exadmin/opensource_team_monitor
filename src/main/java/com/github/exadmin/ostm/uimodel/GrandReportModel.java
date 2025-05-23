@@ -73,6 +73,22 @@ public class GrandReportModel {
             newSheet.setTitle("Repositories check list");
         });
 
+        // ***** SECURITY CHECKS SHEET *****
+        TheSheet sheetSecurity = theReportModel.allocateSheet(SHEET_REPOS_SECURITY, newSheet -> {
+            newSheet.setTitle("Security Checks");
+        });
+        TheColumn colLicenseFile = theReportModel.allocateColumn(COL_REPO_LICENSE_FILE, newColumn -> {
+            newColumn.setTitle("License File");
+        });
+
+        TheColumn colReadmeFile = theReportModel.allocateColumn(COL_REPO_README_FILE, newColumn -> {
+            newColumn.setTitle("Readme File");
+        });
+
+        TheColumn colCLAFile = theReportModel.allocateColumn(COL_REPO_CLA_FILE, newColumn -> {
+            newColumn.setTitle("CLA File");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -115,6 +131,13 @@ public class GrandReportModel {
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);
         sheetCheckList.registerColumn(colTopics, false);
+
+        sheetSecurity.registerColumn(colRepoNumber, true);
+        sheetSecurity.registerColumn(colRepoName, false);
+        sheetSecurity.registerColumn(colTopics, false);
+        sheetSecurity.registerColumn(colLicenseFile, false);
+        sheetSecurity.registerColumn(colReadmeFile, false);
+        sheetSecurity.registerColumn(colCLAFile, false);
 
         return theReportModel;
     }

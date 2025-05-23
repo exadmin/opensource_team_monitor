@@ -29,7 +29,7 @@ public class NewCacheManager {
     }
 
     public String getFromCache(String fullUrl, String requestBody) {
-        File cacheFile = getFileByContent(fullUrl, requestBody);
+        File cacheFile = getFileNameByContent(fullUrl, requestBody);
         if (!cacheFile.exists() && !cacheFile.isFile()) {
             return null; // no cache file is found
         }
@@ -55,10 +55,10 @@ public class NewCacheManager {
     }
 
     public void putToCache(String fullUrl, String requestBody, String responseBody, long cacheTTLInSeconds) {
-        File cacheFile = getFileByContent(fullUrl, requestBody);
+        File cacheFile = getFileNameByContent(fullUrl, requestBody);
         long currentTime = System.currentTimeMillis();
 
-        log.debug("Store response to the cache {}", cacheFile);
+        log.debug("Store response to the cache file {}", cacheFile);
 
         CachedEntity entity = new CachedEntity();
         entity.setUrl(fullUrl);
@@ -92,9 +92,11 @@ public class NewCacheManager {
         }
     }
 
-    private File getFileByContent(String fullUrl, String requestBody) {
+    private File getFileNameByContent(String fullUrl, String requestBody) {
         // generate possible file name for the request
-        String sha256 = MiscUtils.getSHA256(fullUrl + requestBody);
+        String sha256 = MiscUtils.getSHA256FromString(fullUrl + requestBody);
+        sha256 = sha256.replace("\\", "_");
+        sha256 = sha256.replace("/", "_");
         String cacheFileName = getFileNameBy(fullUrl) + "_" + sha256 + ".cached";
 
         // load request if cache file exists

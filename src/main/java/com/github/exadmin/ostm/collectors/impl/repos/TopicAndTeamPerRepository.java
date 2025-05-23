@@ -6,11 +6,12 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class TopicAndTeamPerRepository extends AbstractCollector {
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn colTopics = theReportModel.findColumn(TheColumId.COL_REPO_TOPICS);
 
         List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");

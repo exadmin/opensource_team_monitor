@@ -18,29 +18,41 @@ import java.nio.file.Paths;
 public class OpenSourceTeamMonitorApp {
     private static final Logger log = LoggerFactory.getLogger(OpenSourceTeamMonitorApp.class);
 
+    private static final int ARG1 = 0;
+    private static final int ARG2 = 1;
+    private static final int ARG3 = 2;
+    private static final int ARG4 = 3;
+
     public static void main(String[] args) {
         // Step1: Initiate application
-        if (args.length != 3) {
+        if (args.length != 4) {
             log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
                     "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
-                    "arg2 - output file (read-write) to write results into\n" +
-                    "arg3 - cache directory (read-write) to store responses from github");
+                    "arg2 - parent directory where all necessary repositories are cloned into (into personal subfolders)\n" +
+                    "arg3 - output file (read-write) to write results into\n" +
+                    "arg4 - cache directory (read-write) to store responses from github");
             System.exit(-1);
         }
 
-        final String gitHubToken = getTokenFromArg(args[0]);
+        final String gitHubToken = getTokenFromArg(args[ARG1]);
         if (gitHubToken == null || gitHubToken.isEmpty()) {
             log.error("GitHub token is required for the processing. Provide it via external file. Terminating");
             System.exit(-1);
         }
         HttpRequestBuilder.setAuthenticationToken(gitHubToken);
 
-        final Path outputFilePath = Paths.get(args[1]);
-        NewCacheManager.setCacheDirectoryPath(args[2]);
+        Path reposParentPath = Paths.get(args[ARG2]);
+        if (!reposParentPath.toFile().exists() || !reposParentPath.toFile().isDirectory()) {
+            log.error("Provided directory with cloned repositories is not found. Current value is {}", reposParentPath);
+            System.exit(-1);
+        }
+
+        final Path outputFilePath = Paths.get(args[ARG3]);
+        NewCacheManager.setCacheDirectoryPath(args[ARG4]);
 
         // Step2: Run collectors
         TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
-        CollectorsFactory colFactory = new CollectorsFactory(reportModel);
+        CollectorsFactory colFactory = new CollectorsFactory(reportModel, reposParentPath);
         colFactory.runCollectors();
 
         // Step3: Persist data

@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.collectors.impl.repos;
+package com.github.exadmin.ostm.collectors.impl.repos.quality;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
@@ -14,6 +14,7 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SonarCodeCoverage extends AbstractCollector {
     private static final TypeReference<Map<String, Object>> type = new TypeReference<>() {};
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn column = theReportModel.findColumn(TheColumId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);
 
         // Step1: collect names of all repositories to ask statistics in the Sonar-Cloud for

@@ -6,12 +6,13 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.nio.file.Path;
 import java.util.*;
 
 public class ListAllRepositories extends AbstractCollector {
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         final TheColumn colRepoNumber = theReportModel.findColumn(TheColumId.COL_REPO_NUMBER);
         final TheColumn colRepoName = theReportModel.findColumn(TheColumId.COL_REPO_NAME);
 

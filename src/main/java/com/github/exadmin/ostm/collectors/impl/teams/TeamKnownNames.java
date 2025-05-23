@@ -6,6 +6,7 @@ import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
+import java.nio.file.Path;
 import java.util.*;
 
 public class TeamKnownNames extends AbstractCollector {
@@ -51,14 +52,16 @@ public class TeamKnownNames extends AbstractCollector {
     }
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         Set<String> uniqueLogins = new HashSet<>();
 
         List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository ghRepo : allRepositories) {
             List<GitHubContributorData> ghContributionDataList = gitHubFacade.getContributionsForRepository("Netcracker", ghRepo.getName());
             for (GitHubContributorData data: ghContributionDataList) {
-                uniqueLogins.add(data.getLogin());
+                if (data.getLogin() != null) { // there can be null for very new repo without contributors
+                    uniqueLogins.add(data.getLogin());
+                }
             }
         }
 

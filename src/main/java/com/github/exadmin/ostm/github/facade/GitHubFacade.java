@@ -118,7 +118,9 @@ public class GitHubFacade {
         for (GitHubRepository ghRepo : allRepositories) {
             List<GitHubContributorData> ghContributionDataList = getContributionsForRepository(ownerName, ghRepo.getName());
             for (GitHubContributorData data: ghContributionDataList) {
-                uniqueLogins.add(data.getLogin());
+                if (data.getLogin() != null) {
+                    uniqueLogins.add(data.getLogin());
+                }
             }
         }
 

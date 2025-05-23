@@ -7,6 +7,7 @@ import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.uimodel.*;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class CountNumberOfCommitsPerUser extends AbstractCollector {
@@ -24,7 +25,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
                 }""";
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         List<String> uniqueLogins = gitHubFacade.getUniqueUsers("Netcracker");
 
         final TheColumn theColumn = theReportModel.findColumn(TheColumId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);

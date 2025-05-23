@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.collectors.impl.repos;
+package com.github.exadmin.ostm.collectors.impl.repos.quality;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
@@ -9,6 +9,7 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.nio.file.Path;
 import java.util.List;
 
 public class NumberOfOpenedPullRequests extends AbstractCollector {
@@ -17,7 +18,7 @@ public class NumberOfOpenedPullRequests extends AbstractCollector {
     private static final int ERR_IF_PRS_MORE_THAN = 8;
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn column = theReportModel.findColumn(TheColumId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
 
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");

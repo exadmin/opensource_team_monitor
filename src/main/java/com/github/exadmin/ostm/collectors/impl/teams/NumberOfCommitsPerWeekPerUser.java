@@ -9,6 +9,7 @@ import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.nio.file.Path;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -38,7 +39,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                 """;
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade) {
+    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
         LocalDate fromDate  = todayDate.minusMonths(3).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
