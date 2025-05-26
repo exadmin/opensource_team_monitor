@@ -1,22 +1,35 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
+import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
+import java.nio.file.Paths;
 
-public class ReadmeFilePresence extends AbstractCollector {
+public class ReadmeFilePresence extends AbstractFileContentChecker {
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        TheColumn column = theReportModel.findColumn(TheColumId.COL_REPO_README_FILE);
+    protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
+        return theReportModel.findColumn(TheColumId.COL_REPO_README_FILE);
+    }
 
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : allRepos) {
-            TheCellValue cellValue = new TheCellValue("tbd", "0", SeverityLevel.INFO);
-            column.addValue(repo.getId(), cellValue);
+    @Override
+    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+        Path readmeFilePath = Paths.get(repoDirectory.toString(), "README.md");
+        File readmeFile = readmeFilePath.toFile();
+
+        // if README file is absent
+        if (!readmeFile.exists() || !readmeFile.isFile()) {
+            return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
         }
+
+        // if README file has very small size
+        long fileSize = readmeFile.length();
+        if (fileSize < 1024) {
+            return new TheCellValue("Too small: " + fileSize, fileSize, SeverityLevel.ERROR);
+        }
+
+        return new TheCellValue(fileSize, fileSize, SeverityLevel.OK);
     }
 }

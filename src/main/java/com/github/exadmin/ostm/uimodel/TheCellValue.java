@@ -11,18 +11,10 @@ public class TheCellValue {
      * @param visualValue visual value how it will look like
      * @param sortByValue hidden value how it will be interpreted by html rendering framework (for instance: sorting will be done by this values, not visual)
      */
-    public TheCellValue(String visualValue, String sortByValue, SeverityLevel severityLevel) {
-        this.visualValue = visualValue;
-        this.sortByValue = sortByValue;
+    public TheCellValue(Object visualValue, Object sortByValue, SeverityLevel severityLevel) {
+        this.visualValue = visualValue.toString();
+        this.sortByValue = sortByValue.toString();
         this.severityLevel = severityLevel;
-    }
-
-    public TheCellValue(String visualValue, Integer sortByValue, SeverityLevel severityLevel) {
-       this(visualValue, "" + sortByValue, severityLevel);
-    }
-
-    public TheCellValue(Integer visualValue, Integer sortByValue, SeverityLevel severityLevel) {
-        this("" + visualValue, "" + sortByValue, severityLevel);
     }
 
     public String getVisualValue() {
