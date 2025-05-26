@@ -46,7 +46,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
         String fromStr = MiscUtils.dateToStr(fromDate);
         String toStr  = MiscUtils.dateToStr(todayDate);
 
-        List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");
+        List<String> uniqueUsers = gitHubFacade.getLoginsOfTheTeam();
 
         // there can be no respose for some users - but we need to fulfill them with zeros or some other stubs
         // so let's remember such users and all the table columns to fulfill

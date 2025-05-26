@@ -26,7 +26,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        List<String> uniqueLogins = gitHubFacade.getUniqueUsers("Netcracker");
+        List<String> uniqueLogins = gitHubFacade.getLoginsOfTheTeam();
 
         final TheColumn theColumn = theReportModel.findColumn(TheColumId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
 

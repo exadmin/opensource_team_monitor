@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.github.facade;
 
 import com.github.exadmin.ostm.github.api.GitHubRequest;
-import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
+import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.time.LocalDate;
@@ -111,7 +111,7 @@ public class GitHubFacade {
      * @param ownerName GitHub owner of repositories, i.e. https://github.com/OWNER/repos
      * @return List of Strings
      */
-    public List<String> getUniqueUsers(String ownerName) {
+    public List<String> getUniqueListOfContributors(String ownerName) {
         Set<String> uniqueLogins = new HashSet<>();
 
         List<GitHubRepository> allRepositories = getAllRepositories(ownerName);
@@ -125,6 +125,17 @@ public class GitHubFacade {
         }
 
         return new ArrayList<>(uniqueLogins);
+    }
+
+    public List<String> getLoginsOfTheTeam() {
+        return new ArrayList<>(OnlyKnownUsers.getKnowUsersOnly().keySet());
+    }
+
+    public String getRealNameByLogin(String login) {
+        String realName = OnlyKnownUsers.getRealNameByLogin(login);
+        if (realName == null) throw new IllegalArgumentException("Unknown login " + login);
+
+        return realName;
     }
 
 
