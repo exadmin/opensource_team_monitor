@@ -6,12 +6,11 @@
 # Downloads all existed repositories using paging approach (github does not work stable without paging)
 i=1
 
-# while true; do
-while [ $i -le 2 ]; do
+while true; do
     file="all_repos_page$i.json"
     echo "Processing file $file"
 
-    curl "https://api.github.com/orgs/Netcracker/repos?per_page=5&page=$i" > "$file"
+    curl "https://api.github.com/orgs/Netcracker/repos?per_page=50&page=$i" > "$file"
 
     size=$(stat -c%s "$file")
     if [[ "$size" -lt "6" ]]; then
