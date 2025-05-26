@@ -55,12 +55,17 @@ public class TheCellValue {
         return httpReference;
     }
 
-    public TheCellValue setHttpReference(String httpReference) {
+    public void setHttpReference(String httpReference) {
         this.httpReference = httpReference;
-        return this;
     }
 
     public TheCellValue withHttpReference(String httpReference) {
-        return setHttpReference(httpReference);
+        setHttpReference(httpReference);
+        return this;
+    }
+
+    public TheCellValue withTooltip(String htmlBody) {
+        setToolTipText(htmlBody);
+        return this;
     }
 }

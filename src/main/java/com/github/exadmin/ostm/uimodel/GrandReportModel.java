@@ -89,6 +89,10 @@ public class GrandReportModel {
             newColumn.setTitle("CLA File");
         });
 
+        TheColumn colCodeOwners = theReportModel.allocateColumn(COL_REPO_CODE_OWNERS_FILE, newColumn -> {
+            newColumn.setTitle("Code Owners File");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -138,6 +142,7 @@ public class GrandReportModel {
         sheetSecurity.registerColumn(colLicenseFile, false);
         sheetSecurity.registerColumn(colReadmeFile, false);
         sheetSecurity.registerColumn(colCLAFile, false);
+        sheetSecurity.registerColumn(colCodeOwners, false);
 
         return theReportModel;
     }
