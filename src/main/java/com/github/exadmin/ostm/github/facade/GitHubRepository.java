@@ -22,7 +22,7 @@ public class GitHubRepository {
     }
 
     public String getUrl() {
-        return getStrValue(dataMap, "url");
+        return getStrValue(dataMap, "html_url");
     }
 
     public String getCloneUrl() {
@@ -35,6 +35,12 @@ public class GitHubRepository {
 
     public List<String> getTopics() {
         return getListValue(dataMap, "topics");
+    }
+
+    public String getHttpReferenceToFileInGitHub(String filePathInRepositoryStartingFromRoot) {
+        String defBranch = getStrValue(dataMap, "default_branch");
+        String url = getStrValue(dataMap, "html_url");
+        return url + "/blob/" + defBranch + filePathInRepositoryStartingFromRoot;
     }
 
 

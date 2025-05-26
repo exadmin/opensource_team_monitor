@@ -1,13 +1,13 @@
 package com.github.exadmin.ostm.collectors.api;
 
+import com.github.exadmin.ostm.collectors.impl.repos.ListAllRepositories;
+import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.CLAFilePresence;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.LicenseFilePresence;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.ReadmeFilePresence;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.NumberOfOpenedPullRequests;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
-import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
-import com.github.exadmin.ostm.collectors.impl.repos.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.teams.NumberOfCommitsPerWeekPerUser;
 import com.github.exadmin.ostm.collectors.impl.teams.TeamKnownNames;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;

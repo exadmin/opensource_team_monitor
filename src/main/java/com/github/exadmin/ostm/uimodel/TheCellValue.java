@@ -5,6 +5,7 @@ public class TheCellValue {
     private String sortByValue;
     private String toolTipText;
     private SeverityLevel severityLevel;
+    private String httpReference;
 
     /**
      * Create cell-value to be rendered in the report
@@ -48,5 +49,18 @@ public class TheCellValue {
 
     public SeverityLevel getSeverityLevel() {
         return severityLevel;
+    }
+
+    public String getHttpReference() {
+        return httpReference;
+    }
+
+    public TheCellValue setHttpReference(String httpReference) {
+        this.httpReference = httpReference;
+        return this;
+    }
+
+    public TheCellValue withHttpReference(String httpReference) {
+        return setHttpReference(httpReference);
     }
 }

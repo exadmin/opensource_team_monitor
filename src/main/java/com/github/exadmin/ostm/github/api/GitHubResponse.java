@@ -7,7 +7,9 @@ import com.github.exadmin.ostm.utils.MiscUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class GitHubResponse {
     private static final Logger log = LoggerFactory.getLogger(GitHubResponse.class);

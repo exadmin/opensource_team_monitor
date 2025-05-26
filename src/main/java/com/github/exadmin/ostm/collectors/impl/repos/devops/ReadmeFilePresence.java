@@ -18,6 +18,7 @@ public class ReadmeFilePresence extends AbstractFileContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         Path readmeFilePath = Paths.get(repoDirectory.toString(), "README.md");
         File readmeFile = readmeFilePath.toFile();
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/README.md");
 
         // if README file is absent
         if (!readmeFile.exists() || !readmeFile.isFile()) {
@@ -27,9 +28,9 @@ public class ReadmeFilePresence extends AbstractFileContentChecker {
         // if README file has very small size
         long fileSize = readmeFile.length();
         if (fileSize < 1024) {
-            return new TheCellValue("Too small: " + fileSize, fileSize, SeverityLevel.ERROR);
+            return new TheCellValue("Too small: " + fileSize, fileSize, SeverityLevel.ERROR).withHttpReference(httpRef);
         }
 
-        return new TheCellValue(fileSize, fileSize, SeverityLevel.OK);
+        return new TheCellValue(fileSize, fileSize, SeverityLevel.OK).withHttpReference(httpRef);
     }
 }

@@ -24,6 +24,8 @@ public class CLAFilePresence extends AbstractFileContentChecker {
         Path claFilePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "cla.yaml");
         File claFile = claFilePath.toFile();
 
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/cla.yaml");
+
         if (!claFile.exists() || !claFile.isFile()) {
             return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
         }
@@ -32,10 +34,10 @@ public class CLAFilePresence extends AbstractFileContentChecker {
             String content = FileUtils.readFile(claFilePath.toString());
             Matcher matcher = REQUIRED_CONTENT.matcher(content);
             if (matcher.find()) {
-                return new TheCellValue("Ok", 3, SeverityLevel.OK);
+                return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpRef);
             }
 
-            return new TheCellValue("Unexpected content", 2, SeverityLevel.WARN);
+            return new TheCellValue("Unexpected content", 2, SeverityLevel.WARN).withHttpReference(httpRef);
         } catch (Exception ex) {
             getLog().error("Error while reading cla-file {}", claFilePath, ex);
             return new TheCellValue("Error", 1, SeverityLevel.ERROR);

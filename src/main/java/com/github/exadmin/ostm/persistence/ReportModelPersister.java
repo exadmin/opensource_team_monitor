@@ -63,6 +63,9 @@ public class ReportModelPersister {
                     SeverityLevel level = theCellValue == null ? SeverityLevel.ERROR : theCellValue.getSeverityLevel();
                     cellValueJson.put("severity", level.toString());
 
+                    String href = theCellValue == null ? null : theCellValue.getHttpReference();
+                    if (href != null) cellValueJson.put("href", href);
+
                     dataMap.put(theColumn.getId(), cellValueJson);
                 }
 

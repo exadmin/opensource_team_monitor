@@ -3,9 +3,9 @@ package com.github.exadmin.ostm;
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
+import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import com.github.exadmin.ostm.uimodel.GrandReportModel;
 import com.github.exadmin.ostm.uimodel.TheReportModel;
-import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

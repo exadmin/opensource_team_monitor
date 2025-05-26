@@ -20,6 +20,8 @@ public class LicenseFilePresence extends AbstractFileContentChecker {
         Path licenseFilePath = Paths.get(repoDirectory.toString(), "LICENSE");
         File licenseFile = licenseFilePath.toFile();
 
+        String htmlUrl = repo.getHttpReferenceToFileInGitHub("/LICENSE");
+
         // return error if file is not found
         if (!licenseFile.exists() || !licenseFile.isFile()) {
             return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
@@ -32,9 +34,9 @@ public class LicenseFilePresence extends AbstractFileContentChecker {
             String sha256 = MiscUtils.getSHA256FromString(fileContent);
 
             if (LICENSE_SHA256_BASE64_EXP_VALUE_v1.equals(sha256)) {
-                return new TheCellValue("Apache 2.0", 3, SeverityLevel.OK);
+                return new TheCellValue("Apache 2.0", 3, SeverityLevel.OK).withHttpReference(htmlUrl);
             } else {
-                return new TheCellValue("Non Apache 2.0", 2, SeverityLevel.WARN);
+                return new TheCellValue("Non Apache 2.0", 2, SeverityLevel.WARN).withHttpReference(htmlUrl);
             }
         } catch (IOException ex) {
             getLog().error("Error while reading license file {}", licenseFile, ex);
