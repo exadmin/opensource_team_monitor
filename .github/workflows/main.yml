@@ -36,6 +36,8 @@ jobs:
 
       - name: Build with Maven
         run: |
+          CURRENT_DIR=$(pwd)
+          echo "Git clone directory is ${CURRENT_DIR}"
           mvn -B package --file pom.xml
           mkdir -p /tmp/WORKDIR
           cp ./target/ostm.jar /tmp/WORKDIR/ostm.jar          
@@ -53,6 +55,7 @@ jobs:
       - name: Run reports
         run: |
           CURRENT_DIR=$(pwd)
+          echo "Current directory is ${CURRENT_DIR}"
           cd /tmp/WORKDIR
           
           java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache
