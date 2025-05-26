@@ -53,23 +53,13 @@ public class TeamKnownNames extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        Set<String> uniqueLogins = new HashSet<>();
-
-        List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository ghRepo : allRepositories) {
-            List<GitHubContributorData> ghContributionDataList = gitHubFacade.getContributionsForRepository("Netcracker", ghRepo.getName());
-            for (GitHubContributorData data: ghContributionDataList) {
-                if (data.getLogin() != null) { // there can be null for very new repo without contributors
-                    uniqueLogins.add(data.getLogin());
-                }
-            }
-        }
+        List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");
 
         // create report
         final TheColumn colLogin = theReportModel.findColumn(TheColumId.COL_USER_LOGIN);
         final TheColumn colRealName = theReportModel.findColumn(TheColumId.COL_USER_REAL_NAME);
 
-        for (String login : uniqueLogins) {
+        for (String login : uniqueUsers) {
             String rowId = "row:" + login;
 
             TheCellValue cvLogin = new TheCellValue(login, login, SeverityLevel.INFO);

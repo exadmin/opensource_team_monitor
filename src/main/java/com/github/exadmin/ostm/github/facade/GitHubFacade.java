@@ -17,12 +17,17 @@ public class GitHubFacade {
     public GitHubFacade() {
     }
 
+    // todo: remove hack
+    private static List<GitHubRepository> cacheForDebug = null;
+
     /**
      * Returns list of all repositories fetched from GitHub by calling its REST API
      * @param ownerName short string name of the OWNER from url: https://api.github.com/orgs/OWNER/repos
      * @return List of GitHubRepository
      */
     public List<GitHubRepository> getAllRepositories(String ownerName) {
+        if (cacheForDebug != null) return new ArrayList<>(cacheForDebug);
+
         GitHubRequest request = HttpRequestBuilder
                 .gitHubRESTCall()
                 .toURL("https://api.github.com/orgs/" + ownerName + "/repos")
@@ -43,6 +48,12 @@ public class GitHubFacade {
                 if (ghRepo.getName().equals("k8s-conformance")) continue;
 
                 result.add(ghRepo);
+            }
+
+            if (cacheForDebug == null) {
+                while (result.size() > 5) result.removeFirst();
+
+                cacheForDebug = result;
             }
 
             return result;
@@ -120,6 +131,9 @@ public class GitHubFacade {
             for (GitHubContributorData data: ghContributionDataList) {
                 if (data.getLogin() != null) {
                     uniqueLogins.add(data.getLogin());
+
+                    // todo: remove hack
+                    if (uniqueLogins.size() > 5) return new ArrayList<>(uniqueLogins);
                 }
             }
         }
