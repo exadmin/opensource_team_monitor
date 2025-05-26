@@ -12,7 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CLAFilePresence extends AbstractFileContentChecker {
-    private static final Pattern REQUIRED_CONTENT = Pattern.compile("\\buses\\s*:\\s*Netcracker/qubership-workflow-hub/.github/workflows/cla.yaml@", Pattern.CASE_INSENSITIVE);
+    private static final Pattern REQUIRED_CONTENT_APPROACH1 = Pattern.compile("\\buses\\s*:\\s*Netcracker/qubership-workflow-hub/.github/workflows/cla.yaml@", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern REQUIRED_CONTENT_APPROACH2_PART1 = Pattern.compile("\\buses\\s*:\\s*contributor-assistant\\/github-action@");
+    private static final Pattern REQUIRED_CONTENT_APPROACH2_PART2 = Pattern.compile("\\bpath-to-document\\s*:\\s*'https:\\/\\/github.com\\/Netcracker\\/qubership-github-workflows\\/blob\\/main\\/CLA\\/cla.md'");
+
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
@@ -32,9 +36,24 @@ public class CLAFilePresence extends AbstractFileContentChecker {
 
         try {
             String content = FileUtils.readFile(claFilePath.toString());
-            Matcher matcher = REQUIRED_CONTENT.matcher(content);
-            if (matcher.find()) {
-                return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpRef);
+
+            // check if cla.yaml is realized via reference "uses: ..."
+            {
+                Matcher matcher = REQUIRED_CONTENT_APPROACH1.matcher(content);
+                if (matcher.find()) {
+                    return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpRef);
+                }
+            }
+
+            // check if cla.yaml is realized via copy-paste of original content
+            {
+                Matcher matcher = REQUIRED_CONTENT_APPROACH2_PART1.matcher(content);
+                if (matcher.find()) {
+                    Matcher matcher2 = REQUIRED_CONTENT_APPROACH2_PART2.matcher(content);
+                    if (matcher2.find()) {
+                        return new TheCellValue("Ok", 4, SeverityLevel.OK).withHttpReference(httpRef);
+                    }
+                }
             }
 
             return new TheCellValue("Unexpected content", 2, SeverityLevel.WARN).withHttpReference(httpRef);
