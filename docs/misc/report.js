@@ -14,6 +14,7 @@ function defaultRender (data, type, row, meta) {
 //   }
     // console.log("defaultRenderer is called with type = " + type);
     if (type == 'sort') {
+        if (data.sortByValue == '') return 0;
         return data.sortByValue;
     }
 
@@ -34,7 +35,7 @@ function defaultRender (data, type, row, meta) {
     } else if (data.href) {
         return '<a href="' + data.href + '" target="_blank">' + value + '</a>';
     } else if (value) {
-        return String(value);
+        return value;
     } else {
         return String(data);
     }
@@ -44,14 +45,10 @@ $(document).ready(function() {
     // Add custom sorting for 'only-numbers'
     jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         "only-numbers-asc": function ( a,b ) {
-            var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-            var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-            return x - y;
+            return a - b;
         },
         "only-numbers-desc": function ( a,b ) {
-            var x = parseFloat(String(a).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-            var y = parseFloat(String(b).replace( /[^0-9\.]/g, "" ).replace( /^\.+/g, "")) || -1;
-            return y - x;
+            return b - a;
         }
     } );
 
