@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public abstract class AbstractFileContentChecker extends AbstractCollector {
+public abstract class AFilesContentChecker extends AbstractCollector {
     @Override
     public final void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn column = getColumnToAddValueInto(theReportModel);

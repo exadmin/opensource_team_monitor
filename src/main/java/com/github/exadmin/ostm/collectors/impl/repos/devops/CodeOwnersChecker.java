@@ -8,10 +8,8 @@ import com.github.exadmin.ostm.utils.FileUtils;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +19,7 @@ import java.util.regex.Pattern;
  * in the branch where you'd like to add the code owners. If CODEOWNERS files exist in more than one of those locations,
  * GitHub will search for them in that order and use the first one it finds.
  */
-public class CodeOwnersChecker extends AbstractFileContentChecker {
+public class CodeOwnersChecker extends AFilesContentChecker {
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
         return theReportModel.findColumn(TheColumId.COL_REPO_CODE_OWNERS_FILE);

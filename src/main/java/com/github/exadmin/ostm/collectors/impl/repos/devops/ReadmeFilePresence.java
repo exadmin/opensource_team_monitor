@@ -8,7 +8,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ReadmeFilePresence extends AbstractFileContentChecker {
+public class ReadmeFilePresence extends AFilesContentChecker {
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
         return theReportModel.findColumn(TheColumId.COL_REPO_README_FILE);

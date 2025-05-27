@@ -36,7 +36,8 @@ public enum TheColumId {
     COL_REPO_LINT_TITLE("column:lint_title"),
     COL_REPO_SEC_PROFINITY("colummn:profinity_action"),
     COL_REPO_SEC_MAIN_IS_PROTECTED("column:main_branch_is_protected"),
-    COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker");
+    COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker"),
+    COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words");
 
     private final String id;
 

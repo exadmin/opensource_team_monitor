@@ -93,6 +93,10 @@ public class GrandReportModel {
             newColumn.setTitle("Code Owners File");
         });
 
+        TheColumn colBadListedWords = theReportModel.allocateColumn(COL_REPO_SEC_BAD_WORDS_CHECKER, newColumn -> {
+            newColumn.setTitle("Restricted Words");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -143,6 +147,7 @@ public class GrandReportModel {
         sheetSecurity.registerColumn(colReadmeFile, false);
         sheetSecurity.registerColumn(colCLAFile, false);
         sheetSecurity.registerColumn(colCodeOwners, false);
+        sheetSecurity.registerColumn(colBadListedWords, false);
 
         return theReportModel;
     }

@@ -2,10 +2,7 @@ package com.github.exadmin.ostm.collectors.api;
 
 import com.github.exadmin.ostm.collectors.impl.repos.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
-import com.github.exadmin.ostm.collectors.impl.repos.devops.CLAFilePresence;
-import com.github.exadmin.ostm.collectors.impl.repos.devops.CodeOwnersChecker;
-import com.github.exadmin.ostm.collectors.impl.repos.devops.LicenseFilePresence;
-import com.github.exadmin.ostm.collectors.impl.repos.devops.ReadmeFilePresence;
+import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.NumberOfOpenedPullRequests;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
@@ -32,6 +29,7 @@ public class CollectorsFactory {
         collectors.add(new ReadmeFilePresence());
         collectors.add(new CLAFilePresence());
         collectors.add(new CodeOwnersChecker());
+        collectors.add(new BadWordsChecker());
     }
 
     private final TheReportModel theReportModel;

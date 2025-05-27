@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CLAFilePresence extends AbstractFileContentChecker {
+public class CLAFilePresence extends AFilesContentChecker {
     private static final Pattern REQUIRED_CONTENT_APPROACH1 = Pattern.compile("\\buses\\s*:\\s*Netcracker/qubership-workflow-hub/.github/workflows/cla.yaml@", Pattern.CASE_INSENSITIVE);
 
     private static final Pattern REQUIRED_CONTENT_APPROACH2_PART1 = Pattern.compile("\\buses\\s*:\\s*contributor-assistant\\/github-action@");

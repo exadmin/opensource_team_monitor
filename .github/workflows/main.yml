@@ -58,7 +58,7 @@ jobs:
           echo "Current directory is ${CURRENT_DIR}"
           cd /tmp/WORKDIR
           
-          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache
+          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache ${CURRENT_DIR}/docs/data/black-list-words.properties
           cp ./data.json ${CURRENT_DIR}/docs/data/data.json
           
           cd ${CURRENT_DIR}

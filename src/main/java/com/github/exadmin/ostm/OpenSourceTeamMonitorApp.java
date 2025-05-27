@@ -2,6 +2,7 @@ package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
+import com.github.exadmin.ostm.github.badwords.BadWordsManager;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
 import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import com.github.exadmin.ostm.uimodel.GrandReportModel;
@@ -22,15 +23,17 @@ public class OpenSourceTeamMonitorApp {
     private static final int ARG2 = 1;
     private static final int ARG3 = 2;
     private static final int ARG4 = 3;
+    private static final int ARG5 = 4;
 
     public static void main(String[] args) {
         // Step1: Initiate application
-        if (args.length != 4) {
+        if (args.length != 5) {
             log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
                     "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
                     "arg2 - parent directory where all necessary repositories are cloned into (into personal subfolders)\n" +
                     "arg3 - output file (read-write) to write results into\n" +
-                    "arg4 - cache directory (read-write) to store responses from github");
+                    "arg4 - cache directory (read-write) to store responses from github\n" +
+                    "arg5 - properties file with bad-listed expressions");
             System.exit(-1);
         }
 
@@ -49,6 +52,8 @@ public class OpenSourceTeamMonitorApp {
 
         final Path outputFilePath = Paths.get(args[ARG3]);
         NewCacheManager.setCacheDirectoryPath(args[ARG4]);
+
+        BadWordsManager.loadExpressionsFrom(args[ARG5]); // todo: refactor
 
         // Step2: Run collectors
         TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
