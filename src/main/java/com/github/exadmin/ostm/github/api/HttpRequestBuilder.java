@@ -1,23 +1,19 @@
 package com.github.exadmin.ostm.github.api;
 
+import com.github.exadmin.ostm.app.AppSettings;
+
 public abstract class HttpRequestBuilder {
-    private static String authToken;
-
     HttpRequestBuilder() {
-    }
-
-    public static void setAuthenticationToken(String token) {
-        authToken = token;
     }
 
     public static GitHubHttpRequestBuilderGQL gitHubGraphQLCall() {
         ensureTokenIsSet();
-        return new GitHubHttpRequestBuilderGQL(authToken);
+        return new GitHubHttpRequestBuilderGQL(AppSettings.getGitHubAuthenticationToken());
     }
 
     public static GitHubHttpRequestBuilderREST gitHubRESTCall() {
         ensureTokenIsSet();
-        return new GitHubHttpRequestBuilderREST(authToken);
+        return new GitHubHttpRequestBuilderREST(AppSettings.getGitHubAuthenticationToken());
     }
 
     public static GitHubHttpRequestBuilderREST genericRESTCall() {
@@ -25,7 +21,8 @@ public abstract class HttpRequestBuilder {
     }
 
     private static void ensureTokenIsSet() {
-        if (authToken == null) throw new IllegalStateException("Set authentication token first!");
+        if (AppSettings.getGitHubAuthenticationToken() == null)
+            throw new IllegalStateException("Set authentication token first!");
     }
 
     public abstract GitHubRequest build();

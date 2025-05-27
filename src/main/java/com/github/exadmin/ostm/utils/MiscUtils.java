@@ -3,10 +3,10 @@ package com.github.exadmin.ostm.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -174,5 +174,20 @@ public class MiscUtils {
 
         byte[] hash = digest.digest();
         return Base64.getEncoder().encodeToString(hash);
+    }
+
+    public static String getTokenFromArg(String filePathOrTokenItself) {
+        try {
+            // try to use a value as a file path
+            File file = new File(filePathOrTokenItself);
+            if (file.isFile() && file.exists()) return Files.readString(Paths.get(filePathOrTokenItself), StandardCharsets.UTF_8);
+
+            // if cant - then return as a value itself
+            return filePathOrTokenItself;
+        } catch (IOException | NullPointerException ex) {
+            log.error("Error while loading token from file {}", filePathOrTokenItself, ex);
+        }
+
+        return null;
     }
 }
