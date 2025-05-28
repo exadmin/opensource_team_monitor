@@ -32,7 +32,7 @@ public class FileUtils {
     }
 
     private static void _findAllFilesRecursively(List<String> collectedFiles, File dirToScan, FileAcceptor fileAcceptor) {
-        log.debug("Searching additional configuration items at '{}'", dirToScan);
+        log.debug("Continue collecting files in '{}'", dirToScan);
         File[] items = dirToScan.listFiles();
         if (items == null) return;
 

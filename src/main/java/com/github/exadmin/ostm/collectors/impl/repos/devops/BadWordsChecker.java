@@ -8,6 +8,8 @@ import com.github.exadmin.ostm.utils.FileUtils;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // todo: optimize checking by using: "git rev-parse --short HEAD"
 public class BadWordsChecker extends AFilesContentChecker {
@@ -18,6 +20,7 @@ public class BadWordsChecker extends AFilesContentChecker {
         IGNORED_EXTS.add(".gif");
         IGNORED_EXTS.add(".jpg");
         IGNORED_EXTS.add(".bmp");
+        IGNORED_EXTS.add(".ico");
     }
 
     @Override
@@ -27,7 +30,7 @@ public class BadWordsChecker extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        Map<String, String> badMap = BadWordsManager.getBadMap();
+        Map<String, Pattern> badMap = BadWordsManager.getBadMap();
 
         List<String> allFiles = FileUtils.findAllFilesRecursively(repoDirectory.toString(), shortFileName -> {
             for (String ext : IGNORED_EXTS) {
@@ -50,13 +53,19 @@ public class BadWordsChecker extends AFilesContentChecker {
                 return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
             }
 
-            for (Map.Entry<String, String> me : badMap.entrySet()) {
-                if (fileContent.contains(me.getValue())) {
-                    foundIds.add(me.getKey());
+            for (Map.Entry<String, Pattern> me : badMap.entrySet()) {
+                Matcher matcher = me.getValue().matcher(fileContent);
+                if (matcher.find()) {
+                    if (approveFoundPattern(nextFileName, fileContent, me.getKey(), me.getValue(), matcher)) {
+                        foundIds.add(me.getKey());
+                        getLog().debug("Pattern-id {} was found in the file {}, start = {}, end = {}", me.getKey(), nextFileName, matcher.start(), matcher.end());
+                    } else {
+                        getLog().debug("Pattern-id {} was skipped for the file {}", me.getKey(), nextFileName);
+                    }
                 }
             }
 
-            badMap.keySet().removeAll(foundIds); // reduce number of signatures
+            badMap.keySet().removeAll(foundIds); // reduce number of signatures to work with in scope of this repository
         }
 
         if (!foundIds.isEmpty()) {
@@ -68,5 +77,26 @@ public class BadWordsChecker extends AFilesContentChecker {
         }
 
         return new TheCellValue("Ok", 0, SeverityLevel.OK);
+    }
+
+    /**
+     * Makes double-check - if found value is not false-positive.
+     * For instance, there is "IP-Address" reg-exp, but some addresses are valid to be published in the repository.
+     * This listener allows not make additional check without complication of initial regexp.
+     * @param filePath
+     * @param fileContent
+     * @param patternId
+     * @param regExp
+     * @param matcher
+     * @return
+     */
+    protected boolean approveFoundPattern(String filePath, String fileContent, String patternId, Pattern regExp, Matcher matcher) {
+        // analyze IP addresses for false-positives
+        if ("OTH-IP-ADDR".equals(patternId)) {
+            String ipAddressValue = matcher.group();
+            getLog().debug("Checking IP Address value = {}", ipAddressValue);
+            if ("0.0.0.0".equals(ipAddressValue) || "127.0.0.1".equals(ipAddressValue)) return false;
+        }
+        return true;
     }
 }

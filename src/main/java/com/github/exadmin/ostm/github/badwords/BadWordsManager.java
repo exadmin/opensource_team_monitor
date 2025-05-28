@@ -6,15 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class BadWordsManager {
     private static final Logger log = LoggerFactory.getLogger(BadWordsManager.class);
 
-    private static Map<String, String> badMap;
+    private static Map<String, Pattern> badMap;
 
     public static void loadExpressionsFrom(String filePath, String password, String salt) {
         badMap = new LinkedHashMap<>();
@@ -31,7 +31,15 @@ public class BadWordsManager {
 
                 Set<Object> keys = props.keySet();
                 for (Object key : keys) {
-                    badMap.put(key.toString(), props.get(key).toString());
+                    try {
+                        String regExp = props.get(key).toString();
+                        Pattern pattern = Pattern.compile(regExp, Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
+                        badMap.put(key.toString(), pattern);
+                        log.debug("RegExp {} is compiled successfully", key);
+
+                    } catch (Exception ex) {
+                        log.error("Error while compiling  reg-exp with id = {}", key);
+                    }
                 }
             } catch (IOException ex) {
                 log.error("Error while loading bad words dictionary from {}", filePath, ex);
@@ -43,7 +51,7 @@ public class BadWordsManager {
         }
     }
 
-    public static Map<String, String> getBadMap() {
+    public static Map<String, Pattern> getBadMap() {
         return new HashMap<>(badMap);
     }
 }
