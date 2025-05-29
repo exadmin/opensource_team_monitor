@@ -53,7 +53,8 @@ public class NumberOfOpenedPullRequests extends AbstractCollector {
                 SeverityLevel severity = count > ERR_IF_PRS_MORE_THAN ? SeverityLevel.ERROR :
                         count > WARN_IF_PRS_MORE_THAN ? SeverityLevel.WARN : SeverityLevel.OK;
 
-                return new TheCellValue(count, count, severity);
+                return new TheCellValue(count, count, severity)
+                        .withHttpReference("https://github.com/Netcracker/" + repo.getName() + "/pulls");
             }
         }
 

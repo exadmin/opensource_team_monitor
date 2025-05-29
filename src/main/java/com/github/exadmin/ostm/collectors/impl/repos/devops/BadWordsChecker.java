@@ -30,6 +30,8 @@ public class BadWordsChecker extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+        if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
+
         Map<String, Pattern> badMap = BadWordsManager.getBadMap();
 
         List<String> allFiles = FileUtils.findAllFilesRecursively(repoDirectory.toString(), shortFileName -> {

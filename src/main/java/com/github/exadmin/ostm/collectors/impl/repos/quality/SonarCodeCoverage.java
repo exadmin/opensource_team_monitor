@@ -74,7 +74,9 @@ public class SonarCodeCoverage extends AbstractCollector {
                         String component = (String) mData.get("component");
 
                         String rowId = componentToRowIdMap.remove(component);
-                        column.addValue(rowId, new TheCellValue(value + "%", value, SeverityLevel.INFO));
+                        column.addValue(rowId,
+                                new TheCellValue(value + "%", value, SeverityLevel.INFO)
+                                        .withHttpReference("https://sonarcloud.io/project/overview?id=" + component));
                     }
                 }
             }
@@ -87,7 +89,9 @@ public class SonarCodeCoverage extends AbstractCollector {
 
         // at this step - componenToRowIdMap contains list of components with absent data
         for (Map.Entry<String, String> me : componentToRowIdMap.entrySet()) {
-            column.addValue(me.getValue(), new TheCellValue("Not Registered", 0, SeverityLevel.ERROR));
+            column.addValue(me.getValue(),
+                    new TheCellValue("Not Registered", 0, SeverityLevel.ERROR)
+                            .withHttpReference("https://sonarcloud.io/organizations/netcracker/projects"));
         }
     }
 }
