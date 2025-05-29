@@ -30,6 +30,7 @@ public class CollectorsFactory {
         collectors.add(new CLAFilePresence());
         collectors.add(new CodeOwnersChecker());
         collectors.add(new BadWordsChecker());
+        collectors.add(new ConventionalCommitsActionChecker());
     }
 
     private final TheReportModel theReportModel;

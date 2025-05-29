@@ -97,6 +97,10 @@ public class GrandReportModel {
             newColumn.setTitle("Restricted Words");
         });
 
+        TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {
+            newCol.setTitle("Conventional Commits");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -146,6 +150,7 @@ public class GrandReportModel {
         sheetSecurity.registerColumn(colLicenseFile, false);
         sheetSecurity.registerColumn(colReadmeFile, false);
         sheetSecurity.registerColumn(colCLAFile, false);
+        sheetSecurity.registerColumn(colConventionalCommits, false);
         sheetSecurity.registerColumn(colCodeOwners, false);
         sheetSecurity.registerColumn(colBadListedWords, false);
 

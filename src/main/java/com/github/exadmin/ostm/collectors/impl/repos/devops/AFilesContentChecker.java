@@ -15,6 +15,7 @@ public abstract class AFilesContentChecker extends AbstractCollector {
     @Override
     public final void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn column = getColumnToAddValueInto(theReportModel);
+        if (column == null) throw new IllegalStateException("Column is not. Was it created in the GrandReportModel using allocateColumn() method?");
 
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepos) {
