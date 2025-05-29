@@ -36,7 +36,7 @@ public class GrandReportModel {
         });
 
         // ***** "ALL REPOSITORIES" SHEET *****
-        TheSheet sheetAllRepos = theReportModel.allocateSheet(SHEET_ALL_REPOSITORIES,
+        TheSheet sheetCodeQuality = theReportModel.allocateSheet(SHEET_ALL_REPOSITORIES,
                 newSheet -> newSheet.setTitle("Code Quality"));
 
         TheColumn colRepoNumber = theReportModel.allocateColumn(COL_REPO_NUMBER, newColumn -> {
@@ -70,19 +70,20 @@ public class GrandReportModel {
         });
 
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
-            newSheet.setTitle("Repositories check list");
+            newSheet.setTitle("Security check list");
         });
 
-        // ***** SECURITY CHECKS SHEET *****
-        TheSheet sheetSecurity = theReportModel.allocateSheet(SHEET_REPOS_SECURITY, newSheet -> {
-            newSheet.setTitle("Security Checks");
+        // ***** DEVOPS CHECKS SHEET *****
+        TheSheet devOpsWorkflowsSheet = theReportModel.allocateSheet(SHEET_REPOS_SECURITY, newSheet -> {
+            newSheet.setTitle("DevOps Workflows");
         });
+
         TheColumn colLicenseFile = theReportModel.allocateColumn(COL_REPO_LICENSE_FILE, newColumn -> {
-            newColumn.setTitle("License File");
+            newColumn.setTitle("License File Presence");
         });
 
         TheColumn colReadmeFile = theReportModel.allocateColumn(COL_REPO_README_FILE, newColumn -> {
-            newColumn.setTitle("Readme File");
+            newColumn.setTitle("README.md (size in bytes)");
         });
 
         TheColumn colCLAFile = theReportModel.allocateColumn(COL_REPO_CLA_FILE, newColumn -> {
@@ -134,25 +135,25 @@ public class GrandReportModel {
         }
 
 
-        sheetAllRepos.registerColumn(colRepoNumber, true);
-        sheetAllRepos.registerColumn(colRepoName, true);
-        sheetAllRepos.registerColumn(colTopics, false);
-        sheetAllRepos.registerColumn(colSonarMetric, false);
-        sheetAllRepos.registerColumn(colOpenedPRs, false);
+        sheetCodeQuality.registerColumn(colRepoNumber, true);
+        sheetCodeQuality.registerColumn(colRepoName, true);
+        sheetCodeQuality.registerColumn(colTopics, false);
+        sheetCodeQuality.registerColumn(colSonarMetric, false);
+        sheetCodeQuality.registerColumn(colOpenedPRs, false);
 
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);
         sheetCheckList.registerColumn(colTopics, false);
+        sheetCheckList.registerColumn(colBadListedWords, false);
 
-        sheetSecurity.registerColumn(colRepoNumber, true);
-        sheetSecurity.registerColumn(colRepoName, false);
-        sheetSecurity.registerColumn(colTopics, false);
-        sheetSecurity.registerColumn(colLicenseFile, false);
-        sheetSecurity.registerColumn(colReadmeFile, false);
-        sheetSecurity.registerColumn(colCLAFile, false);
-        sheetSecurity.registerColumn(colConventionalCommits, false);
-        sheetSecurity.registerColumn(colCodeOwners, false);
-        sheetSecurity.registerColumn(colBadListedWords, false);
+        devOpsWorkflowsSheet.registerColumn(colRepoNumber, true);
+        devOpsWorkflowsSheet.registerColumn(colRepoName, false);
+        devOpsWorkflowsSheet.registerColumn(colTopics, false);
+        devOpsWorkflowsSheet.registerColumn(colLicenseFile, false);
+        devOpsWorkflowsSheet.registerColumn(colReadmeFile, false);
+        devOpsWorkflowsSheet.registerColumn(colCLAFile, false);
+        devOpsWorkflowsSheet.registerColumn(colConventionalCommits, false);
+        devOpsWorkflowsSheet.registerColumn(colCodeOwners, false);
 
         return theReportModel;
     }
