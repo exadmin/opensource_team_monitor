@@ -97,6 +97,12 @@ public class BadWordsChecker extends AFilesContentChecker {
             getLog().debug("Checking IP Address value = {}", ipAddressValue);
             if ("0.0.0.0".equals(ipAddressValue) || "127.0.0.1".equals(ipAddressValue)) return false;
         }
+
+        if ("INT-004".equals(patternId)) {
+            String value = matcher.group().toLowerCase();
+            if ("pages.netcracker.com".equalsIgnoreCase(value)) return false;
+        }
+
         return true;
     }
 }
