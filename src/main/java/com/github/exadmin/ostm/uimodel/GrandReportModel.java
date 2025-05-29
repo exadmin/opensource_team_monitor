@@ -106,6 +106,10 @@ public class GrandReportModel {
             newCol.setTitle("Linter/Prettier");
         });
 
+        TheColumn colLabeler = theReportModel.allocateColumn(COL_REPO_LABELER, newCol -> {
+            newCol.setTitle("Automatic Labeler");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -159,6 +163,7 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colConventionalCommits, false);
         devOpsWorkflowsSheet.registerColumn(colCodeOwners, false);
         devOpsWorkflowsSheet.registerColumn(colLinter, false);
+        devOpsWorkflowsSheet.registerColumn(colLabeler, false);
 
         return theReportModel;
     }

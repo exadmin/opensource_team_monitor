@@ -33,6 +33,7 @@ public class CollectorsFactory {
         collectors.add(new BadWordsChecker());
         collectors.add(new ConventionalCommitsActionChecker());
         collectors.add(new SuperLinterChecker());
+        collectors.add(new LabelerActionChecker());
     }
 
     private final TheReportModel theReportModel;

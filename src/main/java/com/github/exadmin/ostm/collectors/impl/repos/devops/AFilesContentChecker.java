@@ -36,25 +36,34 @@ public abstract class AFilesContentChecker extends AbstractCollector {
 
     protected abstract TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory);
 
-    protected TheCellValue checkOneFileForContent(Path filePath, String httpReference, Pattern regExp) {
+    protected TheCellValue checkOneFileForContent(Path filePath, String httpReference, Pattern ... regExps) {
         File file = filePath.toFile();
         if (!file.exists() || !file.isFile()) {
             return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
         }
 
         // if no necessity to check over expected content
-        if (regExp == null) {
+        if (regExps == null || regExps.length == 0) {
             return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpReference);
         }
 
         try {
-            String fileBody = FileUtils.readFile(filePath.toString());
-            Matcher matcher = regExp.matcher(fileBody);
-            if (matcher.find()) {
+            boolean matches = false;
+            for (Pattern regExp : regExps) {
+                String fileBody = FileUtils.readFile(filePath.toString());
+                Matcher matcher = regExp.matcher(fileBody);
+                if (matcher.find()) {
+                    matches = true;
+                    break;
+                }
+            }
+
+            if (matches) {
                 return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpReference);
             } else {
                 return new TheCellValue("Unexpected Content", 2, SeverityLevel.WARN).withHttpReference(httpReference);
             }
+
         } catch (Exception ex) {
             getLog().error("Error while reading file {}", filePath, ex);
             return new TheCellValue("Internal Error", 1, SeverityLevel.ERROR);
