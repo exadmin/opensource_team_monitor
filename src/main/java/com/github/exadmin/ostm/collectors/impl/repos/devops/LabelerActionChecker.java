@@ -22,6 +22,6 @@ public class LabelerActionChecker extends AFilesContentChecker {
         Path filePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "automatic-pr-labeler.yaml");
         String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/automatic-pr-labeler.yaml");
 
-        return checkOneFileForContent(filePath, httpRef, REGEXP1, REGEXP2);
+        return checkOneFileForContent(filePath, httpRef, REGEXP1);
     }
 }

@@ -110,6 +110,14 @@ public class GrandReportModel {
             newCol.setTitle("Automatic Labeler");
         });
 
+        TheColumn colLintTitle = theReportModel.allocateColumn(COL_REPO_LINT_TITLE, newCol -> {
+            newCol.setTitle("Lint Title");
+        });
+
+        TheColumn colProfanity = theReportModel.allocateColumn(COL_REPO_PROFANITY_ACTION, newCol -> {
+            newCol.setTitle("Profanity Checker");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -164,6 +172,8 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colCodeOwners, false);
         devOpsWorkflowsSheet.registerColumn(colLinter, false);
         devOpsWorkflowsSheet.registerColumn(colLabeler, false);
+        devOpsWorkflowsSheet.registerColumn(colLintTitle, false);
+        devOpsWorkflowsSheet.registerColumn(colProfanity, false);
 
         return theReportModel;
     }

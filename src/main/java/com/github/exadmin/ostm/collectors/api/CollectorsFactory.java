@@ -34,6 +34,8 @@ public class CollectorsFactory {
         collectors.add(new ConventionalCommitsActionChecker());
         collectors.add(new SuperLinterChecker());
         collectors.add(new LabelerActionChecker());
+        collectors.add(new LintTitleActionChecker());
+        collectors.add(new ProfanityChecker());
     }
 
     private final TheReportModel theReportModel;
