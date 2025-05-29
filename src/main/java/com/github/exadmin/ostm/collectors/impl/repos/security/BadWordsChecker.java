@@ -1,5 +1,6 @@
-package com.github.exadmin.ostm.collectors.impl.repos.devops;
+package com.github.exadmin.ostm.collectors.impl.repos.security;
 
+import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
 import com.github.exadmin.ostm.github.badwords.BadWordsManager;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;

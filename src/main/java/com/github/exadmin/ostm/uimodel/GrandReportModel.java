@@ -102,6 +102,10 @@ public class GrandReportModel {
             newCol.setTitle("Conventional Commits");
         });
 
+        TheColumn colLinter = theReportModel.allocateColumn(COL_REPO_LINTER, newCol -> {
+            newCol.setTitle("Linter/Prettier");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -138,6 +142,7 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colRepoNumber, true);
         sheetCodeQuality.registerColumn(colRepoName, true);
         sheetCodeQuality.registerColumn(colTopics, false);
+        sheetCodeQuality.registerColumn(colReadmeFile, false);
         sheetCodeQuality.registerColumn(colSonarMetric, false);
         sheetCodeQuality.registerColumn(colOpenedPRs, false);
 
@@ -150,10 +155,10 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colRepoName, false);
         devOpsWorkflowsSheet.registerColumn(colTopics, false);
         devOpsWorkflowsSheet.registerColumn(colLicenseFile, false);
-        devOpsWorkflowsSheet.registerColumn(colReadmeFile, false);
         devOpsWorkflowsSheet.registerColumn(colCLAFile, false);
         devOpsWorkflowsSheet.registerColumn(colConventionalCommits, false);
         devOpsWorkflowsSheet.registerColumn(colCodeOwners, false);
+        devOpsWorkflowsSheet.registerColumn(colLinter, false);
 
         return theReportModel;
     }
