@@ -35,6 +35,7 @@ public class ReportModelPersister {
                 jsonColumn.setData(theColumn.getId());
                 jsonColumn.setTitle(theColumn.getTitle());
                 jsonColumn.setClassName(theColumn.getCssClassName());
+                jsonColumn.setHelpUrl(theColumn.getHelpUrl());
             }
 
             // collect all rowidsd

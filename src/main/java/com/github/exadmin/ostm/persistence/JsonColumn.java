@@ -16,8 +16,11 @@ public class JsonColumn {
     private String className;
 
     @JsonProperty("sType")
-    private String sType = "only-numbers"; // this type is needed for DataTables to enable sorting by number value, see
-    // report.js "jQuery.extend( jQuery.fn.dataTableExt.oSort"
+    private String sType = "only-numbers";  // this type is needed for DataTables to enable sorting by number value, see
+                                            // report.js "jQuery.extend( jQuery.fn.dataTableExt.oSort"
+
+    @JsonProperty("help_url")
+    private String helpUrl;
 
     public JsonColumn(JsonTable jsonTable) {
         List<JsonColumn> columns = jsonTable.getColumns();
@@ -57,5 +60,13 @@ public class JsonColumn {
 
     public void setsType(String sType) {
         this.sType = sType;
+    }
+
+    public String getHelpUrl() {
+        return helpUrl;
+    }
+
+    public void setHelpUrl(String helpUrl) {
+        this.helpUrl = helpUrl;
     }
 }

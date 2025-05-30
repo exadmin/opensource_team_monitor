@@ -80,6 +80,7 @@ public class GrandReportModel {
 
         TheColumn colLicenseFile = theReportModel.allocateColumn(COL_REPO_LICENSE_FILE, newColumn -> {
             newColumn.setTitle("License File Presence");
+            newColumn.setHelpUrl("https://www.apache.org/licenses/LICENSE-2.0.txt");
         });
 
         TheColumn colReadmeFile = theReportModel.allocateColumn(COL_REPO_README_FILE, newColumn -> {
@@ -88,10 +89,12 @@ public class GrandReportModel {
 
         TheColumn colCLAFile = theReportModel.allocateColumn(COL_REPO_CLA_FILE, newColumn -> {
             newColumn.setTitle("CLA File");
+            newColumn.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#cla");
         });
 
         TheColumn colCodeOwners = theReportModel.allocateColumn(COL_REPO_CODE_OWNERS_FILE, newColumn -> {
             newColumn.setTitle("Code Owners File");
+            newColumn.setHelpUrl("https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners");
         });
 
         TheColumn colBadListedWords = theReportModel.allocateColumn(COL_REPO_SEC_BAD_WORDS_CHECKER, newColumn -> {
@@ -100,22 +103,27 @@ public class GrandReportModel {
 
         TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {
             newCol.setTitle("Conventional Commits");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#conventional-commits-pr-check");
         });
 
         TheColumn colLinter = theReportModel.allocateColumn(COL_REPO_LINTER, newCol -> {
             newCol.setTitle("Linter/Prettier");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#lint-code-base-super-linter");
         });
 
         TheColumn colLabeler = theReportModel.allocateColumn(COL_REPO_LABELER, newCol -> {
             newCol.setTitle("Automatic Labeler");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#automatic-pr-labels-based-on-conventional-commits");
         });
 
         TheColumn colLintTitle = theReportModel.allocateColumn(COL_REPO_LINT_TITLE, newCol -> {
             newCol.setTitle("Lint Title");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#lint-pr-title");
         });
 
         TheColumn colProfanity = theReportModel.allocateColumn(COL_REPO_PROFANITY_ACTION, newCol -> {
             newCol.setTitle("Profanity Checker");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#profanity-filter");
         });
 
         TheColumn colBadLinks = theReportModel.allocateColumn(COL_REPO_SEC_BAD_LINKS_CHECKER, newCol -> {

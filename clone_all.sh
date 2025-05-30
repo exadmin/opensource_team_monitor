@@ -18,7 +18,8 @@ while true; do
         break
     fi
 
-    cat "$file" | grep -v 'k8s-conformance' | grep -e 'clone_url*' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
+    # cat "$file" | grep -v -e 'k8s-conformance' -e 'kafka' -e 'postgres' -e 'cassandra' | grep -e 'clone_url*' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
+    cat "$file" | grep -e 'clone_url*' | grep '/qubership-' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
 
     i=$((i + 1))
 done

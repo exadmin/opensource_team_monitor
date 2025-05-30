@@ -13,6 +13,7 @@ public class TheColumn {
     private String title;
     private final Map<String, TheCellValue> dataMap;
     private String cssClassName;
+    private String helpUrl;
 
     private int renderingOrder;
 
@@ -69,5 +70,13 @@ public class TheColumn {
 
     public List<String> getRows() {
         return new ArrayList<>(dataMap.keySet());
+    }
+
+    public String getHelpUrl() {
+        return helpUrl;
+    }
+
+    public void setHelpUrl(String helpUrl) {
+        this.helpUrl = helpUrl;
     }
 }
