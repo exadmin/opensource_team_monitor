@@ -37,7 +37,8 @@ public enum TheColumId {
     COL_REPO_PROFANITY_ACTION("colummn:profanity_action"),
     COL_REPO_SEC_MAIN_IS_PROTECTED("column:main_branch_is_protected"),
     COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker"),
-    COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words");
+    COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words"),
+    COL_REPO_BUILD_ON_COMMIT("column:build_on_commit");
 
     private final String id;
 

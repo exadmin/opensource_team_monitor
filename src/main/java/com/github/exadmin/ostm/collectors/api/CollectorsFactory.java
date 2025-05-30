@@ -36,6 +36,8 @@ public class CollectorsFactory {
         collectors.add(new LabelerActionChecker());
         collectors.add(new LintTitleActionChecker());
         collectors.add(new ProfanityChecker());
+        collectors.add(new BadLinksChecker());
+        collectors.add(new BuildOnCommit());
     }
 
     private final TheReportModel theReportModel;

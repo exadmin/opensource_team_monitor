@@ -118,6 +118,14 @@ public class GrandReportModel {
             newCol.setTitle("Profanity Checker");
         });
 
+        TheColumn colBadLinks = theReportModel.allocateColumn(COL_REPO_SEC_BAD_LINKS_CHECKER, newCol -> {
+            newCol.setTitle("Bad Links Checker");
+        });
+
+        TheColumn colBuildOnCommit = theReportModel.allocateColumn(COL_REPO_BUILD_ON_COMMIT, newCol -> {
+            newCol.setTitle("Build on Commit");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -174,6 +182,8 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colLabeler, false);
         devOpsWorkflowsSheet.registerColumn(colLintTitle, false);
         devOpsWorkflowsSheet.registerColumn(colProfanity, false);
+        devOpsWorkflowsSheet.registerColumn(colBadLinks, false);
+        devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
 
         return theReportModel;
     }
