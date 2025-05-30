@@ -18,4 +18,8 @@ public enum SeverityLevel {
     public String toString() {
         return text;
     }
+
+    public boolean isErroneous() {
+        return (this == ERROR) || (this == WARN) || (this == SECURITY_WARN);
+    }
 }

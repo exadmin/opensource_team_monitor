@@ -87,7 +87,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                     totalCount = totalCount + count;
                 }
 
-                final TheColumn theColumn = theReportModel.findColumn(TheColumId.findById("column:week_back_" + weekBackNumber));
+                final TheColumn theColumn = theReportModel.findColumn(TheColumnId.findById("column:week_back_" + weekBackNumber));
                 if (theColumn == null) throw new IllegalStateException("Can't find column for week with number = " + weekBackNumber);
                 weekBackNumber++;
 

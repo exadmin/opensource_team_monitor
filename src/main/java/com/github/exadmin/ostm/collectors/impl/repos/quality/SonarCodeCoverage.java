@@ -32,7 +32,7 @@ public class SonarCodeCoverage extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        TheColumn column = theReportModel.findColumn(TheColumId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);
+        TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);
 
         // Step1: collect names of all repositories to ask statistics in the Sonar-Cloud for
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");

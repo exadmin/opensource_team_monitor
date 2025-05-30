@@ -16,7 +16,7 @@ public class ConventionalCommitsActionChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_CONVENTIONAL_COMMITS_ACTION);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_CONVENTIONAL_COMMITS_ACTION);
     }
 
     @Override

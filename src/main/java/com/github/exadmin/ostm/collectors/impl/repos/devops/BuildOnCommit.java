@@ -14,7 +14,7 @@ public class BuildOnCommit extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_BUILD_ON_COMMIT);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_BUILD_ON_COMMIT);
     }
 
     @Override

@@ -20,7 +20,7 @@ public class CLAFilePresence extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_CLA_FILE);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_CLA_FILE);
     }
 
     @Override

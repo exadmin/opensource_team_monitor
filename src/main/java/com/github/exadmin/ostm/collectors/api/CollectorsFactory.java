@@ -1,11 +1,13 @@
 package com.github.exadmin.ostm.collectors.api;
 
-import com.github.exadmin.ostm.collectors.impl.repos.ListAllRepositories;
-import com.github.exadmin.ostm.collectors.impl.repos.TopicAndTeamPerRepository;
+import com.github.exadmin.ostm.collectors.impl.repos.common.ListAllRepositories;
+import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.NumberOfOpenedPullRequests;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
 import com.github.exadmin.ostm.collectors.impl.repos.security.BadWordsChecker;
+import com.github.exadmin.ostm.collectors.impl.repos.summary.TotalErrorsCounter;
+import com.github.exadmin.ostm.collectors.impl.repos.summary.UniqueTeamsCollector;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
 import com.github.exadmin.ostm.collectors.impl.teams.NumberOfCommitsPerWeekPerUser;
 import com.github.exadmin.ostm.collectors.impl.teams.TeamKnownNames;
@@ -38,6 +40,8 @@ public class CollectorsFactory {
         collectors.add(new ProfanityChecker());
         collectors.add(new BadLinksChecker());
         collectors.add(new BuildOnCommit());
+        collectors.add(new UniqueTeamsCollector());
+        collectors.add(new TotalErrorsCounter());
     }
 
     private final TheReportModel theReportModel;

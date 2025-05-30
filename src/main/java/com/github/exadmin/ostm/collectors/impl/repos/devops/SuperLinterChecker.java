@@ -13,7 +13,7 @@ public class SuperLinterChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_LINTER);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_LINTER);
     }
 
     @Override

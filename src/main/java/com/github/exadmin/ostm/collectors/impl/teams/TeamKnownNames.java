@@ -16,8 +16,8 @@ public class TeamKnownNames extends AbstractCollector {
         List<String> uniqueUsers = gitHubFacade.getLoginsOfTheTeam();
 
         // create report
-        final TheColumn colLogin = theReportModel.findColumn(TheColumId.COL_USER_LOGIN);
-        final TheColumn colRealName = theReportModel.findColumn(TheColumId.COL_USER_REAL_NAME);
+        final TheColumn colLogin = theReportModel.findColumn(TheColumnId.COL_USER_LOGIN);
+        final TheColumn colRealName = theReportModel.findColumn(TheColumnId.COL_USER_REAL_NAME);
 
         for (String login : uniqueUsers) {
             String rowId = "row:" + login;

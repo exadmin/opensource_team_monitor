@@ -3,7 +3,7 @@ package com.github.exadmin.ostm.collectors.impl.repos.devops;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.TheCellValue;
-import com.github.exadmin.ostm.uimodel.TheColumId;
+import com.github.exadmin.ostm.uimodel.TheColumnId;
 import com.github.exadmin.ostm.uimodel.TheColumn;
 import com.github.exadmin.ostm.uimodel.TheReportModel;
 
@@ -16,7 +16,7 @@ public class ProfanityChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_PROFANITY_ACTION);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_PROFANITY_ACTION);
     }
 
     @Override

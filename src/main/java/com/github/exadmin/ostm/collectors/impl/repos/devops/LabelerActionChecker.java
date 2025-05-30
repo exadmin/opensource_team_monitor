@@ -14,7 +14,7 @@ public class LabelerActionChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_LABELER);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_LABELER);
     }
 
     @Override

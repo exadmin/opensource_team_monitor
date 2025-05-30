@@ -2,7 +2,7 @@ package com.github.exadmin.ostm.uimodel;
 
 import java.util.List;
 
-import static com.github.exadmin.ostm.uimodel.TheColumId.*;
+import static com.github.exadmin.ostm.uimodel.TheColumnId.*;
 import static com.github.exadmin.ostm.uimodel.TheSheetId.*;
 
 public class GrandReportModel {
@@ -12,7 +12,7 @@ public class GrandReportModel {
 
         // ***** "TEAM SUMMARY" SHEET *****
         TheSheet sheetTeamSummary = theReportModel.allocateSheet(SHEET_TEAM_SUMMARY_ID,
-                newInstance -> newInstance.setTitle("Qubership Team"));
+                newInstance -> newInstance.setTitle("Qubership Team Members"));
 
         // User login column
         TheColumn colGitHubLogin = theReportModel.allocateColumn(COL_USER_LOGIN, newColumn -> {
@@ -134,6 +134,19 @@ public class GrandReportModel {
             newCol.setTitle("Build on Commit");
         });
 
+        // SUMMARY SHEET
+        TheSheet sheetSummary = theReportModel.allocateSheet(SHEET_SUMMARY, newSheet-> {
+            newSheet.setTitle("Summary by teams");
+        });
+
+        TheColumn colTeamName = theReportModel.allocateColumn(COL_SUMMARY_TEAM_NAME, newCol -> {
+            newCol.setTitle("Team Name");
+        });
+
+        TheColumn colTotalErrors = theReportModel.allocateColumn(COL_SUMMARY_TEAM_TOTAL_ERRORS, newCol -> {
+            newCol.setTitle("Total Errors");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -142,7 +155,7 @@ public class GrandReportModel {
         sheetTeamSummary.registerColumn(colUserAllContribs, false);
 
         // create 12 weeks back columns
-        List<TheColumId> weekBackColumns = List.of(
+        List<TheColumnId> weekBackColumns = List.of(
                 COL_WEEK_BACK_01_ID,
                 COL_WEEK_BACK_02_ID,
                 COL_WEEK_BACK_03_ID,
@@ -156,7 +169,7 @@ public class GrandReportModel {
                 COL_WEEK_BACK_11_ID,
                 COL_WEEK_BACK_12_ID
                 );
-        for (TheColumId id : weekBackColumns) {
+        for (TheColumnId id : weekBackColumns) {
             TheColumn column = theReportModel.allocateColumn(id, newColumn -> {
                 newColumn.setTitle("Week back ???"); // the name will be initiated later in the right collector
                 newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
@@ -192,6 +205,9 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colProfanity, false);
         devOpsWorkflowsSheet.registerColumn(colBadLinks, false);
         devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
+
+        sheetSummary.registerColumn(colTeamName, true);
+        sheetSummary.registerColumn(colTotalErrors, false);
 
         return theReportModel;
     }

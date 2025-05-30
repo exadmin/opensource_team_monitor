@@ -3,7 +3,7 @@ package com.github.exadmin.ostm.uimodel;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum TheColumId {
+public enum TheColumnId {
 
     COL_USER_LOGIN("column:user_login"),
     COL_USER_REAL_NAME("column:user_real_name"),
@@ -38,11 +38,13 @@ public enum TheColumId {
     COL_REPO_SEC_MAIN_IS_PROTECTED("column:main_branch_is_protected"),
     COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker"),
     COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words"),
-    COL_REPO_BUILD_ON_COMMIT("column:build_on_commit");
+    COL_REPO_BUILD_ON_COMMIT("column:build_on_commit"),
+    COL_SUMMARY_TEAM_NAME("column:team_name"),
+    COL_SUMMARY_TEAM_TOTAL_ERRORS("column:team_total_errors");
 
     private final String id;
 
-    TheColumId(String id) {
+    TheColumnId(String id) {
         this.id = id;
         putIntoCache(this);
     }
@@ -51,15 +53,15 @@ public enum TheColumId {
         return id;
     }
 
-    private static Map<String, TheColumId> cache;
+    private static Map<String, TheColumnId> cache;
 
-    private static void putIntoCache(TheColumId theColumId) {
+    private static void putIntoCache(TheColumnId theColumId) {
         if (cache == null) cache = new HashMap<>();
 
         cache.put(theColumId.getId(), theColumId);
     }
 
-    public static TheColumId findById(String id) {
+    public static TheColumnId findById(String id) {
         return cache.get(id);
     }
 }

@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.collectors.impl.repos;
+package com.github.exadmin.ostm.collectors.impl.repos.common;
 
 import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
@@ -15,8 +15,8 @@ public class ListAllRepositories extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        final TheColumn colRepoNumber = theReportModel.findColumn(TheColumId.COL_REPO_NUMBER);
-        final TheColumn colRepoName = theReportModel.findColumn(TheColumId.COL_REPO_NAME);
+        final TheColumn colRepoNumber = theReportModel.findColumn(TheColumnId.COL_REPO_NUMBER);
+        final TheColumn colRepoName = theReportModel.findColumn(TheColumnId.COL_REPO_NAME);
 
         // Collect known repositories into the map
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");

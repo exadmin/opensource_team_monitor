@@ -40,7 +40,7 @@ public class TheReportModel {
         return sheetsMap.get(sheetId.getId());
     }
 
-    TheColumn allocateColumn(TheColumId columnId, OnCreateListener<TheColumn> listener) {
+    TheColumn allocateColumn(TheColumnId columnId, OnCreateListener<TheColumn> listener) {
         TheColumn existedColumn = findColumn(columnId);
         if (existedColumn != null) return existedColumn;
 
@@ -57,7 +57,7 @@ public class TheReportModel {
      * @param columnId String colum id to do searching by.
      * @return TheColumn instance or null if nothing is found.
      */
-    public TheColumn findColumn(TheColumId columnId) {
+    public TheColumn findColumn(TheColumnId columnId) {
         if (columnId == null) return null;
         return columnsMap.get(columnId.getId());
     }

@@ -28,7 +28,7 @@ public class CountNumberOfCommitsPerUser extends AbstractCollector {
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         List<String> uniqueLogins = gitHubFacade.getLoginsOfTheTeam();
 
-        final TheColumn theColumn = theReportModel.findColumn(TheColumId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
+        final TheColumn theColumn = theReportModel.findColumn(TheColumnId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
 
         for (String login : uniqueLogins) {
             String newQuery = GQL_QUERY_TEMPLATE.replace("XXXXX", login);

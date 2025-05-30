@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 public class CodeOwnersChecker extends AFilesContentChecker {
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumId.COL_REPO_CODE_OWNERS_FILE);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_CODE_OWNERS_FILE);
     }
 
     @Override

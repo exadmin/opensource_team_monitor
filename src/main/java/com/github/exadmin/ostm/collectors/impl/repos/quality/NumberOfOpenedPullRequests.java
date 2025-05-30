@@ -19,7 +19,7 @@ public class NumberOfOpenedPullRequests extends AbstractCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        TheColumn column = theReportModel.findColumn(TheColumId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
+        TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
 
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepos) {
