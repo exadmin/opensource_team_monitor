@@ -68,4 +68,8 @@ public class TheCellValue {
         setToolTipText(htmlBody);
         return this;
     }
+
+    public void setSeverityLevel(SeverityLevel severityLevel) {
+        this.severityLevel = severityLevel;
+    }
 }

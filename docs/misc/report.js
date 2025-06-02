@@ -26,6 +26,7 @@ function defaultRender (data, type, row, meta) {
     if (data.severity == 'INFO') value = value + '';
     if (data.severity == 'SEC') value = value + '&nbsp;&#128561;';
     if (data.severity == 'SKIP') value = value + '&nbsp;&#x1F4A4;';
+    if (data.severity == 'PLACE1') value = value + '&nbsp;&#x1F947;';
 
 
     if (data.title && data.href) {

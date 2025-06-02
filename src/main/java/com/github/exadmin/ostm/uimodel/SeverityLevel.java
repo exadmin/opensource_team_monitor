@@ -6,7 +6,9 @@ public enum SeverityLevel {
     ERROR("ERR"),
     WARN("WARN"),
     SECURITY_WARN("SEC"),
-    SKIP("SKIP");
+    SKIP("SKIP"),
+    PLACE1("PLACE1");
+
 
     private String text;
 

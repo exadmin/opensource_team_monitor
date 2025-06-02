@@ -45,6 +45,9 @@ public class TotalErrorsCounter extends AbstractCollector {
             columns.add(theReportModel.findColumn(columnId));
         }
 
+        int minErrorsPerRepoValue = Integer.MAX_VALUE;
+        List<TheCellValue> listMinErrorsPerRepoCellValues = new ArrayList<>();
+
         Map<String, List<GitHubRepository>> teamsMap = getRepositoriesMappedByTeams(gitHubFacade);
         for (String rowIdWhichIsTeam : teamsMap.keySet()) {
             // calculate total number of errors per all repositories and metrics
@@ -65,7 +68,24 @@ public class TotalErrorsCounter extends AbstractCollector {
 
             colTotalErrors.addValue(rowIdWhichIsTeam, new TheCellValue(errorsCount, errorsCount, SeverityLevel.INFO));
             colTotalRepos.addValue(rowIdWhichIsTeam, new TheCellValue(numOfReposPerTeam, numOfReposPerTeam, SeverityLevel.INFO));
-            colErrorsPerRepo.addValue(rowIdWhichIsTeam, new TheCellValue(numOfErrorsPerRepo, numOfErrorsPerRepo, SeverityLevel.INFO));
+
+            TheCellValue cvNumOfErrorsPerRepo = new TheCellValue(numOfErrorsPerRepo, numOfErrorsPerRepo, SeverityLevel.INFO);
+            colErrorsPerRepo.addValue(rowIdWhichIsTeam, cvNumOfErrorsPerRepo);
+
+            // if new minimalistic value is met
+            if (numOfErrorsPerRepo < minErrorsPerRepoValue) {
+                minErrorsPerRepoValue = numOfErrorsPerRepo;
+                listMinErrorsPerRepoCellValues.clear();
+            }
+
+            if (numOfErrorsPerRepo == minErrorsPerRepoValue) {
+                listMinErrorsPerRepoCellValues.add(cvNumOfErrorsPerRepo);
+            }
+        }
+
+        // mark best/worst cell-values
+        for (TheCellValue cellValue : listMinErrorsPerRepoCellValues) {
+            cellValue.setSeverityLevel(SeverityLevel.PLACE1);
         }
     }
 
