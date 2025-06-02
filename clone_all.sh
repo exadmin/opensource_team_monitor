@@ -19,6 +19,7 @@ while true; do
     fi
 
     # cat "$file" | grep -v -e 'k8s-conformance' -e 'kafka' -e 'postgres' -e 'cassandra' | grep -e 'clone_url*' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
+    # keep this ignore-rule in sync with com.github.exadmin.ostm.github.facade.GitHubFacade.getAllRepositories
     cat "$file" | grep -e 'clone_url*' | grep '/qubership-' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
 
     i=$((i + 1))

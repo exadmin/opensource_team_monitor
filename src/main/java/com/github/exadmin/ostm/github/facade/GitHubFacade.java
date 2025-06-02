@@ -39,8 +39,8 @@ public class GitHubFacade {
             for (Map<String, Object> repoMap : listOfMaps) {
                 GitHubRepository ghRepo = new GitHubRepository(repoMap);
 
-                // remove k8-conformance as it brings lotof non intresting data
-                if (ghRepo.getName().equals("k8s-conformance")) continue;
+                // keep this ignore rule in sync with clone_all.sh script
+                if (!ghRepo.getName().startsWith("qubership-")) continue;
 
                 result.add(ghRepo);
             }
