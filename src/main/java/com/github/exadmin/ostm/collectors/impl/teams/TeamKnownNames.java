@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TeamKnownNames extends AbstractCollector {
 
-
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         // List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");

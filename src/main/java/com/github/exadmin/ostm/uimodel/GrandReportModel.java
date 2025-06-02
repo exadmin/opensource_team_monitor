@@ -147,6 +147,18 @@ public class GrandReportModel {
             newCol.setTitle("Total Errors");
         });
 
+        TheColumn colTotalRepositories = theReportModel.allocateColumn(COL_SUMMARY_TEAM_TOTAL_REPOSITORIES, newCol -> {
+            newCol.setTitle("Number of Repositories");
+        });
+
+        TheColumn colErrorsPerRepository = theReportModel.allocateColumn(COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY, newCol -> {
+            newCol.setTitle("Error per Repository");
+        });
+
+        TheColumn colTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_LEAD_NAME, newCol -> {
+            newCol.setTitle("Lead name");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -207,7 +219,11 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
 
         sheetSummary.registerColumn(colTeamName, true);
+        sheetSummary.registerColumn(colTeamLead, false);
         sheetSummary.registerColumn(colTotalErrors, false);
+        sheetSummary.registerColumn(colTotalRepositories, false);
+        sheetSummary.registerColumn(colErrorsPerRepository, false);
+
 
         return theReportModel;
     }

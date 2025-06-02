@@ -30,9 +30,14 @@ public class TotalErrorsCounter extends AbstractCollector {
         COLUMNS.add(TheColumnId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);
         COLUMNS.add(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
     }
+
+
+
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        final TheColumn myColumn = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_ERRORS);
+        final TheColumn colTotalErrors = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_ERRORS);
+        final TheColumn colTotalRepos = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_REPOSITORIES);
+        final TheColumn colErrorsPerRepo = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY);
 
         List<TheColumn> columns = new ArrayList<>();
 
@@ -55,7 +60,12 @@ public class TotalErrorsCounter extends AbstractCollector {
                 }
             }
 
-            myColumn.addValue(rowIdWhichIsTeam, new TheCellValue("" + errorsCount, errorsCount, SeverityLevel.INFO));
+            int numOfReposPerTeam = allRelatedRepositories.size();
+            int numOfErrorsPerRepo = errorsCount / numOfReposPerTeam;
+
+            colTotalErrors.addValue(rowIdWhichIsTeam, new TheCellValue(errorsCount, errorsCount, SeverityLevel.INFO));
+            colTotalRepos.addValue(rowIdWhichIsTeam, new TheCellValue(numOfReposPerTeam, numOfReposPerTeam, SeverityLevel.INFO));
+            colErrorsPerRepo.addValue(rowIdWhichIsTeam, new TheCellValue(numOfErrorsPerRepo, numOfErrorsPerRepo, SeverityLevel.INFO));
         }
     }
 

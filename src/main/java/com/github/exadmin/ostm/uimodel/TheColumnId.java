@@ -40,7 +40,10 @@ public enum TheColumnId {
     COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words"),
     COL_REPO_BUILD_ON_COMMIT("column:build_on_commit"),
     COL_SUMMARY_TEAM_NAME("column:team_name"),
-    COL_SUMMARY_TEAM_TOTAL_ERRORS("column:team_total_errors");
+    COL_SUMMARY_TEAM_TOTAL_ERRORS("column:team_total_errors"),
+    COL_SUMMARY_TEAM_TOTAL_REPOSITORIES("column:team_total_repositories"),
+    COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY("column:team_errors_per_repository"),
+    COL_SUMMARY_TEAM_LEAD_NAME("column:team_lead_name");
 
     private final String id;
 
