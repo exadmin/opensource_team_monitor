@@ -72,7 +72,7 @@ public class BadWordsChecker extends AFilesContentChecker {
         }
 
         if (!foundIds.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Bad words found:<br>");
+            StringBuilder sb = new StringBuilder("Signatures found:<br>");
             for (String foundId : foundIds) {
                 sb.append("&nbsp;&nbsp;").append(foundId).append("<br>");
             }

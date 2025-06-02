@@ -98,7 +98,7 @@ public class GrandReportModel {
         });
 
         TheColumn colBadListedWords = theReportModel.allocateColumn(COL_REPO_SEC_BAD_WORDS_CHECKER, newColumn -> {
-            newColumn.setTitle("Restricted Words");
+            newColumn.setTitle("Restricted signatures");
         });
 
         TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {
@@ -155,8 +155,12 @@ public class GrandReportModel {
             newCol.setTitle("Error per Repository");
         });
 
-        TheColumn colTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_LEAD_NAME, newCol -> {
-            newCol.setTitle("Lead name");
+        TheColumn colRedTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_RED_LEAD_NAME, newCol -> {
+            newCol.setTitle("Red lead name");
+        });
+
+        TheColumn colBlueTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_BLUE_LEAD_NAME, newCol -> {
+            newCol.setTitle("Blue lead name");
         });
 
         // ********************************
@@ -164,7 +168,7 @@ public class GrandReportModel {
         // ********************************
         sheetTeamSummary.registerColumn(colGitHubLogin, true);
         sheetTeamSummary.registerColumn(colUserRealName, false);
-        sheetTeamSummary.registerColumn(colUserAllContribs, false);
+        // sheetTeamSummary.registerColumn(colUserAllContribs, false);
 
         // create 12 weeks back columns
         List<TheColumnId> weekBackColumns = List.of(
@@ -188,7 +192,7 @@ public class GrandReportModel {
 
             });
 
-            sheetTeamSummary.registerColumn(column, false);
+            // sheetTeamSummary.registerColumn(column, false);
         }
 
 
@@ -219,11 +223,11 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
 
         sheetSummary.registerColumn(colTeamName, true);
-        sheetSummary.registerColumn(colTeamLead, false);
+        sheetSummary.registerColumn(colRedTeamLead, false);
+        sheetSummary.registerColumn(colBlueTeamLead, false);
         sheetSummary.registerColumn(colTotalErrors, false);
         sheetSummary.registerColumn(colTotalRepositories, false);
         sheetSummary.registerColumn(colErrorsPerRepository, false);
-
 
         return theReportModel;
     }
