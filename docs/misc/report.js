@@ -74,7 +74,7 @@ $(document).ready(function() {
             // Add help urls to column titles if exists
             tableData.columns.forEach(column => {
                 if (column.help_url) {
-                    column.title += `<a href="${column.help_url}" target="_blank" class="help-icon">❔</a>`;
+                    column.title += `<a href="${column.help_url}" target="_blank" class="help-icon"><br>&#x1F56E;</a>`;
                 }
                 column.render = window[column.render] || defaultRender;
             });

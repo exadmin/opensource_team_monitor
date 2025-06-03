@@ -61,6 +61,7 @@ public class GrandReportModel {
             newColumn.setTitle("Code Coverage");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
             newColumn.setRenderingOrder(2);
+            newColumn.setHelpUrl("https://wiki.qubership.org/en/Personal-space/Larkin/sonar-integration-guide");
         });
 
         TheColumn colOpenedPRs = theReportModel.allocateColumn(COL_REPO_OPENED_PULL_REQUESTS_COUNT, newColumn -> {
