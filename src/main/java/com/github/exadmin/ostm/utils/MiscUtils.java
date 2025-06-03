@@ -190,4 +190,18 @@ public class MiscUtils {
 
         return null;
     }
+
+    /**
+     * Return first non-null values from the provided set
+     * @param values
+     * @return
+     * @param <T>
+     */
+    public static <T> T getFirstNonNull(T ... values) {
+        for (T value : values) {
+            if (value != null) return value;
+        }
+
+        return null;
+    }
 }

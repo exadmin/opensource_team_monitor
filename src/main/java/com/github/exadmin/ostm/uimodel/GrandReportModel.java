@@ -70,6 +70,11 @@ public class GrandReportModel {
             newColumn.setRenderingOrder(3);
         });
 
+        TheColumn colPlatformVersion = theReportModel.allocateColumn(COL_REPO_PLATFORM_SDK_VERSION, newCol -> {
+            newCol.setTitle("Platform Version");
+            newCol.setRenderingOrder(4);
+        });
+
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
             newSheet.setTitle("Security check list");
         });
@@ -203,6 +208,7 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colReadmeFile, false);
         sheetCodeQuality.registerColumn(colSonarMetric, false);
         sheetCodeQuality.registerColumn(colOpenedPRs, false);
+        sheetCodeQuality.registerColumn(colPlatformVersion, false);
 
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);
