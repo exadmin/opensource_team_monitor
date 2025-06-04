@@ -16,21 +16,28 @@ public class ReadmeFilePresence extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        Path readmeFilePath = Paths.get(repoDirectory.toString(), "README.md");
-        File readmeFile = readmeFilePath.toFile();
-        String httpRef = repo.getHttpReferenceToFileInGitHub("/README.md");
+        // there can be readme files in different capitality of letters
+        File dir = repoDirectory.toFile();
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File readmeFile : files) {
+                if (readmeFile.isFile() && readmeFile.exists()) {
+                    String fileName = readmeFile.getAbsolutePath();
+                    if (fileName.toLowerCase().endsWith("readme.md")) {
+                        String httpRef = repo.getHttpReferenceToFileInGitHub("/" + readmeFile.getName());
 
-        // if README file is absent
-        if (!readmeFile.exists() || !readmeFile.isFile()) {
-            return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
+                        // if README file has very small size
+                        long fileSize = readmeFile.length();
+                        if (fileSize < 1024) {
+                            return new TheCellValue("Too small: " + fileSize, fileSize, SeverityLevel.ERROR).withHttpReference(httpRef);
+                        }
+
+                        return new TheCellValue(fileSize, fileSize, SeverityLevel.OK).withHttpReference(httpRef);
+                    }
+                }
+            }
         }
 
-        // if README file has very small size
-        long fileSize = readmeFile.length();
-        if (fileSize < 1024) {
-            return new TheCellValue("Too small: " + fileSize, fileSize, SeverityLevel.ERROR).withHttpReference(httpRef);
-        }
-
-        return new TheCellValue(fileSize, fileSize, SeverityLevel.OK).withHttpReference(httpRef);
+        return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
     }
 }
