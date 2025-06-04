@@ -4,7 +4,7 @@ import com.github.exadmin.ostm.collectors.impl.repos.common.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.NumberOfOpenedPullRequests;
-import com.github.exadmin.ostm.collectors.impl.repos.quality.PlatformVersionChecker;
+import com.github.exadmin.ostm.collectors.impl.repos.quality.LanguagePlatformVersionChecker;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
 import com.github.exadmin.ostm.collectors.impl.repos.security.BadWordsChecker;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.TotalErrorsCounter;
@@ -43,7 +43,7 @@ public class CollectorsFactory {
         collectors.add(new BuildOnCommit());
         collectors.add(new UniqueTeamsCollector());
         collectors.add(new TotalErrorsCounter());
-        collectors.add(new PlatformVersionChecker());
+        collectors.add(new LanguagePlatformVersionChecker());
     }
 
     private final TheReportModel theReportModel;
