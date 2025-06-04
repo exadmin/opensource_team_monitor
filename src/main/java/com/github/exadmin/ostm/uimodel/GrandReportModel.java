@@ -75,6 +75,16 @@ public class GrandReportModel {
             newCol.setRenderingOrder(4);
         });
 
+        TheColumn colSpringVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
+            newCol.setTitle("Spring Framework");
+            newCol.setRenderingOrder(5);
+        });
+
+        TheColumn colQuarkusVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION, newCol -> {
+            newCol.setTitle("Quarkus Framework");
+            newCol.setRenderingOrder(6);
+        });
+
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
             newSheet.setTitle("Security check list");
         });
@@ -209,6 +219,8 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colSonarMetric, false);
         sheetCodeQuality.registerColumn(colOpenedPRs, false);
         sheetCodeQuality.registerColumn(colPlatformVersion, false);
+        sheetCodeQuality.registerColumn(colSpringVersion, false);
+        sheetCodeQuality.registerColumn(colQuarkusVersion, false);
 
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);

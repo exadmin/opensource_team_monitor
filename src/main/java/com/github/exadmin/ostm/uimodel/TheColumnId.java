@@ -45,7 +45,9 @@ public enum TheColumnId {
     COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY("column:team_errors_per_repository"),
     COL_SUMMARY_TEAM_RED_LEAD_NAME("column:team_red_lead_name"),
     COL_SUMMARY_TEAM_BLUE_LEAD_NAME("column:team_blue_lead_name"),
-    COL_REPO_PLATFORM_SDK_VERSION("column:repository_platform_sdk_version");
+    COL_REPO_PLATFORM_SDK_VERSION("column:repository_platform_sdk_version"),
+    COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION("column:spring_framework_version"),
+    COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION("column:quarkus_framework_version");
 
 
     private final String id;
