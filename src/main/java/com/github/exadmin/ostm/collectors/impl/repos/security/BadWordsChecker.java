@@ -8,7 +8,14 @@ import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,12 +50,13 @@ public class BadWordsChecker extends AFilesContentChecker {
             return true;
         });
 
-        Set<String> foundIds = new HashSet<>();
+        Set<String> foundIds = ConcurrentHashMap.newKeySet();
+        ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
         for (String nextFileName : allFiles) {
             if (badMap.isEmpty()) break; // no signatures to search for
 
-            String fileContent = "";
+            final String fileContent;
             try {
                 fileContent = FileUtils.readFile(nextFileName);
             } catch (Exception ex) {
@@ -56,23 +64,30 @@ public class BadWordsChecker extends AFilesContentChecker {
                 return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
             }
 
-            for (Map.Entry<String, Pattern> me : badMap.entrySet()) {
-                Matcher matcher = me.getValue().matcher(fileContent);
-                if (matcher.find()) {
-                    if (approveFoundPattern(nextFileName, fileContent, me.getKey(), me.getValue(), matcher)) {
-                        foundIds.add(me.getKey());
-                        getLog().debug("Pattern-id {} was found in the file {}, start = {}, end = {}", me.getKey(), nextFileName, matcher.start(), matcher.end());
-                    } else {
-                        getLog().debug("Pattern-id {} was skipped for the file {}", me.getKey(), nextFileName);
-                    }
-                }
-            }
+            CompletableFuture<?>[] futures = badMap.entrySet().stream()
+                    .map(me -> CompletableFuture.supplyAsync( () ->
+                            {
+                                Matcher matcher = me.getValue().matcher(fileContent);
+                                if (matcher.find()) {
+                                    if (approveFoundPattern(nextFileName, fileContent, me.getKey(), me.getValue(), matcher)) {
+                                        foundIds.add(me.getKey());
+                                        getLog().debug("Pattern-id {} was found in the file {}, start = {}, end = {}", me.getKey(), nextFileName, matcher.start(), matcher.end());
+                                    } else {
+                                        getLog().debug("Pattern-id {} was skipped for the file {}", me.getKey(), nextFileName);
+                                    }
+                                }
+                                    return null;
+                            }, executor)
+                    )
+                    .toArray(CompletableFuture[]::new);
+
+            CompletableFuture.allOf(futures).join();
 
             badMap.keySet().removeAll(foundIds); // reduce number of signatures to work with in scope of this repository
         }
 
         if (!foundIds.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Signatures found:<br>");
+            StringBuilder sb = new StringBuilder();
             for (String foundId : foundIds) {
                 sb.append("&nbsp;&nbsp;").append(foundId).append("<br>");
             }

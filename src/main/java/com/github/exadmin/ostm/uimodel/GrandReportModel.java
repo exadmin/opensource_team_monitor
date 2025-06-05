@@ -119,7 +119,7 @@ public class GrandReportModel {
         });
 
         TheColumn colBadListedWords = theReportModel.allocateColumn(COL_REPO_SEC_BAD_WORDS_CHECKER, newColumn -> {
-            newColumn.setTitle("Restricted signatures");
+            newColumn.setTitle("Attention signatures");
         });
 
         TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {

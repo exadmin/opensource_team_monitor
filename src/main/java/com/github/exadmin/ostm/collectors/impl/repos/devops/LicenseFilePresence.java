@@ -13,7 +13,8 @@ import java.nio.file.Paths;
 
 public class LicenseFilePresence extends AFilesContentChecker {
     // SHA256 hash of "https://www.apache.org/licenses/LICENSE-2.0.txt" (trimmed string)
-    private static final String LICENSE_SHA256_BASE64_EXP_VALUE_v1 = "KD6mzCmXoacNoASeCa35MXu2DKG1Enm2UZa4OmnhmWs=";
+    // private static final String LICENSE_SHA256_BASE64_EXP_VALUE_v1 = "KD6mzCmXoacNoASeCa35MXu2DKG1Enm2UZa4OmnhmWs=";
+    private static final String LICENSE_SHA256_BASE64_EXP_VALUE_v1 = "+1gg8p+90Vw4VWMz8lUTqVW1hlAbwxMr0lr2HRhKu0k=";
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
@@ -30,7 +31,7 @@ public class LicenseFilePresence extends AFilesContentChecker {
         // check file content
         try {
             String fileContent = FileUtils.readFile(licenseFile.toString());
-            fileContent = fileContent.trim();
+            fileContent = MiscUtils.getLettersOnly(fileContent);
             String sha256 = MiscUtils.getSHA256FromString(fileContent);
 
             if (LICENSE_SHA256_BASE64_EXP_VALUE_v1.equals(sha256)) {

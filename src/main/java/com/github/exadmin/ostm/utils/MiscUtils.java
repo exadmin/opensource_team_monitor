@@ -204,4 +204,18 @@ public class MiscUtils {
 
         return null;
     }
+
+    /**
+     * Removes all unprintables characters from the source string.*
+     * @param originalString
+     * @return
+     */
+    public static String getLettersOnly(String originalString) {
+        StringBuilder sb = new StringBuilder();
+        for (char ch : originalString.toCharArray()) {
+            if (Character.isLetter(ch)) sb.append(ch);
+        }
+
+        return sb.toString();
+    }
 }
