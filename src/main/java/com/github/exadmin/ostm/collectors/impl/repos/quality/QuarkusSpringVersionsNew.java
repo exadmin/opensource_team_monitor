@@ -34,13 +34,13 @@ public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
         List<String> allPomFiles = FileUtils.findAllFilesRecursively(repositoryPath.toString(), file -> file.equals("pom.xml"));
         Properties properties = collectAllProperties(allPomFiles);
 
-        processOneMavenGroup("org.springframework.boot", allPomFiles, properties, colSpringBoot, repository.getId());
-        processOneMavenGroup("org.springframework", allPomFiles, properties, colSpringFrwk, repository.getId());
-        processOneMavenGroup("io.quarkus", allPomFiles, properties, colQuarkus, repository.getId());
+        processOneMavenGroup("org.springframework.boot", allPomFiles, properties, colSpringBoot, repository.getId(), null);
+        processOneMavenGroup("org.springframework", allPomFiles, properties, colSpringFrwk, repository.getId(), null);
+        processOneMavenGroup("io.quarkus", allPomFiles, properties, colQuarkus, repository.getId(), List.of("quarkus.platform.version", "quarkus.version"));
     }
 
-    private void processOneMavenGroup(String groupId, List<String> allPomFiles, Properties properties, TheColumn theColumn, String rowId) {
-        Set<String> versions = findVersionsFor(groupId, allPomFiles, properties);
+    private void processOneMavenGroup(String groupId, List<String> allPomFiles, Properties properties, TheColumn theColumn, String rowId, List<String> extraProperties) {
+        Set<String> versions = findVersionsFor(groupId, allPomFiles, properties, extraProperties);
         String text = String.join("<br>", versions);
         theColumn.addValue(rowId, new TheCellValue(text, versions.size(), SeverityLevel.INFO));
     }
@@ -84,7 +84,7 @@ public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
         return properties;
     }
 
-    private Set<String> findVersionsFor(String groupId, List<String> allPomFiles, Properties properties) {
+    private Set<String> findVersionsFor(String groupId, List<String> allPomFiles, Properties properties, List<String> extraProperties) {
         Set<String> result = new HashSet<>();
 
         for (String fileName : allPomFiles) {
@@ -123,10 +123,11 @@ public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
             }
         }
 
-        // todo: remove hack
-        if ("io.quarkus".equals(groupId)) {
-            String verFromProperties = properties.getProperty("quarkus.version");
-            if (verFromProperties != null) result.add(verFromProperties + "!");
+        if (extraProperties != null) {
+            for (String propertyKey : extraProperties) {
+                String verFromProperties = properties.getProperty(propertyKey);
+                if (verFromProperties != null) result.add(verFromProperties);
+            }
         }
 
         return result;
