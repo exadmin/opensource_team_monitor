@@ -3,10 +3,7 @@ package com.github.exadmin.ostm.collectors.api;
 import com.github.exadmin.ostm.collectors.impl.repos.common.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
-import com.github.exadmin.ostm.collectors.impl.repos.quality.NumberOfOpenedPullRequests;
-import com.github.exadmin.ostm.collectors.impl.repos.quality.LanguagePlatformVersionChecker;
-import com.github.exadmin.ostm.collectors.impl.repos.quality.QuarkusSpringVersions;
-import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
+import com.github.exadmin.ostm.collectors.impl.repos.quality.*;
 import com.github.exadmin.ostm.collectors.impl.repos.security.BadWordsChecker;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.TotalErrorsCounter;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.UniqueTeamsCollector;
@@ -45,7 +42,7 @@ public class CollectorsFactory {
         collectors.add(new UniqueTeamsCollector());
         collectors.add(new TotalErrorsCounter());
         collectors.add(new LanguagePlatformVersionChecker());
-        collectors.add(new QuarkusSpringVersions());
+        collectors.add(new QuarkusSpringVersionsNew());
     }
 
     private final TheReportModel theReportModel;

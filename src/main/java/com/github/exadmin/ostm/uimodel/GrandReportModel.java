@@ -75,14 +75,19 @@ public class GrandReportModel {
             newCol.setRenderingOrder(4);
         });
 
-        TheColumn colSpringVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
+        TheColumn colSpringFrwkVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Spring Framework");
             newCol.setRenderingOrder(5);
         });
 
+        TheColumn colSpringBootVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_BOOT_VERSION, newCol -> {
+            newCol.setTitle("Spring Boot");
+            newCol.setRenderingOrder(6);
+        });
+
         TheColumn colQuarkusVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Quarkus Framework");
-            newCol.setRenderingOrder(6);
+            newCol.setRenderingOrder(7);
         });
 
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
@@ -219,7 +224,8 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colSonarMetric, false);
         sheetCodeQuality.registerColumn(colOpenedPRs, false);
         sheetCodeQuality.registerColumn(colPlatformVersion, false);
-        sheetCodeQuality.registerColumn(colSpringVersion, false);
+        sheetCodeQuality.registerColumn(colSpringFrwkVersion, false);
+        sheetCodeQuality.registerColumn(colSpringBootVersion, false);
         sheetCodeQuality.registerColumn(colQuarkusVersion, false);
 
         sheetCheckList.registerColumn(colRepoNumber, true);

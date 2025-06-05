@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class QuarkusSpringVersions extends AbstractCollector {
     private static final TypeReference<Map<String, Object>> TYPE_REFERENCE = new TypeReference<>() {};
     private static final XmlMapper xmlMapper = new XmlMapper();
@@ -25,6 +26,12 @@ public class QuarkusSpringVersions extends AbstractCollector {
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn colSpring = theReportModel.findColumn(TheColumnId.COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION);
         TheColumn colQuarkus= theReportModel.findColumn(TheColumnId.COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION);
+
+        // 1. select next repository
+        // 2. list all pom.xml inside all folders
+        // 3. load all <properties>...</> from each pom.xml
+        // 4. grep all pom.xml for <groupId>org.springframework.boot</groupId>
+        // 5. if version is found and scope != test - collect version into the unique set of versions
 
         List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepositories) {
