@@ -1,5 +1,6 @@
 package com.github.exadmin.ostm;
 
+import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
 import com.github.exadmin.ostm.utils.PasswordBasedEncryption;
@@ -41,11 +42,14 @@ public class EncryptBadWordsDictionaryApp {
             System.exit(-4);
         }
 
-        log.info("Encrypting file '{}' into '{}'.", sourceFile, outputFile);
+
 
         String srcContent = null;
         try {
             srcContent = FileUtils.readFile(sourceFile);
+
+            log.info("Testing source file for reg-exp compilation '{}'", sourceFile);
+            AttentionSignaturesManager.loadDecryptedContent(srcContent);
         } catch (Exception ex) {
             log.error("Error while reading source file {}", sourceFile, ex);
             System.exit(-5);

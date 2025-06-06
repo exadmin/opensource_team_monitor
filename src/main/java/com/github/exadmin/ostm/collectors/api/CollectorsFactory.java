@@ -4,7 +4,7 @@ import com.github.exadmin.ostm.collectors.impl.repos.common.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.*;
-import com.github.exadmin.ostm.collectors.impl.repos.security.BadWordsChecker;
+import com.github.exadmin.ostm.collectors.impl.repos.security.AttentionSignaturesChecker;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.TotalErrorsCounter;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.UniqueTeamsCollector;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
@@ -31,7 +31,7 @@ public class CollectorsFactory {
         collectors.add(new ReadmeFilePresence());
         collectors.add(new CLAFilePresence());
         collectors.add(new CodeOwnersChecker());
-        collectors.add(new BadWordsChecker());
+        collectors.add(new AttentionSignaturesChecker());
         collectors.add(new ConventionalCommitsActionChecker());
         collectors.add(new SuperLinterChecker());
         collectors.add(new LabelerActionChecker());

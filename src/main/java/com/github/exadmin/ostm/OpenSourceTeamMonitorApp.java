@@ -2,7 +2,7 @@ package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.app.AppSettings;
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
-import com.github.exadmin.ostm.github.badwords.BadWordsManager;
+import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
 import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import com.github.exadmin.ostm.uimodel.GrandReportModel;
@@ -59,7 +59,7 @@ public class OpenSourceTeamMonitorApp {
         String password = MiscUtils.getTokenFromArg(args[ARG6]);
         String salt = MiscUtils.getTokenFromArg(args[ARG7]);
 
-        BadWordsManager.loadExpressionsFrom(badWordsFile, password, salt);
+        AttentionSignaturesManager.loadExpressionsFrom(badWordsFile, password, salt);
 
         // Step2: Run collectors
         TheReportModel reportModel = GrandReportModel.getGrandReportInstance();

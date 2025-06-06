@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.security;
 
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
-import com.github.exadmin.ostm.github.badwords.BadWordsManager;
+import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 // todo: optimize checking by using: "git rev-parse --short HEAD"
-public class BadWordsChecker extends AFilesContentChecker {
+public class AttentionSignaturesChecker extends AFilesContentChecker {
 
     private static final List<String> IGNORED_EXTS = new ArrayList<>();
     static {
@@ -40,7 +40,7 @@ public class BadWordsChecker extends AFilesContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
 
-        Map<String, Pattern> badMap = BadWordsManager.getBadMap();
+        Map<String, Pattern> badMap = AttentionSignaturesManager.getBadMap();
 
         List<String> allFiles = FileUtils.findAllFilesRecursively(repoDirectory.toString(), shortFileName -> {
             for (String ext : IGNORED_EXTS) {
@@ -119,6 +119,11 @@ public class BadWordsChecker extends AFilesContentChecker {
         if ("INT-004".equals(patternId)) {
             String value = matcher.group().toLowerCase();
             if ("pages.netcracker.com".equalsIgnoreCase(value)) return false;
+        }
+
+        if ("INT-006".equals(patternId)) {
+            String value = matcher.group().toLowerCase();
+            if ("opensourcegroup@netcracker.com".equals(value)) return false;
         }
 
         return true;
