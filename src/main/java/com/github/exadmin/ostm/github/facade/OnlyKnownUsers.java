@@ -46,7 +46,11 @@ public class OnlyKnownUsers {
         ALIAS_TO_NAME.put("alsergs", "Sergei Aleksandrov");
         ALIAS_TO_NAME.put("lis0x90", "Sergey Lisovoy");
         ALIAS_TO_NAME.put("Ksiona", "Ksenia Shmoilova");
-
+        ALIAS_TO_NAME.put("vlme0618", "Vladislav Medvedev");
+        ALIAS_TO_NAME.put("dale1020", "Daria Lebedeva");
+        ALIAS_TO_NAME.put("Bogdan-Bairamov", "Bogdan Bairamov");
+        ALIAS_TO_NAME.put("DmitryChurbanov", "Dmitry Churbanov");
+        // ALIAS_TO_NAME.put("xxx", "xxxx");
     }
 
     static Map<String, String> getKnowUsersOnly() {

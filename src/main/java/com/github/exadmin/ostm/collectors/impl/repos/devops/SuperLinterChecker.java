@@ -20,7 +20,7 @@ public class SuperLinterChecker extends AFilesContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         // check super linter
         {
-            Path linterPath = Paths.get(repoDirectory.toString(), ".guthub", "workflows", "super-linter.yaml");
+            Path linterPath = Paths.get(repoDirectory.toString(), ".github", "workflows", "super-linter.yaml");
             String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/super-linter.yaml");
             TheCellValue linterCheckResult = checkOneFileForContent(linterPath, httpRef, REGEXP_FOR_LINTER);
             if (linterCheckResult.getSeverityLevel().equals(SeverityLevel.OK) || linterCheckResult.getSeverityLevel().equals(SeverityLevel.WARN))
