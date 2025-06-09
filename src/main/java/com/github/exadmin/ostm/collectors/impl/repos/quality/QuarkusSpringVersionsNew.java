@@ -31,7 +31,7 @@ public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
         // 4. grep all pom.xml for <groupId>org.springframework.boot</groupId>, <groupId>org.springframework</groupId>
         // 5. if version is found and scope != test - collect version into the unique set of versions
 
-        List<String> allPomFiles = FileUtils.findAllFilesRecursively(repositoryPath.toString(), file -> file.equals("pom.xml"));
+        List<String> allPomFiles = FileUtils.findAllFilesRecursively(repositoryPath.toString(), (fullFileName, shortFileName) -> shortFileName.equals("pom.xml"));
         Properties properties = collectAllProperties(allPomFiles);
 
         processOneMavenGroup("org.springframework.boot", allPomFiles, properties, colSpringBoot, repository.getId(), null);

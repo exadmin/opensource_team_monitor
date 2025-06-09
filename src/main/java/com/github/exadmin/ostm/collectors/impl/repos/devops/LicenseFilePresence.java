@@ -32,7 +32,7 @@ public class LicenseFilePresence extends AFilesContentChecker {
         try {
             String fileContent = FileUtils.readFile(licenseFile.toString());
             fileContent = MiscUtils.getLettersOnly(fileContent);
-            String sha256 = MiscUtils.getSHA256FromString(fileContent);
+            String sha256 = MiscUtils.getSHA256AsBase64(fileContent);
 
             if (LICENSE_SHA256_BASE64_EXP_VALUE_v1.equals(sha256)) {
                 return new TheCellValue("Apache 2.0", 3, SeverityLevel.OK).withHttpReference(htmlUrl);

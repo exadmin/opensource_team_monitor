@@ -19,10 +19,15 @@ public class FileUtils {
         return new String(bytes);
     }
 
+    /**
+     * Handler to analyze is file is sutable to be returned during files collecting procedure
+     * Note: fullFileName contain path delimiters which depend on operating system
+     */
     public interface FileAcceptor {
-        boolean testFileByName(String shortFileName);
+        boolean testFileByName(String fullFileName, String shortFileName);
     }
 
+    // todo: avoid String file names - switch to Path instances
     public static List<String> findAllFilesRecursively(String rootDirName, FileAcceptor fileAcceptor) {
         List<String> result = new ArrayList<>();
 
@@ -43,7 +48,8 @@ public class FileUtils {
             } else {
                 String longFileName = item.toString();
                 String shortFileName = item.getName();
-                if (fileAcceptor.testFileByName(shortFileName)) collectedFiles.add(longFileName);
+
+                if (fileAcceptor.testFileByName(longFileName, shortFileName)) collectedFiles.add(longFileName);
             }
         }
     }

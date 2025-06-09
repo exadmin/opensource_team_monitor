@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm;
 
-import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
+import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
 import com.github.exadmin.ostm.utils.PasswordBasedEncryption;
@@ -8,13 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EncryptBadWordsDictionaryApp {
+public class EncryptSignaturesDictionaryApp {
     private static final int ARG1_SOURCE_PROPERTIES_FILE = 0;
     private static final int ARG2_OUTPUT_ENCRYPTED_FILE  = 1;
     private static final int ARG3_PASSWORD_OR_FILE_WITH_PASSWORD = 2;
     private static final int ARG4_SALT_OR_FILE_WITH_SALT = 3;
 
-    private static final Logger log = LoggerFactory.getLogger(EncryptBadWordsDictionaryApp.class);
+    private static final Logger log = LoggerFactory.getLogger(EncryptSignaturesDictionaryApp.class);
 
     public static void main(String[] args) {
         String sourceFile = args[ARG1_SOURCE_PROPERTIES_FILE];

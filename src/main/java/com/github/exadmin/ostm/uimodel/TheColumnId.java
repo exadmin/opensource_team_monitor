@@ -37,7 +37,7 @@ public enum TheColumnId {
     COL_REPO_PROFANITY_ACTION("colummn:profanity_action"),
     COL_REPO_SEC_MAIN_IS_PROTECTED("column:main_branch_is_protected"),
     COL_REPO_SEC_BAD_LINKS_CHECKER("column:bad_links_checker"),
-    COL_REPO_SEC_BAD_WORDS_CHECKER("column:bad_words"),
+    COL_REPO_SEC_SIGNATURES_CHECKER("column:attention_signatures"),
     COL_REPO_BUILD_ON_COMMIT("column:build_on_commit"),
     COL_SUMMARY_TEAM_NAME("column:team_name"),
     COL_SUMMARY_TEAM_TOTAL_ERRORS("column:team_total_errors"),

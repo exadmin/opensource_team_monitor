@@ -1,17 +1,18 @@
 package com.github.exadmin.ostm.collectors.impl.repos.security;
 
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
-import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
+import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
+import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
@@ -33,16 +34,21 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumnId.COL_REPO_SEC_BAD_WORDS_CHECKER);
+        return theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
     }
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
 
-        Map<String, Pattern> badMap = AttentionSignaturesManager.getBadMap();
+        Map<String, Pattern> sigMapCopy = AttentionSignaturesManager.getSignaturesMapCopy();
+        final String repoDir = repoDirectory.toString();
+        final String gitFolder = Paths.get(repoDir, ".git").toString();
 
-        List<String> allFiles = FileUtils.findAllFilesRecursively(repoDirectory.toString(), shortFileName -> {
+        List<String> allFiles = FileUtils.findAllFilesRecursively(repoDir, (longFileName, shortFileName) -> {
+            // ignore files in /.git/ folder
+            if (longFileName.startsWith(gitFolder)) return false;
+
             for (String ext : IGNORED_EXTS) {
                 if (shortFileName.endsWith(ext)) return false;
             }
@@ -50,11 +56,12 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
             return true;
         });
 
-        Set<String> foundIds = ConcurrentHashMap.newKeySet();
+        Map<String, String> foundSigs = new ConcurrentHashMap<>();
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
         for (String nextFileName : allFiles) {
-            if (badMap.isEmpty()) break; // no signatures to search for
+            if (sigMapCopy.isEmpty()) break; // no signatures to search for
+            if (!foundSigs.isEmpty()) break;; // we jsut highligh that at least somethign was found
 
             final String fileContent;
             try {
@@ -64,34 +71,37 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                 return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
             }
 
-            CompletableFuture<?>[] futures = badMap.entrySet().stream()
+            CompletableFuture<?>[] futures = sigMapCopy.entrySet().stream()
                     .map(me -> CompletableFuture.supplyAsync( () ->
                             {
                                 Matcher matcher = me.getValue().matcher(fileContent);
                                 if (matcher.find()) {
                                     if (approveFoundPattern(nextFileName, fileContent, me.getKey(), me.getValue(), matcher)) {
-                                        foundIds.add(me.getKey());
-                                        getLog().debug("Pattern-id {} was found in the file {}, start = {}, end = {}", me.getKey(), nextFileName, matcher.start(), matcher.end());
+                                        String hash = calculateSignatureHash(repoDir, nextFileName, matcher);
+                                        foundSigs.put(me.getKey(), hash);
+                                        getLog().debug("Pattern-id {} was found with hash = {}", me.getKey(), hash);
                                     } else {
                                         getLog().debug("Pattern-id {} was skipped for the file {}", me.getKey(), nextFileName);
                                     }
                                 }
-                                    return null;
+
+                                return null;
                             }, executor)
                     )
                     .toArray(CompletableFuture[]::new);
 
             CompletableFuture.allOf(futures).join();
 
-            badMap.keySet().removeAll(foundIds); // reduce number of signatures to work with in scope of this repository
+            sigMapCopy.keySet().removeAll(foundSigs.keySet()); // reduce number of signatures to work with in scope of this repository
         }
 
-        if (!foundIds.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            for (String foundId : foundIds) {
-                sb.append("&nbsp;&nbsp;").append(foundId).append("<br>");
-            }
-            return new TheCellValue(sb.toString(), 2, SeverityLevel.ERROR);
+        if (!foundSigs.isEmpty()) {
+            StringBuilder sb = new StringBuilder("Warning");
+            // current implementation will not share found signatures hashes
+            /*for (Map.Entry<String, String> me : foundSigs.entrySet()) {
+                sb.append(me.getKey()).append(" (").append(me.getValue()).append(")").append("<br>");
+            }*/
+            return new TheCellValue(sb.toString(), 2, SeverityLevel.WARN);
         }
 
         return new TheCellValue("Ok", 0, SeverityLevel.OK);
@@ -127,5 +137,20 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         }
 
         return true;
+    }
+
+    private static String calculateSignatureHash(String repoDir, String fullFileName, Matcher matcher) {
+        repoDir = repoDir.trim();
+        fullFileName = fullFileName.trim();
+
+        String relFileName = fullFileName.substring(repoDir.length());
+        relFileName = relFileName.replace("\\", "/"); // switch to linux style
+
+        int startOffset = matcher.start();
+        int endOffset   = matcher.end();
+
+        String testString = relFileName + ":" + startOffset + ":" + endOffset;
+        return MiscUtils.getSHA256AsHex(testString).substring(0, 16); // return only first 16 chars
+
     }
 }

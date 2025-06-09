@@ -94,7 +94,7 @@ public class NewCacheManager {
 
     private File getFileNameByContent(String fullUrl, String requestBody) {
         // generate possible file name for the request
-        String sha256 = MiscUtils.getSHA256FromString(fullUrl + requestBody);
+        String sha256 = MiscUtils.getSHA256AsBase64(fullUrl + requestBody);
         sha256 = sha256.replace("\\", "_");
         sha256 = sha256.replace("/", "_");
         String cacheFileName = getFileNameBy(fullUrl) + "_" + sha256 + ".cached";

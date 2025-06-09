@@ -24,7 +24,7 @@ public class TotalErrorsCounter extends AbstractCollector {
         COLUMNS.add(TheColumnId.COL_REPO_PROFANITY_ACTION);
         COLUMNS.add(TheColumnId.COL_REPO_SEC_BAD_LINKS_CHECKER);
         COLUMNS.add(TheColumnId.COL_REPO_BUILD_ON_COMMIT);
-        COLUMNS.add(TheColumnId.COL_REPO_SEC_BAD_WORDS_CHECKER);
+        COLUMNS.add(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
         COLUMNS.add(TheColumnId.COL_REPO_TOPICS);
         COLUMNS.add(TheColumnId.COL_REPO_README_FILE);
         COLUMNS.add(TheColumnId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);

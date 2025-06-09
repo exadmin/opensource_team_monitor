@@ -1,4 +1,4 @@
-package com.github.exadmin.ostm.github.badwords;
+package com.github.exadmin.ostm.github.signatures;
 
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.PasswordBasedEncryption;
@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class AttentionSignaturesManager {
     private static final Logger log = LoggerFactory.getLogger(AttentionSignaturesManager.class);
 
-    private static Map<String, Pattern> badMap;
+    private static Map<String, Pattern> sigMap;
 
     public static void loadExpressionsFrom(String filePath, String password, String salt) {
         // decrypt file first
@@ -22,7 +22,7 @@ public class AttentionSignaturesManager {
             String encryptedContent = FileUtils.readFile(filePath);
             String decryptedContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
 
-            badMap = loadDecryptedContent(decryptedContent);
+            sigMap = loadDecryptedContent(decryptedContent);
         } catch (Exception ex) {
             log.error("Error while reading file {}", filePath, ex);
             throw new IllegalStateException(ex);
@@ -55,7 +55,7 @@ public class AttentionSignaturesManager {
         return result;
     }
 
-    public static Map<String, Pattern> getBadMap() {
-        return new HashMap<>(badMap);
+    public static Map<String, Pattern> getSignaturesMapCopy() {
+        return new HashMap<>(sigMap);
     }
 }

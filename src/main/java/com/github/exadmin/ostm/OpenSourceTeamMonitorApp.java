@@ -2,7 +2,7 @@ package com.github.exadmin.ostm;
 
 import com.github.exadmin.ostm.app.AppSettings;
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
-import com.github.exadmin.ostm.github.badwords.AttentionSignaturesManager;
+import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
 import com.github.exadmin.ostm.persistence.ReportModelPersister;
 import com.github.exadmin.ostm.uimodel.GrandReportModel;
@@ -33,7 +33,7 @@ public class OpenSourceTeamMonitorApp {
                     "arg2 - parent directory where all necessary repositories are cloned into (into personal subfolders)\n" +
                     "arg3 - output file (read-write) to write results into\n" +
                     "arg4 - cache directory (read-write) to store responses from github\n" +
-                    "arg5 - encrypted properties file with bad-listed expressions\n" +
+                    "arg5 - encrypted properties file with signatures to detect\n" +
                     "arg6 - password to encrypt properties file\n" +
                     "arg7 - salt to encrypt properties file");
             System.exit(-1);

@@ -118,7 +118,7 @@ public class GrandReportModel {
             newColumn.setHelpUrl("https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners");
         });
 
-        TheColumn colBadListedWords = theReportModel.allocateColumn(COL_REPO_SEC_BAD_WORDS_CHECKER, newColumn -> {
+        TheColumn colAttSignatures = theReportModel.allocateColumn(COL_REPO_SEC_SIGNATURES_CHECKER, newColumn -> {
             newColumn.setTitle("Attention signatures");
         });
 
@@ -129,7 +129,7 @@ public class GrandReportModel {
 
         TheColumn colLinter = theReportModel.allocateColumn(COL_REPO_LINTER, newCol -> {
             newCol.setTitle("Linter/Prettier");
-            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#lint-code-base-super-linter");
+            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#lint-codebase-super-linter");
         });
 
         TheColumn colLabeler = theReportModel.allocateColumn(COL_REPO_LABELER, newCol -> {
@@ -231,7 +231,7 @@ public class GrandReportModel {
         sheetCheckList.registerColumn(colRepoNumber, true);
         sheetCheckList.registerColumn(colRepoName, false);
         sheetCheckList.registerColumn(colTopics, false);
-        sheetCheckList.registerColumn(colBadListedWords, false);
+        sheetCheckList.registerColumn(colAttSignatures, false);
 
         devOpsWorkflowsSheet.registerColumn(colRepoNumber, true);
         devOpsWorkflowsSheet.registerColumn(colRepoName, false);

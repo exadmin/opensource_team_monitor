@@ -151,17 +151,29 @@ public class MiscUtils {
         throw new IllegalArgumentException("List is expected but " + value.getClass() + " is found.");
     }
 
-    public static String getSHA256FromString(String str) {
+    public static String getSHA256AsBase64(String str) {
         try {
             try (InputStream is = new ByteArrayInputStream(str.getBytes())) {
-                return getSha256FromInputStream(is);
+                byte[] hash = getSha256FromInputStream(is);
+                return Base64.getEncoder().encodeToString(hash);
             }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    public static String getSha256FromInputStream(InputStream is) throws IOException, NoSuchAlgorithmException {
+    public static String getSHA256AsHex(String str) {
+        try {
+            try (InputStream is = new ByteArrayInputStream(str.getBytes())) {
+                byte[] hash = getSha256FromInputStream(is);
+                return bytesToHex(hash);
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private static byte[] getSha256FromInputStream(InputStream is) throws IOException, NoSuchAlgorithmException {
         byte[] buffer= new byte[8192];
         int count;
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -172,8 +184,7 @@ public class MiscUtils {
             }
         }
 
-        byte[] hash = digest.digest();
-        return Base64.getEncoder().encodeToString(hash);
+        return digest.digest();
     }
 
     public static String getTokenFromArg(String filePathOrTokenItself) {
