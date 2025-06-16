@@ -50,6 +50,9 @@ public class OnlyKnownUsers {
         ALIAS_TO_NAME.put("dale1020", "Daria Lebedeva");
         ALIAS_TO_NAME.put("Bogdan-Bairamov", "Bogdan Bairamov");
         ALIAS_TO_NAME.put("DmitryChurbanov", "Dmitry Churbanov");
+        ALIAS_TO_NAME.put("asatt", "Alexey Karasev");
+        ALIAS_TO_NAME.put("denisanfimov", "Denis Anfimov");
+        ALIAS_TO_NAME.put("Derananer", "Ilia Lisetckii");
         // ALIAS_TO_NAME.put("xxx", "xxxx");
     }
 

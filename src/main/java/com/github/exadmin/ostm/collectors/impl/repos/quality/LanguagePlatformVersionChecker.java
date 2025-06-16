@@ -38,7 +38,11 @@ public class LanguagePlatformVersionChecker extends AFilesContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         List<String> filesOfInterest = new ArrayList<>();
 
-        try (Stream<Path> stream = Files.walk(Paths.get(repoDirectory.toString()))) {
+        if (!repoDirectory.toFile().exists()) {
+            return new TheCellValue("Was not downloaded", 0, SeverityLevel.ERROR);
+        }
+
+        try (Stream<Path> stream = Files.walk(repoDirectory)) {
             stream
                     .filter(Files::isRegularFile)
                     .map(Path::toAbsolutePath)

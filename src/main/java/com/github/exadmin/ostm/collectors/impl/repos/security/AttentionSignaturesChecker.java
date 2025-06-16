@@ -1,5 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.security;
 
+import com.fasterxml.jackson.core.StreamReadFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
 import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
@@ -7,6 +9,9 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
+import com.github.exadmin.sourcesscanner.exclude.ExcludeFileModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +27,8 @@ import java.util.regex.Pattern;
 
 // todo: optimize checking by using: "git rev-parse --short HEAD"
 public class AttentionSignaturesChecker extends AFilesContentChecker {
+
+    private static final Logger log = LoggerFactory.getLogger(AttentionSignaturesChecker.class);
 
     private static final List<String> IGNORED_EXTS = new ArrayList<>();
     static {
@@ -40,6 +47,10 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
+
+        // load exclusions configuration if exists
+        Path exPath = Paths.get(repoDirectory.toString(), ".github", "qs-grand-report.yaml");
+        ExcludeFileModel efModel = exPath.toFile().exists() ? loadExistedModel(exPath) : null;
 
         Map<String, Pattern> sigMapCopy = AttentionSignaturesManager.getSignaturesMapCopy();
         final String repoDir = repoDirectory.toString();
@@ -76,12 +87,19 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                             {
                                 Matcher matcher = me.getValue().matcher(fileContent);
                                 if (matcher.find()) {
-                                    if (approveFoundPattern(nextFileName, fileContent, me.getKey(), me.getValue(), matcher)) {
+
+                                    String textHash = MiscUtils.getSHA256AsHex(matcher.group());
+                                    String relFileName = getRelativeFileName(repoDirectory, Paths.get(nextFileName));
+                                    String fileHash = MiscUtils.getSHA256AsHex(relFileName);
+
+                                    // if current signature is in the exclusion list
+                                    if (efModel != null && efModel.contains(textHash, fileHash)) {
+                                        getLog().debug("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
+                                        return null;
+                                    } else {
                                         String hash = calculateSignatureHash(repoDir, nextFileName, matcher);
                                         foundSigs.put(me.getKey(), hash);
                                         getLog().debug("Pattern-id {} was found with hash = {}", me.getKey(), hash);
-                                    } else {
-                                        getLog().debug("Pattern-id {} was skipped for the file {}", me.getKey(), nextFileName);
                                     }
                                 }
 
@@ -152,5 +170,32 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         String testString = relFileName + ":" + startOffset + ":" + endOffset;
         return MiscUtils.getSHA256AsHex(testString).substring(0, 16); // return only first 16 chars
 
+    }
+
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    private static ExcludeFileModel loadExistedModel(Path filePath) {
+        try {
+            OBJECT_MAPPER.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
+            return OBJECT_MAPPER.readValue(filePath.toFile(), ExcludeFileModel.class);
+        } catch (Exception ex) {
+            log.error("Can't load existed exclusion configuration {}", filePath, ex);
+            return null;
+        }
+    }
+
+    public static String getRelativeFileName(Path rootDir, Path fileName) {
+        // Normalize both paths to handle '/./' and '/../' components
+        Path normRoot = rootDir.normalize();
+        Path normFile = fileName.normalize();
+
+        // Make sure the file path is within the root directory
+        if (normFile.startsWith(normRoot)) {
+            // Relativize the path (returns the relative path from rootDir to fileName)
+            Path relativePath = normRoot.relativize(normFile);
+            String result = relativePath.toString();
+            return result.replace("\\", "/"); // switch to unix style in windows running case
+        }
+
+        throw new IllegalStateException("Unexpected file path " + normFile);
     }
 }
