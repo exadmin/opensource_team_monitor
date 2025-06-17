@@ -38,4 +38,13 @@ public class ExcludeFileModel {
             return compareByFile;
         });
     }
+
+    public boolean isPathFullyIgnored(String relFileOrDirNameHash) {
+        for (ExcludeSignatureItem next : signatures) {
+            if (next.getFileHash().equals(relFileOrDirNameHash) && next.getTextHash().equals("00000000")) return true;
+        }
+
+        return false;
+    }
+
 }

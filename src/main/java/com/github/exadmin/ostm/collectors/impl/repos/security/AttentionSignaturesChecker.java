@@ -13,8 +13,9 @@ import com.github.exadmin.sourcesscanner.exclude.ExcludeFileModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,23 +55,47 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
         Map<String, Pattern> sigMapCopy = AttentionSignaturesManager.getSignaturesMapCopy();
         final String repoDir = repoDirectory.toString();
-        final String gitFolder = Paths.get(repoDir, ".git").toString();
 
-        List<String> allFiles = FileUtils.findAllFilesRecursively(repoDir, (longFileName, shortFileName) -> {
-            // ignore files in /.git/ folder
-            if (longFileName.startsWith(gitFolder)) return false;
+        List<Path> filesToAnalyze = new ArrayList<>();
 
-            for (String ext : IGNORED_EXTS) {
-                if (shortFileName.endsWith(ext)) return false;
-            }
+        try {
+            Files.walkFileTree(repoDirectory, new FileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    String relFileName = getRelativeFileName(repoDirectory, dir);
+                    String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
-            return true;
-        });
+                    if (efModel != null && efModel.isPathFullyIgnored(fileHash)) return FileVisitResult.SKIP_SUBTREE;
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    String relFileName = getRelativeFileName(repoDirectory, file);
+                    String fileHash = MiscUtils.getSHA256AsHex(relFileName);
+                    if (efModel == null || !efModel.isPathFullyIgnored(fileHash)) filesToAnalyze.add(file);
+
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException ex) {
+            log.error("Error while walking in the directory {}", repoDir, ex);
+        }
 
         Map<String, String> foundSigs = new ConcurrentHashMap<>();
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
-        for (String nextFileName : allFiles) {
+        for (Path nextFileName : filesToAnalyze) {
             if (sigMapCopy.isEmpty()) break; // no signatures to search for
             if (!foundSigs.isEmpty()) break;; // we jsut highligh that at least somethign was found
 
@@ -89,7 +114,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                                 if (matcher.find()) {
 
                                     String textHash = MiscUtils.getSHA256AsHex(matcher.group());
-                                    String relFileName = getRelativeFileName(repoDirectory, Paths.get(nextFileName));
+                                    String relFileName = getRelativeFileName(repoDirectory, nextFileName);
                                     String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
                                     // if current signature is in the exclusion list
@@ -97,7 +122,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                                         getLog().debug("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
                                         return null;
                                     } else {
-                                        String hash = calculateSignatureHash(repoDir, nextFileName, matcher);
+                                        String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
                                         foundSigs.put(me.getKey(), hash);
                                         getLog().debug("Pattern-id {} was found with hash = {}", me.getKey(), hash);
                                     }

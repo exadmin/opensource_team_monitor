@@ -18,7 +18,7 @@ public class UniqueTeamsCollector extends AbstractCollector {
         RED_LEADS_MAP.put("qubership-observability", "Ildar Minaev");
         RED_LEADS_MAP.put("qubership-tp", "Denis Arychkov");
         RED_LEADS_MAP.put("qubership-core", "Ilya Smirnov");
-        RED_LEADS_MAP.put("qubership-devops", "Roman Parfinenko");
+        RED_LEADS_MAP.put("qubership-devops", "Pavel Anikin");
         RED_LEADS_MAP.put("qubership-apihub", "Alexander Agishev");
         RED_LEADS_MAP.put("qubership-landscape", "Ilya Smirnov");
         RED_LEADS_MAP.put("qubership-infra", UNDEFINED_STR);

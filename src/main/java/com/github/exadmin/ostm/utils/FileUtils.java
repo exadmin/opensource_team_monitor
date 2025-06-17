@@ -15,7 +15,11 @@ public class FileUtils {
     private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
     public static String readFile(String filePath) throws IOException {
-        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        return readFile(Paths.get(filePath));
+    }
+
+    public static String readFile(Path filePath) throws IOException {
+        byte[] bytes = Files.readAllBytes(filePath);
         return new String(bytes);
     }
 
