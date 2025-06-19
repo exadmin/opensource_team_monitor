@@ -50,7 +50,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
 
         // load exclusions configuration if exists
-        Path exPath = Paths.get(repoDirectory.toString(), ".github", "qs-grand-report.yaml");
+        Path exPath = Paths.get(repoDirectory.toString(), ".qubership", "grand-report.json");
         ExcludeFileModel efModel = exPath.toFile().exists() ? loadExistedModel(exPath) : null;
 
         Map<String, Pattern> sigMapCopy = AttentionSignaturesManager.getSignaturesMapCopy();
@@ -62,6 +62,9 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
             Files.walkFileTree(repoDirectory, new FileVisitor<Path>() {
                 @Override
                 public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                    // todo: move this hard code to some configurable place, priority = normal
+                    if (dir.getFileName().toString().equals(".git")) return FileVisitResult.SKIP_SUBTREE;
+
                     String relFileName = getRelativeFileName(repoDirectory, dir);
                     String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
