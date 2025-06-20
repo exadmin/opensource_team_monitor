@@ -17,12 +17,16 @@ public class ListAllRepositories extends AbstractCollector {
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         final TheColumn colRepoNumber = theReportModel.findColumn(TheColumnId.COL_REPO_NUMBER);
         final TheColumn colRepoName = theReportModel.findColumn(TheColumnId.COL_REPO_NAME);
+        final TheColumn colRepoType = theReportModel.findColumn(TheColumnId.COL_REPO_TYPE);
 
         // Collect known repositories into the map
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
-        Map<String, String> repoNames = new HashMap<>();
-        Map<String, String> repoRefs  = new HashMap<>();
+        Map<String, String> repoNames           = new HashMap<>();
+        Map<String, String> repoRefs            = new HashMap<>();
+        Map<String, GitHubRepository> reposMap  = new HashMap<>();
+
         for (GitHubRepository nextRepo : allRepos) {
+            reposMap.put(nextRepo.getId(), nextRepo);
             repoNames.put(nextRepo.getId(), nextRepo.getName().toLowerCase());
             repoRefs.put(nextRepo.getId(), nextRepo.getUrl());
         }
@@ -34,8 +38,27 @@ public class ListAllRepositories extends AbstractCollector {
         for (Map.Entry<String, String> me : repoNames.entrySet()) {
             String refToRepo = repoRefs.get(me.getKey());
 
+            GitHubRepository repo = reposMap.get(me.getKey());
+
+            SeverityLevel repoType = SeverityLevel.INFO_PUBLIC;
+            String typeText = "public";
+            int sortByValue = 0;
+
+            if (repo.isArchived()) {
+                repoType = SeverityLevel.INFO_ARCHIVED;
+                typeText = "archived";
+                sortByValue = 1;
+            }
+
+            if (repo.isPrivate()) {
+                repoType = SeverityLevel.INFO_PRIVATE;
+                typeText = "private";
+                sortByValue = 2;
+            }
+
             colRepoNumber.addValue(me.getKey(), new TheCellValue(number, number, SeverityLevel.INFO));
             colRepoName.addValue(me.getKey(), new TheCellValue(me.getValue(), me.getValue(), SeverityLevel.INFO).withHttpReference(refToRepo));
+            colRepoType.addValue(me.getKey(), new TheCellValue(typeText, sortByValue, repoType ));
 
             number++;
         }

@@ -18,21 +18,18 @@ public class GrandReportModel {
         TheColumn colGitHubLogin = theReportModel.allocateColumn(COL_USER_LOGIN, newColumn -> {
             newColumn.setTitle("GitHub Login");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(-1000);
         });
 
         // User real name column
         TheColumn colUserRealName = theReportModel.allocateColumn(COL_USER_REAL_NAME, newColumn -> {
             newColumn.setTitle("Real name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(-900);
         });
 
         // User contributions column
         TheColumn colUserAllContribs = theReportModel.allocateColumn(COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID, newColumn -> {
             newColumn.setTitle("User contributions for All Times");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-            newColumn.setRenderingOrder(-800);
         });
 
         // ***** "ALL REPOSITORIES" SHEET *****
@@ -42,52 +39,48 @@ public class GrandReportModel {
         TheColumn colRepoNumber = theReportModel.allocateColumn(COL_REPO_NUMBER, newColumn -> {
             newColumn.setTitle("Number");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(0);
+        });
+
+        TheColumn colRepoType = theReportModel.allocateColumn(COL_REPO_TYPE, newCol -> {
+            newCol.setTitle("Type");
+            newCol.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
         });
 
         TheColumn colRepoName = theReportModel.allocateColumn(COL_REPO_NAME, newColumn -> {
             newColumn.setTitle("Repository Name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-            newColumn.setRenderingOrder(1);
         });
 
         TheColumn colTopics = theReportModel.allocateColumn(COL_REPO_TOPICS, newColumn -> {
             newColumn.setTitle("Topics");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-            newColumn.setRenderingOrder(2);
         });
 
         TheColumn colSonarMetric = theReportModel.allocateColumn(COL_REPO_SONAR_CODE_COVERAGE_METRIC, newColumn -> {
             newColumn.setTitle("Code Coverage");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-            newColumn.setRenderingOrder(2);
             newColumn.setHelpUrl("https://wiki.qubership.org/en/Personal-space/Larkin/sonar-integration-guide");
         });
 
         TheColumn colOpenedPRs = theReportModel.allocateColumn(COL_REPO_OPENED_PULL_REQUESTS_COUNT, newColumn -> {
             newColumn.setTitle("Opened Pull Requests Count");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-            newColumn.setRenderingOrder(3);
         });
 
         TheColumn colPlatformVersion = theReportModel.allocateColumn(COL_REPO_PLATFORM_SDK_VERSION, newCol -> {
             newCol.setTitle("Platform Version");
-            newCol.setRenderingOrder(4);
         });
 
         TheColumn colSpringFrwkVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Spring Framework");
-            newCol.setRenderingOrder(5);
         });
 
         TheColumn colSpringBootVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_BOOT_VERSION, newCol -> {
             newCol.setTitle("Spring Boot");
-            newCol.setRenderingOrder(6);
         });
 
         TheColumn colQuarkusVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Quarkus Framework");
-            newCol.setRenderingOrder(7);
         });
 
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
@@ -218,6 +211,7 @@ public class GrandReportModel {
 
 
         sheetCodeQuality.registerColumn(colRepoNumber, true);
+        sheetCodeQuality.registerColumn(colRepoType, false);
         sheetCodeQuality.registerColumn(colRepoName, true);
         sheetCodeQuality.registerColumn(colTopics, false);
         sheetCodeQuality.registerColumn(colReadmeFile, false);
@@ -228,12 +222,16 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colSpringBootVersion, false);
         sheetCodeQuality.registerColumn(colQuarkusVersion, false);
 
+
         sheetCheckList.registerColumn(colRepoNumber, true);
+        sheetCheckList.registerColumn(colRepoType, false);
         sheetCheckList.registerColumn(colRepoName, false);
         sheetCheckList.registerColumn(colTopics, false);
         sheetCheckList.registerColumn(colAttSignatures, false);
 
+
         devOpsWorkflowsSheet.registerColumn(colRepoNumber, true);
+        devOpsWorkflowsSheet.registerColumn(colRepoType, false);
         devOpsWorkflowsSheet.registerColumn(colRepoName, false);
         devOpsWorkflowsSheet.registerColumn(colTopics, false);
         devOpsWorkflowsSheet.registerColumn(colLicenseFile, false);
@@ -246,6 +244,7 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colProfanity, false);
         devOpsWorkflowsSheet.registerColumn(colBadLinks, false);
         devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
+
 
         sheetSummary.registerColumn(colTeamName, true);
         sheetSummary.registerColumn(colRedTeamLead, false);

@@ -19,6 +19,7 @@ function defaultRender (data, type, row, meta) {
     }
 
     // Be aligned with com.github.exadmin.ostm.uimodel.SeverityLevel
+    // select chars at: https://www.compart.com/en/unicode/
     let value = data.value || '&nbsp;';
     if (data.severity == 'OK') value = value + '&nbsp;✅';
     if (data.severity == 'ERR') value = value + '&nbsp;❌';
@@ -27,6 +28,9 @@ function defaultRender (data, type, row, meta) {
     if (data.severity == 'SEC') value = value + '&nbsp;&#128561;';
     if (data.severity == 'SKIP') value = value + '&nbsp;&#x1F4A4;';
     if (data.severity == 'PLACE1') value = value + '&nbsp;&#x1F947;';
+    if (data.severity == 'INFO_PUB') value = value + '&nbsp;&#x1F513;'
+    if (data.severity == 'INFO_PRIV') value = value + '&nbsp;&#x1F512;'
+    if (data.severity == 'INFO_ARCH') value = value + '&nbsp;&#x1F4D5;'
 
 
     if (data.title && data.href) {

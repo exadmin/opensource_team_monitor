@@ -103,7 +103,10 @@ public class LanguagePlatformVersionChecker extends AFilesContentChecker {
         }
 
         if (obj instanceof String) {
-            return obj.toString();
+            String str = obj.toString();
+
+            if (str.isBlank()) return null;
+            return str;
         }
 
         return null;

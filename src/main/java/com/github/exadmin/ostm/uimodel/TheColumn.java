@@ -15,8 +15,6 @@ public class TheColumn {
     private String cssClassName;
     private String helpUrl;
 
-    private int renderingOrder;
-
     TheColumn(TheColumnId id) {
         this.id = id.getId();
         this.dataMap = new LinkedHashMap<>();
@@ -58,14 +56,6 @@ public class TheColumn {
 
     Map<String, TheCellValue> getDataMap() {
         return dataMap;
-    }
-
-    public int getRenderingOrder() {
-        return renderingOrder;
-    }
-
-    public void setRenderingOrder(int renderingOrder) {
-        this.renderingOrder = renderingOrder;
     }
 
     public List<String> getRows() {

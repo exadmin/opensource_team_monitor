@@ -142,6 +142,10 @@ public class MiscUtils {
 
     public static boolean getBoolValue(Map<String, Object> map, String keyName) {
         Object value = map.get(keyName);
+        if (value instanceof Boolean) {
+            return (boolean) value;
+        }
+
         if (value instanceof String) {
             String strValue = value.toString();
             if ("true".equalsIgnoreCase(strValue) || "false".equalsIgnoreCase(strValue)) {

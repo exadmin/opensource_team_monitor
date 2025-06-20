@@ -1,5 +1,6 @@
 package com.github.exadmin.ostm.uimodel;
 
+// see report.js rendering rules
 public enum SeverityLevel {
     INFO("INFO"),
     OK("OK"),
@@ -7,7 +8,10 @@ public enum SeverityLevel {
     WARN("WARN"),
     SECURITY_WARN("SEC"),
     SKIP("SKIP"),
-    PLACE1("PLACE1");
+    PLACE1("PLACE1"),
+    INFO_PUBLIC("INFO_PUB"),
+    INFO_PRIVATE("INFO_PRIV"),
+    INFO_ARCHIVED("INFO_ARCH");
 
 
     private String text;
