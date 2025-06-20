@@ -7,7 +7,6 @@ import com.github.exadmin.ostm.utils.FileUtils;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,10 +24,10 @@ public class CLAFilePresence extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        Path claFilePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "cla.yaml");
+        Path claFilePath = findYamlFile(repoDirectory, ".github", "workflows", "cla.yaml");
         File claFile = claFilePath.toFile();
 
-        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/cla.yaml");
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + claFilePath.getFileName());
 
         if (!claFile.exists() || !claFile.isFile()) {
             return new TheCellValue("Not found", 0, SeverityLevel.ERROR);

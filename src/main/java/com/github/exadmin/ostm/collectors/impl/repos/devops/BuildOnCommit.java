@@ -5,7 +5,6 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 public class BuildOnCommit extends AFilesContentChecker {
@@ -21,16 +20,16 @@ public class BuildOnCommit extends AFilesContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         // check as maven-based repository
         {
-            Path filePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "maven-build.yaml");
-            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/maven-build.yaml");
+            Path filePath = findYamlFile(repoDirectory,  ".github", "workflows", "maven-build.yaml");
+            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
             TheCellValue value = checkOneFileForContent(filePath, httpRef, REGEXP_MAVEN_BUILD);
             if (SeverityLevel.OK.equals(value.getSeverityLevel()) || SeverityLevel.WARN.equals(value.getSeverityLevel()))
                 return value;
         }
 
         // check as go-based repository
-        Path filePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "go-build.yaml");
-        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/go-build.yaml");
+        Path filePath = findYamlFile(repoDirectory, ".github", "workflows", "go-build.yaml");
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
         return checkOneFileForContent(filePath, httpRef, REGEXP_GO_BUILD);
     }
 }

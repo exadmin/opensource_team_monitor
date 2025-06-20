@@ -2,10 +2,12 @@ package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
-import com.github.exadmin.ostm.uimodel.*;
+import com.github.exadmin.ostm.uimodel.TheCellValue;
+import com.github.exadmin.ostm.uimodel.TheColumn;
+import com.github.exadmin.ostm.uimodel.TheColumnId;
+import com.github.exadmin.ostm.uimodel.TheReportModel;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 public class LabelerActionChecker extends AFilesContentChecker {
@@ -19,8 +21,8 @@ public class LabelerActionChecker extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        Path filePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "automatic-pr-labeler.yaml");
-        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/automatic-pr-labeler.yaml");
+        Path filePath = findYamlFile(repoDirectory, ".github", "workflows", "automatic-pr-labeler.yaml");
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
 
         return checkOneFileForContent(filePath, httpRef, REGEXP1);
     }

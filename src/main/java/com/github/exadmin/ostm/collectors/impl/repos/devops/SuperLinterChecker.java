@@ -5,7 +5,6 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Pattern;
 
 public class SuperLinterChecker extends AFilesContentChecker {
@@ -20,8 +19,8 @@ public class SuperLinterChecker extends AFilesContentChecker {
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
         // check super linter
         {
-            Path linterPath = Paths.get(repoDirectory.toString(), ".github", "workflows", "super-linter.yaml");
-            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/super-linter.yaml");
+            Path linterPath = findYamlFile(repoDirectory, ".github", "workflows", "super-linter.yaml");
+            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + linterPath.getFileName());
             TheCellValue linterCheckResult = checkOneFileForContent(linterPath, httpRef, REGEXP_FOR_LINTER);
             if (linterCheckResult.getSeverityLevel().equals(SeverityLevel.OK) || linterCheckResult.getSeverityLevel().equals(SeverityLevel.WARN))
                 return linterCheckResult;
@@ -29,8 +28,8 @@ public class SuperLinterChecker extends AFilesContentChecker {
 
         // check prettier
         {
-            Path prettierPath = Paths.get(repoDirectory.toString(), ".github", "workflows", "prettier.yaml");
-            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/prettier.yaml");
+            Path prettierPath = findYamlFile(repoDirectory, ".github", "workflows", "prettier.yaml");
+            String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + prettierPath.getFileName());
             return checkOneFileForContent(prettierPath, httpRef, null);
         }
     }

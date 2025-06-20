@@ -12,6 +12,7 @@ import com.github.exadmin.ostm.utils.FileUtils;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,5 +69,31 @@ public abstract class AFilesContentChecker extends AbstractCollector {
             getLog().error("Error while reading file {}", filePath, ex);
             return new TheCellValue("Internal Error", 1, SeverityLevel.ERROR);
         }
+    }
+
+    /**
+     * Returns path instance of file which is represented by the arguments.
+     * If the last element ends with ".yaml" or ".yml" then attempt to find correspondingly ".yml" or ".yaml" (i.e.another writing") will be done.
+     * @param repoDirectory Path instance of the root directory
+     * @param more list of string sub-paths (directories and last file)
+     * @return
+     */
+    protected Path findYamlFile(Path repoDirectory, String ... more) {
+        Path path = Paths.get(repoDirectory.toString(), more);
+        File file = path.toFile();
+        if (file.exists() && file.isFile()) return path;
+
+        // support case when yaml-files can be either with "yml" or witl "yaml" extension
+        List<String> list = new ArrayList<>(List.of(more));
+        String last = list.removeLast();
+
+        if (last.endsWith(".yaml")) {
+            last = last.substring(0, last.length() - 5) + ".yml";
+        } else if (last.endsWith(".yml")) {
+            last = last.substring(0, last.length() - 4) + ".yaml";
+        }
+
+        list.add(last);
+        return Paths.get(repoDirectory.toString(), list.toArray(new String[0]));
     }
 }

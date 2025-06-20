@@ -7,7 +7,6 @@ import com.github.exadmin.ostm.utils.FileUtils;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,14 +20,14 @@ public class ConventionalCommitsActionChecker extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        Path filePath = Paths.get(repoDirectory.toString(), ".github", "workflows", "pr-conventional-commits.yaml");
+        Path filePath = findYamlFile(repoDirectory, ".github", "workflows", "pr-conventional-commits.yaml");
         File file = filePath.toFile();
 
         if (!file.exists() || !file.isFile()) {
             return new TheCellValue("Not found", 0, SeverityLevel.ERROR);
         }
 
-        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/pr-conventional-commits.yaml");
+        String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
 
         try {
             String fileContent = FileUtils.readFile(filePath.toString());
