@@ -140,6 +140,18 @@ public class MiscUtils {
         return Integer.parseInt(value.toString());
     }
 
+    public static boolean getBoolValue(Map<String, Object> map, String keyName) {
+        Object value = map.get(keyName);
+        if (value instanceof String) {
+            String strValue = value.toString();
+            if ("true".equalsIgnoreCase(strValue) || "false".equalsIgnoreCase(strValue)) {
+                return Boolean.parseBoolean(strValue);
+            }
+        }
+
+        return false;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> List<T> getListValue(Map<String, Object> map, String keyName) {
         Object value = map.get(keyName);

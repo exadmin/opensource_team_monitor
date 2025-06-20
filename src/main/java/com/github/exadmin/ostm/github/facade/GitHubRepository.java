@@ -3,8 +3,7 @@ package com.github.exadmin.ostm.github.facade;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.exadmin.ostm.utils.MiscUtils.getListValue;
-import static com.github.exadmin.ostm.utils.MiscUtils.getStrValue;
+import static com.github.exadmin.ostm.utils.MiscUtils.*;
 
 public class GitHubRepository {
     private final Map<String, Object> dataMap;
@@ -35,6 +34,14 @@ public class GitHubRepository {
 
     public List<String> getTopics() {
         return getListValue(dataMap, "topics");
+    }
+
+    public boolean isPrivate() {
+        return getBoolValue(dataMap, "private");
+    }
+
+    public boolean isArchived() {
+        return getBoolValue(dataMap, "archived");
     }
 
     public String getHttpReferenceToFileInGitHub(String filePathInRepositoryStartingFromRoot) {
