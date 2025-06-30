@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class AttentionSignaturesManager {
     private static final Logger log = LoggerFactory.getLogger(AttentionSignaturesManager.class);
 
-    private static Map<String, Pattern> sigMap;
+    private static Map<String, Pattern> restrictedSigMap;
+    private static Map<String, String> allowedSigMap;
+    private static String dictionaryVersion = "undefined";
 
     public static void loadExpressionsFrom(String filePath, String password, String salt) {
         // decrypt file first
@@ -22,40 +25,89 @@ public class AttentionSignaturesManager {
             String encryptedContent = FileUtils.readFile(filePath);
             String decryptedContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
 
-            sigMap = loadDecryptedContent(decryptedContent);
+            loadDecryptedContent(decryptedContent);
         } catch (Exception ex) {
             log.error("Error while reading file {}", filePath, ex);
             throw new IllegalStateException(ex);
         }
     }
 
-    public static Map<String, Pattern> loadDecryptedContent(String fileBody) {
-        Map<String, Pattern> result = new LinkedHashMap<>();
-
+    public static void loadDecryptedContent(String fileBody) {
         try (ByteArrayInputStream is = new ByteArrayInputStream(fileBody.getBytes(StandardCharsets.UTF_8))) {
-            Properties props = new Properties();
-            props.load(is);
+            Properties properties = new Properties();
+            properties.load(is);
 
-            Set<Object> keys = props.keySet();
-            for (Object key : keys) {
-                try {
-                    String regExp = props.get(key).toString();
-                    Pattern pattern = Pattern.compile(regExp, Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
-                    result.put(key.toString(), pattern);
-                    log.debug("RegExp {} is compiled successfully", key);
-                } catch (Exception ex) {
-                    log.error("Error while compiling  reg-exp with id = {}", key);
+            Map<String, Pattern> restrMap = new HashMap<>();
+            Map<String, String> allowedMap = new HashMap<>();
+
+            for (Object key : properties.keySet()) {
+                String sigId = key.toString();
+                String expression = properties.getProperty(sigId);
+
+                if ("version".equalsIgnoreCase(sigId)) {
+                    dictionaryVersion = expression;
+                    continue;
+                }
+
+                if (sigId.endsWith("(allowed)")) {
+                    sigId = sigId.substring(0, sigId.length() - 9);
+
+                    log.info("Signature with id '{}' = '{}' is marked as allowed.", sigId, expression);
+                    allowedMap.put(sigId, expression);
+                } else {
+                    compileAndKeep(sigId, expression, restrMap);
                 }
             }
+
+            restrictedSigMap = Collections.unmodifiableMap(restrMap);
+            allowedSigMap = Collections.unmodifiableMap(allowedMap);
+
         } catch (IOException ex) {
             log.error("Error while reading content", ex);
             throw new IllegalStateException(ex);
         }
-
-        return result;
     }
 
     public static Map<String, Pattern> getSignaturesMapCopy() {
-        return new HashMap<>(sigMap);
+        return new HashMap<>(restrictedSigMap);
+    }
+
+    public static Map<String, String> getAllowedSigMapCopy() {
+        return new HashMap<>(allowedSigMap);
+    }
+
+    private static final Set<Character> SPECIAL_CHARS =
+            Set.of('!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?', '/');
+
+    private static void compileAndKeep(String key, String regExpStr, Map<String, Pattern> map) {
+        final String originalKeyName = key; // for logging aims
+
+        if (key.endsWith("(regexp)")) {
+            key = key.substring(0, key.length() - 8);
+        } else if (!key.contains("(") && !key.contains(")")) {
+
+            // escape special characters if exists
+            StringBuilder sb = new StringBuilder();
+            for (char ch : regExpStr.toCharArray()) {
+                for (char specialCh : SPECIAL_CHARS) {
+                    if (ch == specialCh) {
+                        sb.append("\\");
+                        break;
+                    }
+                }
+
+                sb.append(ch);
+            }
+
+            regExpStr = "\\b" + sb + "\\b";
+        }
+
+        try {
+            log.info("Compiling key '{}' effective expressions = '{}'", originalKeyName, regExpStr);
+            Pattern regExp = Pattern.compile(regExpStr, Pattern.CASE_INSENSITIVE + Pattern.DOTALL);
+            map.put(key, regExp);
+        } catch (PatternSyntaxException pse) {
+            log.error("Error while compiling signature with ID = '{}', reg-exp = '{}'", originalKeyName, regExpStr);
+        }
     }
 }

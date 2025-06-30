@@ -98,9 +98,11 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         Map<String, String> foundSigs = new ConcurrentHashMap<>();
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
+        final Map<String, String> allowedSigMap = AttentionSignaturesManager.getAllowedSigMapCopy();
+
         for (Path nextFileName : filesToAnalyze) {
             if (sigMapCopy.isEmpty()) break; // no signatures to search for
-            if (!foundSigs.isEmpty()) break;; // we jsut highligh that at least somethign was found
+            if (!foundSigs.isEmpty()) break;; // we just highlight that at least something was found
 
             final String fileContent;
             try {
@@ -116,7 +118,10 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                                 Matcher matcher = me.getValue().matcher(fileContent);
                                 if (matcher.find()) {
 
-                                    String textHash = MiscUtils.getSHA256AsHex(matcher.group());
+                                    String foundText = matcher.group();
+                                    if (allowedSigMap.containsValue(foundText)) return null;
+
+                                    String textHash = MiscUtils.getSHA256AsHex(foundText);
                                     String relFileName = getRelativeFileName(repoDirectory, nextFileName);
                                     String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
