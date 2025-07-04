@@ -110,4 +110,8 @@ public class AttentionSignaturesManager {
             log.error("Error while compiling signature with ID = '{}', reg-exp = '{}'", originalKeyName, regExpStr);
         }
     }
+
+    public static String getDictionaryVersion() {
+        return dictionaryVersion;
+    }
 }

@@ -3,9 +3,9 @@ package com.github.exadmin.ostm.collectors.impl.repos.security;
 import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
-import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 public class AttentionSignaturesChecker extends AFilesContentChecker {
 
     private static final Logger log = LoggerFactory.getLogger(AttentionSignaturesChecker.class);
+    private TheColumn theColumn;
 
     private static final List<String> IGNORED_EXTS = new ArrayList<>();
     static {
@@ -42,7 +43,8 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        return theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
+        this.theColumn = theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
+        return this.theColumn;
     }
 
     @Override
@@ -55,6 +57,9 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
         Map<String, Pattern> sigMapCopy = AttentionSignaturesManager.getSignaturesMapCopy();
         final String repoDir = repoDirectory.toString();
+
+        // set dictionary version into column
+        theColumn.setTitle("Attention signatures (v." + AttentionSignaturesManager.getDictionaryVersion() + ")");
 
         List<Path> filesToAnalyze = new ArrayList<>();
 
