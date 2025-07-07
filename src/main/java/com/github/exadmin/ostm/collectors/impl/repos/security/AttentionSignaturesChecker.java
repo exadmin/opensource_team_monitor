@@ -23,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,10 +105,11 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
         final Map<String, String> allowedSigMap = AttentionSignaturesManager.getAllowedSigMapCopy();
+        final AtomicInteger numberOfWarnings = new AtomicInteger(0);
 
         for (Path nextFileName : filesToAnalyze) {
             if (sigMapCopy.isEmpty()) break; // no signatures to search for
-            if (!foundSigs.isEmpty()) break;; // we just highlight that at least something was found
+            // if (!foundSigs.isEmpty()) break;; // we just highlight that at least something was found
 
             final String fileContent;
             try {
@@ -135,9 +137,10 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                                         getLog().debug("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
                                         return null;
                                     } else {
-                                        String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
-                                        foundSigs.put(me.getKey(), hash);
-                                        getLog().debug("Pattern-id {} was found with hash = {}", me.getKey(), hash);
+                                        // String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
+                                        // foundSigs.put(me.getKey(), hash);
+                                        numberOfWarnings.incrementAndGet();
+                                        getLog().debug("Pattern-id {} was detected in a file {}", me.getKey(), nextFileName);
                                     }
                                 }
 
@@ -148,16 +151,12 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
             CompletableFuture.allOf(futures).join();
 
-            sigMapCopy.keySet().removeAll(foundSigs.keySet()); // reduce number of signatures to work with in scope of this repository
+            // sigMapCopy.keySet().removeAll(foundSigs.keySet()); // reduce number of signatures to work with in scope of this repository
         }
 
-        if (!foundSigs.isEmpty()) {
-            StringBuilder sb = new StringBuilder("Warning");
-            // current implementation will not share found signatures hashes
-            /*for (Map.Entry<String, String> me : foundSigs.entrySet()) {
-                sb.append(me.getKey()).append(" (").append(me.getValue()).append(")").append("<br>");
-            }*/
-            return new TheCellValue(sb.toString(), 2, SeverityLevel.WARN);
+        if (numberOfWarnings.get() > 0) {
+            String sb = "Warnings (" + numberOfWarnings.get() + ")";
+            return new TheCellValue(sb, numberOfWarnings.get(), SeverityLevel.WARN);
         }
 
         return new TheCellValue("Ok", 0, SeverityLevel.OK);
