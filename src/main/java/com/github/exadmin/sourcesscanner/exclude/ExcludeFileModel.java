@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExcludeFileModel {
+    public static final String SKIP_FULL_FILE_HASH = "00000000";
+
     @JsonProperty("exclusions")
     private List<ExcludeSignatureItem> signatures;
 
@@ -41,7 +43,7 @@ public class ExcludeFileModel {
 
     public boolean isPathFullyIgnored(String relFileOrDirNameHash) {
         for (ExcludeSignatureItem next : signatures) {
-            if (next.getFileHash().equals(relFileOrDirNameHash) && next.getTextHash().equals("00000000")) return true;
+            if (next.getFileHash().equals(relFileOrDirNameHash) && next.getTextHash().equals(SKIP_FULL_FILE_HASH)) return true;
         }
 
         return false;

@@ -122,15 +122,20 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
             CompletableFuture<?>[] futures = sigMapCopy.entrySet().stream()
                     .map(me -> CompletableFuture.supplyAsync( () ->
                             {
+                                final String relFileName = getRelativeFileName(repoDirectory, nextFileName);
+                                final String fileHash = MiscUtils.getSHA256AsHex(relFileName);
+
+                                // check if this file is fully marked to be ignored
+                                if (efModel != null && efModel.contains(ExcludeFileModel.SKIP_FULL_FILE_HASH, fileHash))
+                                    return null;
+
+                                // otherwise - try scan it for signatures
                                 Matcher matcher = me.getValue().matcher(fileContent);
                                 if (matcher.find()) {
-
                                     String foundText = matcher.group();
                                     if (allowedSigMap.containsValue(foundText)) return null;
 
                                     String textHash = MiscUtils.getSHA256AsHex(foundText);
-                                    String relFileName = getRelativeFileName(repoDirectory, nextFileName);
-                                    String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
                                     // if current signature is in the exclusion list
                                     if (efModel != null && efModel.contains(textHash, fileHash)) {
