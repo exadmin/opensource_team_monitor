@@ -29,7 +29,7 @@ public class UniqueTeamsCollector extends AbstractCollector {
         BLUE_LEADS_MAP.put("qubership-nifi", "Sagar Shah");
         BLUE_LEADS_MAP.put("qubership-integration", "Pavels Kletnojs");
         BLUE_LEADS_MAP.put("qubership-observability", "Alexey Karasev");
-        BLUE_LEADS_MAP.put("qubership-tp", "Aleksandr Kapustin");
+        BLUE_LEADS_MAP.put("qubership-tp", "Irina Ismagilova & Elena Kurganova");
         BLUE_LEADS_MAP.put("qubership-core", "Sergey Lisovoy");
         BLUE_LEADS_MAP.put("qubership-devops", "Mikhail Gushchin");
         BLUE_LEADS_MAP.put("qubership-apihub", "Andrei Chekalin");
