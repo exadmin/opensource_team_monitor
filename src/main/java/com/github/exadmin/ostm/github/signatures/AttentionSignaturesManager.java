@@ -17,6 +17,8 @@ public class AttentionSignaturesManager {
 
     private static Map<String, Pattern> restrictedSigMap;
     private static Map<String, String> allowedSigMap;
+    private static Map<String, List<String>> excludeExtsMap; // signature -> List of file extensions to ignore
+
     private static String dictionaryVersion = "undefined";
 
     public static void loadExpressionsFrom(String filePath, String password, String salt) {
@@ -37,8 +39,9 @@ public class AttentionSignaturesManager {
             Properties properties = new Properties();
             properties.load(is);
 
-            Map<String, Pattern> restrMap = new HashMap<>();
-            Map<String, String> allowedMap = new HashMap<>();
+            Map<String, Pattern> regExpTmpMap = new HashMap<>();
+            Map<String, String> allowedSignaturesTmpMap = new HashMap<>();
+            Map<String, List<String>> excludeExtTmpMap = new HashMap<>();
 
             for (Object key : properties.keySet()) {
                 String sigId = key.toString();
@@ -49,18 +52,34 @@ public class AttentionSignaturesManager {
                     continue;
                 }
 
+                // if signature must exclude some files with provided list of extensions
+                if (sigId.endsWith("(exclude-ext)")) {
+                    String[] exts = expression.split(",");
+                    List<String> extList = new ArrayList<>();
+                    for (String ext : exts) {
+                        ext = ext.trim();
+                        if (!ext.isEmpty()) extList.add(ext);
+                    }
+
+                    sigId = sigId.substring(0, sigId.length() -13);
+                    excludeExtTmpMap.put(sigId, extList);
+
+                    continue;
+                }
+
                 if (sigId.endsWith("(allowed)")) {
                     sigId = sigId.substring(0, sigId.length() - 9);
 
                     log.info("Signature with id '{}' = '{}' is marked as allowed.", sigId, expression);
-                    allowedMap.put(sigId, expression);
+                    allowedSignaturesTmpMap.put(sigId, expression);
                 } else {
-                    compileAndKeep(sigId, expression, restrMap);
+                    compileAndKeep(sigId, expression, regExpTmpMap);
                 }
             }
 
-            restrictedSigMap = Collections.unmodifiableMap(restrMap);
-            allowedSigMap = Collections.unmodifiableMap(allowedMap);
+            restrictedSigMap = Collections.unmodifiableMap(regExpTmpMap);
+            allowedSigMap = Collections.unmodifiableMap(allowedSignaturesTmpMap);
+            excludeExtsMap = Collections.unmodifiableMap(excludeExtTmpMap);
 
         } catch (IOException ex) {
             log.error("Error while reading content", ex);
@@ -74,6 +93,10 @@ public class AttentionSignaturesManager {
 
     public static Map<String, String> getAllowedSigMapCopy() {
         return new HashMap<>(allowedSigMap);
+    }
+
+    public static Map<String, List<String>> getExcludeExtsMap() {
+        return excludeExtsMap;
     }
 
     private static final Set<Character> SPECIAL_CHARS =

@@ -33,15 +33,6 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
     private static final Logger log = LoggerFactory.getLogger(AttentionSignaturesChecker.class);
     private TheColumn theColumn;
 
-    private static final List<String> IGNORED_EXTS = new ArrayList<>();
-    static {
-        IGNORED_EXTS.add(".png");
-        IGNORED_EXTS.add(".gif");
-        IGNORED_EXTS.add(".jpg");
-        IGNORED_EXTS.add(".bmp");
-        IGNORED_EXTS.add(".ico");
-    }
-
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
         this.theColumn = theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
@@ -122,6 +113,9 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
             CompletableFuture<?>[] futures = sigMapCopy.entrySet().stream()
                     .map(me -> CompletableFuture.supplyAsync( () ->
                             {
+                                final String sigId = me.getKey();
+                                if (isToIgnoreFile(sigId, nextFileName)) return null;
+
                                 final String relFileName = getRelativeFileName(repoDirectory, nextFileName);
                                 final String fileHash = MiscUtils.getSHA256AsHex(relFileName);
 
@@ -165,6 +159,19 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         }
 
         return new TheCellValue("Ok", 0, SeverityLevel.OK);
+    }
+
+    private static boolean isToIgnoreFile(String signatureId, Path currentFile) {
+        Map<String, List<String>> excludeExtMap = AttentionSignaturesManager.getExcludeExtsMap();
+        if (excludeExtMap == null) return false;
+
+        List<String> list = excludeExtMap.get(signatureId);
+        if (list == null) return false;
+
+        String fileExt = FileUtils.getFileExtensionAsString(currentFile);
+        if (fileExt == null) return false;
+
+        return list.contains(fileExt);
     }
 
     /**
