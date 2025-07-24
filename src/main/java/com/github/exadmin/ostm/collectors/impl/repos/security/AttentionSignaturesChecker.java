@@ -100,7 +100,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
         for (Path nextFileName : filesToAnalyze) {
             if (sigMapCopy.isEmpty()) break; // no signatures to search for
-            // if (!foundSigs.isEmpty()) break;; // we just highlight that at least something was found
+            if (!foundSigs.isEmpty()) break;; // we just highlight that at least something was found
 
             final String fileContent;
             try {
@@ -136,8 +136,8 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
                                         getLog().debug("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
                                         return null;
                                     } else {
-                                        // String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
-                                        // foundSigs.put(me.getKey(), hash);
+                                        String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
+                                        foundSigs.put(me.getKey(), hash);
                                         numberOfWarnings.incrementAndGet();
                                         getLog().debug("Pattern-id {} was detected in a file {}", me.getKey(), nextFileName);
                                     }
@@ -150,11 +150,12 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
             CompletableFuture.allOf(futures).join();
 
-            // sigMapCopy.keySet().removeAll(foundSigs.keySet()); // reduce number of signatures to work with in scope of this repository
+            sigMapCopy.keySet().removeAll(foundSigs.keySet()); // reduce number of signatures to work with in scope of this repository
         }
 
         if (numberOfWarnings.get() > 0) {
-            String sb = "Warnings (" + numberOfWarnings.get() + ")";
+            // String sb = "Warnings (" + numberOfWarnings.get() + ")";
+            String sb = "Warnings found";
             return new TheCellValue(sb, numberOfWarnings.get(), SeverityLevel.WARN);
         }
 
