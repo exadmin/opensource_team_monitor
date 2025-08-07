@@ -50,7 +50,8 @@ jobs:
           chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
           chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
           cd /tmp/WORKDIR/ALL_REPOSITORIES/
-          ./clone_all.sh        
+          ./clone_all.sh
+          ./clone_all.sh
 
       - name: Run reports
         run: |
