@@ -4,6 +4,7 @@ import com.github.exadmin.ostm.collectors.api.AbstractCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
+import com.github.exadmin.ostm.utils.MiscUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
@@ -17,7 +18,8 @@ public class TopicAndTeamPerRepository extends AbstractCollector {
         List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repository : repoList) {
             String rowId = repository.getId();
-            TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()), "", SeverityLevel.INFO);
+            Integer sum = MiscUtils.getCharSum(repository.getTopics().toString());
+            TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()), sum, SeverityLevel.INFO);
             colTopics.addValue(rowId, cellValue);
         }
     }
