@@ -19,3 +19,5 @@ else
     echo "Cloning repository $repo_name..."
     git clone "$repo_url"
 fi
+
+sleep 3
