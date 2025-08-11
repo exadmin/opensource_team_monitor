@@ -51,6 +51,7 @@ public class GitHubFacade {
                 // keep this ignore rule in sync with clone_all.sh script
                 String repoName = ghRepo.getName();
                 if (REPOS_TO_IGNORE.contains(repoName)) continue;
+                if (ghRepo.isPrivate() || ghRepo.isArchived()) continue;
 
                 result.add(ghRepo);
             }
