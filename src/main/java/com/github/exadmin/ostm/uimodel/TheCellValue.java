@@ -1,5 +1,7 @@
 package com.github.exadmin.ostm.uimodel;
 
+import com.github.exadmin.ostm.utils.MiscUtils;
+
 public class TheCellValue {
     private String visualValue;
     private String sortByValue;
@@ -14,8 +16,15 @@ public class TheCellValue {
      */
     public TheCellValue(Object visualValue, Object sortByValue, SeverityLevel severityLevel) {
         this.visualValue = visualValue.toString();
-        this.sortByValue = sortByValue.toString();
+
         this.severityLevel = severityLevel;
+
+        // define sortByValue automatically for Strings
+        if (sortByValue instanceof Number) {
+            this.sortByValue = sortByValue.toString();
+        } else {
+            this.sortByValue = "" + MiscUtils.getCharSum(sortByValue.toString());
+        }
     }
 
     public String getVisualValue() {
