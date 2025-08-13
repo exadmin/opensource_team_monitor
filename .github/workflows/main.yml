@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Run grand report generation
+name: Generate Grand Report
 
 # Controls when the workflow will run
 on:
@@ -50,8 +50,7 @@ jobs:
           chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
           chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
           cd /tmp/WORKDIR/ALL_REPOSITORIES/
-          ./clone_all.sh
-          ./clone_all.sh
+          ./clone_all.sh          
 
       - name: Run reports
         run: |
@@ -65,11 +64,15 @@ jobs:
           cp ./data.json ${CURRENT_DIR}/docs/data/data.json
           
           cd ${CURRENT_DIR}
+          
+          cp -f ./docs/index_template.html ./docs/index.html
+          sed -i "s/{{DATE}}/$(date)/g" ./docs/index.html
 
           git config user.name github-actions
           git config user.email github-actions@github.com
                     
           git add ./docs/data/data.json          
+          git add ./docs/index.html          
                     
-          git commit -m "./docs/data/data.json is updated at $(date)"
+          git commit -m "Grand Report generation at $(date)"
           git push
