@@ -103,7 +103,7 @@ public class GrandReportModel {
 
         TheColumn colCLAFile = theReportModel.allocateColumn(COL_REPO_CLA_FILE, newColumn -> {
             newColumn.setTitle("CLA File");
-            newColumn.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#cla");
+            newColumn.setHelpUrl("https://github.com/Netcracker/.github/blob/main/docs/workflows/cla.md");
         });
 
         TheColumn colCodeOwners = theReportModel.allocateColumn(COL_REPO_CODE_OWNERS_FILE, newColumn -> {
@@ -117,7 +117,7 @@ public class GrandReportModel {
 
         TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {
             newCol.setTitle("Conventional Commits");
-            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#conventional-commits-pr-check");
+            newCol.setHelpUrl("https://github.com/Netcracker/.github/blob/main/docs/workflows/pr-conventional-commits.md");
         });
 
         TheColumn colLinter = theReportModel.allocateColumn(COL_REPO_LINTER, newCol -> {
@@ -127,12 +127,12 @@ public class GrandReportModel {
 
         TheColumn colLabeler = theReportModel.allocateColumn(COL_REPO_LABELER, newCol -> {
             newCol.setTitle("Automatic Labeler");
-            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#automatic-pr-labels-based-on-conventional-commits");
+            newCol.setHelpUrl("https://github.com/Netcracker/.github/blob/main/docs/workflows/automatic-pr-labeler.md");
         });
 
         TheColumn colLintTitle = theReportModel.allocateColumn(COL_REPO_LINT_TITLE, newCol -> {
             newCol.setTitle("Lint Title");
-            newCol.setHelpUrl("https://github.com/Netcracker/qubership-workflow-hub?tab=readme-ov-file#lint-pr-title");
+            newCol.setHelpUrl("https://github.com/Netcracker/.github/blob/main/docs/workflows/pr-lint-title.md");
         });
 
         TheColumn colProfanity = theReportModel.allocateColumn(COL_REPO_PROFANITY_ACTION, newCol -> {
@@ -221,6 +221,7 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colSpringFrwkVersion, false);
         sheetCodeQuality.registerColumn(colSpringBootVersion, false);
         sheetCodeQuality.registerColumn(colQuarkusVersion, false);
+        sheetCodeQuality.registerColumn(colBuildOnCommit, false);
 
 
         sheetCheckList.registerColumn(colRepoNumber, true);
@@ -243,8 +244,6 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colLintTitle, false);
         devOpsWorkflowsSheet.registerColumn(colProfanity, false);
         devOpsWorkflowsSheet.registerColumn(colBadLinks, false);
-        devOpsWorkflowsSheet.registerColumn(colBuildOnCommit, false);
-
 
         sheetSummary.registerColumn(colTeamName, true);
         sheetSummary.registerColumn(colRedTeamLead, false);

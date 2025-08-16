@@ -10,7 +10,7 @@ while true; do
     file="all_repos_page$i.json"
     echo "Processing file $file"
 
-    curl "https://api.github.com/orgs/Netcracker/repos?per_page=5&page=$i" > "$file"
+    curl "https://api.github.com/orgs/Netcracker/repos?per_page=50&page=$i" > "$file"
 
     # exit from the loop - in case downloaded file is similar to empty json, i.e. "[]" string
     size=$(stat -c%s "$file")
@@ -20,7 +20,7 @@ while true; do
     fi
 
     # temp exit - change per_page to 50 also when removing
-    break
+    # break
 
     # keep this ignore-rule in sync with com.github.exadmin.ostm.github.facade.GitHubFacade.getAllRepositories
     # cat "$file" | grep -v -e 'k8s-conformance' -e 'kafka' -e 'postgres' -e 'cassandra' -e 'keycloak' | grep -e 'clone_url*' | cut -d \" -f 4 | xargs -L1 --no-run-if-empty ./clone_or_pull.sh
