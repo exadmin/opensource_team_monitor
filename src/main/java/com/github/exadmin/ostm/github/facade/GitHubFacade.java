@@ -16,11 +16,11 @@ public class GitHubFacade {
     private static final List<String> REPOS_TO_IGNORE = new ArrayList<>();
     static {
         // keep this list in sync with clone_all.sh
-        REPOS_TO_IGNORE.add("k8s-conformance");
-        REPOS_TO_IGNORE.add("kafka");
-        REPOS_TO_IGNORE.add("postgres");
-        REPOS_TO_IGNORE.add("cassandra");
-        REPOS_TO_IGNORE.add("keycloak");
+        // REPOS_TO_IGNORE.add("k8s-conformance");
+        // REPOS_TO_IGNORE.add("kafka");
+        // REPOS_TO_IGNORE.add("postgres");
+        // REPOS_TO_IGNORE.add("cassandra");
+        // REPOS_TO_IGNORE.add("keycloak");
     }
 
     public GitHubFacade() {

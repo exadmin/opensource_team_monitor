@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractOneRepositoryCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.SeverityLevel;
@@ -17,23 +17,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public abstract class AFilesContentChecker extends AbstractCollector {
+public abstract class AFilesContentChecker extends AbstractOneRepositoryCollector {
     @Override
-    public final void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        TheColumn column = getColumnToAddValueInto(theReportModel);
+    protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
         if (column == null) throw new IllegalStateException("Column is not. Was it created in the GrandReportModel using allocateColumn() method?");
 
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepos) {
             String repoName = repo.getName();
-            Path repoDirectory = Paths.get(parentPathForClonedRepositories.toString(), repoName);
+            Path repoDirectory = Paths.get(repositoryPath.toString(), repoName);
 
             TheCellValue cellValue = checkOneRepository(repo, gitHubFacade, repoDirectory);
             column.addValue(repo.getId(), cellValue);
         }
     }
-
-    protected abstract TheColumn getColumnToAddValueInto(TheReportModel theReportModel);
 
     protected abstract TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory);
 

@@ -14,11 +14,13 @@ public class TheColumn {
     private final Map<String, TheCellValue> dataMap;
     private String cssClassName;
     private String helpUrl;
+    private boolean renderId;
 
-    TheColumn(TheColumnId id) {
+    TheColumn(TheColumnId id, boolean renderId) {
         this.id = id.getId();
         this.dataMap = new LinkedHashMap<>();
         this.cssClassName = TD_CENTER_MIDDLE;
+        this.renderId = renderId;
     }
 
     public String getId() {
@@ -26,7 +28,7 @@ public class TheColumn {
     }
 
     public String getTitle() {
-        return title;
+        return title + (renderId ? "[" + id  + "]": "");
     }
 
     public void setTitle(String title) {

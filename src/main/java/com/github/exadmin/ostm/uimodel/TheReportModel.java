@@ -1,10 +1,13 @@
 package com.github.exadmin.ostm.uimodel;
 
+import com.github.exadmin.ostm.persistence.overrides.JsonReportOverrides;
+
 import java.util.*;
 
 public class TheReportModel {
     private final Map<String, TheSheet> sheetsMap = new LinkedHashMap<>();
     private final Map<String, TheColumn> columnsMap = new HashMap<>();
+    private JsonReportOverrides reportOverrides;
 
     TheReportModel() {
     }
@@ -45,7 +48,7 @@ public class TheReportModel {
         if (existedColumn != null) return existedColumn;
 
         // create new column instance
-        TheColumn theColumn = new TheColumn(columnId);
+        TheColumn theColumn = new TheColumn(columnId, columnId.isRenderId());
         listener.process(theColumn);
 
         columnsMap.put(columnId.getId(), theColumn);
@@ -60,5 +63,13 @@ public class TheReportModel {
     public TheColumn findColumn(TheColumnId columnId) {
         if (columnId == null) return null;
         return columnsMap.get(columnId.getId());
+    }
+
+    public JsonReportOverrides getReportOverrides() {
+        return reportOverrides;
+    }
+
+    public void setReportOverrides(JsonReportOverrides reportOverrides) {
+        this.reportOverrides = reportOverrides;
     }
 }

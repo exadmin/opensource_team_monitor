@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.repos.quality;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
@@ -12,7 +12,7 @@ import com.github.exadmin.ostm.utils.MiscUtils;
 import java.nio.file.Path;
 import java.util.List;
 
-public class NumberOfOpenedPullRequests extends AbstractCollector {
+public class NumberOfOpenedPullRequests extends AbstractManyRepositoriesCollector {
     private static final int SLEEP_BEFORE_NEXT_TRY_MILLIS = 5000;
     private static final int WARN_IF_PRS_MORE_THAN = 5;
     private static final int ERR_IF_PRS_MORE_THAN = 8;

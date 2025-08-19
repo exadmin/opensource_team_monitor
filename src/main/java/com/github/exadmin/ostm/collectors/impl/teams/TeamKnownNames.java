@@ -1,13 +1,13 @@
 package com.github.exadmin.ostm.collectors.impl.teams;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
 import java.util.List;
 
-public class TeamKnownNames extends AbstractCollector {
+public class TeamKnownNames extends AbstractManyRepositoriesCollector {
 
     @Override
     public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {

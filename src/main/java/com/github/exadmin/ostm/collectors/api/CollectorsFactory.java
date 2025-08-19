@@ -42,7 +42,9 @@ public class CollectorsFactory {
         collectors.add(new UniqueTeamsCollector());
         collectors.add(new TotalErrorsCounter());
         collectors.add(new LanguagePlatformVersionChecker());
-        collectors.add(new QuarkusSpringVersionsNew());
+        collectors.add(new QuarkusVersion());
+        collectors.add(new SpringBootVersion());
+        collectors.add(new SpringFrwkVersion());
     }
 
     private final TheReportModel theReportModel;

@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 
-public abstract class AbstractCollector {
+abstract class AbstractCollector {
     private Logger log;
 
     public abstract void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories);

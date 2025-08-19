@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.teams;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
-public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
+public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesCollector {
     private static final String GQL_QUERY_TEMPLATE = """
                 {
                   user(login: "USERXXX") {
@@ -87,7 +87,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractCollector {
                     totalCount = totalCount + count;
                 }
 
-                final TheColumn theColumn = theReportModel.findColumn(TheColumnId.findById("column:week_back_" + weekBackNumber));
+                final TheColumn theColumn = theReportModel.findColumn(TheColumnId.findById("WEEK_" + weekBackNumber));
                 if (theColumn == null) throw new IllegalStateException("Can't find column for week with number = " + weekBackNumber);
                 weekBackNumber++;
 

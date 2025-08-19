@@ -53,6 +53,7 @@ public class OnlyKnownUsers {
         ALIAS_TO_NAME.put("asatt", "Alexey Karasev");
         ALIAS_TO_NAME.put("denisanfimov", "Denis Anfimov");
         ALIAS_TO_NAME.put("Derananer", "Ilia Lisetckii");
+        ALIAS_TO_NAME.put("dmitry618", "Dmitry Myasnikov");
         // ALIAS_TO_NAME.put("xxx", "xxxx");
     }
 

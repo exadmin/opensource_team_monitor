@@ -15,16 +15,16 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
-public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
+public abstract class QuarkusSpringParentCollector extends AbstractOneRepositoryCollector {
     private static final TypeReference<Map<String, Object>> TYPE_REFERENCE = new TypeReference<>() {};
     private static final XmlMapper xmlMapper = new XmlMapper();
 
-    @Override
-    protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository) {
-        TheColumn colSpringFrwk = theReportModel.findColumn(TheColumnId.COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION);
-        TheColumn colSpringBoot = theReportModel.findColumn(TheColumnId.COL_REPO_QUALITY_SPRING_BOOT_VERSION);
-        TheColumn colQuarkus= theReportModel.findColumn(TheColumnId.COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION);
+    protected abstract String getMavenGroupId();
+    protected abstract List<String> getExtraProperties();
 
+    @Override
+    protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
+        // Algorithm
         // 1. select next repository
         // 2. list all pom.xml inside all folders
         // 3. load all <properties>...</> from each pom.xml
@@ -34,9 +34,7 @@ public class QuarkusSpringVersionsNew extends AbstractOneRepositoryCollector {
         List<String> allPomFiles = FileUtils.findAllFilesRecursively(repositoryPath.toString(), (fullFileName, shortFileName) -> shortFileName.equals("pom.xml"));
         Properties properties = collectAllProperties(allPomFiles);
 
-        processOneMavenGroup("org.springframework.boot", allPomFiles, properties, colSpringBoot, repository.getId(), null);
-        processOneMavenGroup("org.springframework", allPomFiles, properties, colSpringFrwk, repository.getId(), null);
-        processOneMavenGroup("io.quarkus", allPomFiles, properties, colQuarkus, repository.getId(), List.of("quarkus.platform.version", "quarkus.version"));
+        processOneMavenGroup(getMavenGroupId(), allPomFiles, properties, column, repository.getId(), getExtraProperties());
     }
 
     private void processOneMavenGroup(String groupId, List<String> allPomFiles, Properties properties, TheColumn theColumn, String rowId, List<String> extraProperties) {

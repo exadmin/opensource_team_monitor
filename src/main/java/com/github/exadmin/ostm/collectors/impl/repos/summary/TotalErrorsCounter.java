@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.repos.summary;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TotalErrorsCounter extends AbstractCollector {
+public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
     private static final List<TheColumnId> COLUMNS = new ArrayList<>();
     static {
         COLUMNS.add(TheColumnId.COL_REPO_LICENSE_FILE);

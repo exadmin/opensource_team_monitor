@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.repos.summary;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
@@ -8,7 +8,7 @@ import com.github.exadmin.ostm.uimodel.*;
 import java.nio.file.Path;
 import java.util.*;
 
-public class UniqueTeamsCollector extends AbstractCollector {
+public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
     private static final String UNDEFINED_STR = "<small>undefined</small>";
 
     private static final Map<String, String> RED_LEADS_MAP = new HashMap<>();

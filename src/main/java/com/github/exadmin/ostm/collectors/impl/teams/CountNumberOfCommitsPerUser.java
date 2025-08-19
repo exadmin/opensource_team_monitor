@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.teams;
 
-import com.github.exadmin.ostm.collectors.api.AbstractCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
@@ -10,7 +10,7 @@ import com.github.exadmin.ostm.uimodel.*;
 import java.nio.file.Path;
 import java.util.List;
 
-public class CountNumberOfCommitsPerUser extends AbstractCollector {
+public class CountNumberOfCommitsPerUser extends AbstractManyRepositoriesCollector {
     private static final String GQL_QUERY_TEMPLATE = """
                 {
                   user(login: "XXXXX") {

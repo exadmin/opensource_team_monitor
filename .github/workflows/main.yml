@@ -60,7 +60,7 @@ jobs:
           
           curl -o dictionary-latest-downloaded.encrypted https://raw.githubusercontent.com/exadmin/CyberFerretDictionary/main/dictionary-latest.encrypted
           
-          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache /tmp/WORKDIR/dictionary-latest-downloaded.encrypted ${{secrets.OSTM_PASSWORD}} ${{secrets.OSTM_SALT}}
+          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache /tmp/WORKDIR/dictionary-latest-downloaded.encrypted ${{secrets.OSTM_PASSWORD}} ${{secrets.OSTM_SALT}} ${CURRENT_DIR}/docs/data/grand-report-overrides.json
           cp ./data.json ${CURRENT_DIR}/docs/data/data.json
           
           cd ${CURRENT_DIR}

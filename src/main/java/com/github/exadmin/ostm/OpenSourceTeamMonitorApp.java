@@ -1,16 +1,22 @@
 package com.github.exadmin.ostm;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.StreamReadFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.exadmin.ostm.app.AppSettings;
 import com.github.exadmin.ostm.collectors.api.CollectorsFactory;
 import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.github.cache.NewCacheManager;
 import com.github.exadmin.ostm.persistence.ReportModelPersister;
+import com.github.exadmin.ostm.persistence.overrides.JsonReportOverrides;
 import com.github.exadmin.ostm.uimodel.GrandReportModel;
 import com.github.exadmin.ostm.uimodel.TheReportModel;
 import com.github.exadmin.ostm.utils.MiscUtils;
+import com.github.exadmin.sourcesscanner.exclude.ExcludeFileModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -24,10 +30,11 @@ public class OpenSourceTeamMonitorApp {
     private static final int ARG5 = 4;
     private static final int ARG6 = 5;
     private static final int ARG7 = 6;
+    private static final int ARG8 = 7;
 
     public static void main(String[] args) {
         // Step1: Initiate application
-        if (args.length != 7) {
+        if (args.length != 8) {
             log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
                     "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
                     "arg2 - parent directory where all necessary repositories are cloned into (into personal subfolders)\n" +
@@ -35,7 +42,8 @@ public class OpenSourceTeamMonitorApp {
                     "arg4 - cache directory (read-write) to store responses from github\n" +
                     "arg5 - encrypted properties file with signatures to detect\n" +
                     "arg6 - password to encrypt properties file\n" +
-                    "arg7 - salt to encrypt properties file");
+                    "arg7 - salt to encrypt properties file\n" +
+                    "arg8 - path to file with report overrides (json)");
             System.exit(-1);
         }
 
@@ -61,8 +69,20 @@ public class OpenSourceTeamMonitorApp {
 
         AttentionSignaturesManager.loadExpressionsFrom(badWordsFile, password, salt);
 
+        // load report overrides from external json file
+        JsonReportOverrides reportOverrides = null;
+        try {
+            File jsonFile = new File(args[ARG8]);
+            ObjectMapper mapper = new ObjectMapper(new JsonFactory());
+            mapper.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
+            reportOverrides = mapper.readValue(jsonFile, JsonReportOverrides.class);
+        } catch (Exception ex) {
+            log.error("Can't load report overrides configuration from {}", args[ARG8], ex);
+        }
+
         // Step2: Run collectors
         TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
+        reportModel.setReportOverrides(reportOverrides);
         CollectorsFactory colFactory = new CollectorsFactory(reportModel, reposParentPath);
         colFactory.runCollectors();
 
