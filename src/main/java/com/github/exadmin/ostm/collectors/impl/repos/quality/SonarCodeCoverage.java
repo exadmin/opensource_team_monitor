@@ -71,11 +71,12 @@ public class SonarCodeCoverage extends AbstractManyRepositoriesCollector {
                     String metricName = (String) mData.get("metric");
                     if ("coverage".equalsIgnoreCase(metricName)) {
                         String value = (String) mData.get("value");
+                        int sortByValue = MiscUtils.getSortByValueForFloatString(value);
                         String component = (String) mData.get("component");
 
                         String rowId = componentToRowIdMap.remove(component);
                         column.addValue(rowId,
-                                new TheCellValue(value + "%", value, SeverityLevel.INFO)
+                                new TheCellValue(value + "%", sortByValue, SeverityLevel.INFO)
                                         .withHttpReference("https://sonarcloud.io/project/overview?id=" + component));
                     }
                 }

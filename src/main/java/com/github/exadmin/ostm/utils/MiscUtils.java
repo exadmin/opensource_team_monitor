@@ -254,4 +254,12 @@ public class MiscUtils {
 
         return sum;
     }
+
+    public static Integer getSortByValueForFloatString(String floatStr) {
+        try {
+            return (int) (Float.parseFloat(floatStr) * 100);
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
+    }
 }
