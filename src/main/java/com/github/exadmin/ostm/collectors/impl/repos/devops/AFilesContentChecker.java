@@ -22,14 +22,8 @@ public abstract class AFilesContentChecker extends AbstractOneRepositoryCollecto
     protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
         if (column == null) throw new IllegalStateException("Column is not. Was it created in the GrandReportModel using allocateColumn() method?");
 
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : allRepos) {
-            String repoName = repo.getName();
-            Path repoDirectory = Paths.get(repositoryPath.toString(), repoName);
-
-            TheCellValue cellValue = checkOneRepository(repo, gitHubFacade, repoDirectory);
-            column.addValue(repo.getId(), cellValue);
-        }
+        TheCellValue cellValue = checkOneRepository(repository, gitHubFacade, repositoryPath);
+        column.addValue(repository.getId(), cellValue);
     }
 
     protected abstract TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory);

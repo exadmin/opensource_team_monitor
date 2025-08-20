@@ -18,33 +18,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectorsFactory {
-    private final static List<AbstractCollector> collectors = new ArrayList<>();
+    private final static List<AbstractCollector> COLLECTORS_ORDERED_EXECUTION = new ArrayList<>();
     static {
-        collectors.add(new TeamKnownNames());
-        collectors.add(new ListAllRepositories());
-        collectors.add(new CountNumberOfCommitsPerUser());
-        collectors.add(new NumberOfCommitsPerWeekPerUser());
-        collectors.add(new TopicAndTeamPerRepository());
-        collectors.add(new SonarCodeCoverage());
-        collectors.add(new NumberOfOpenedPullRequests());
-        collectors.add(new LicenseFilePresence());
-        collectors.add(new ReadmeFilePresence());
-        collectors.add(new CLAFilePresence());
-        collectors.add(new CodeOwnersChecker());
-        collectors.add(new AttentionSignaturesChecker());
-        collectors.add(new ConventionalCommitsActionChecker());
-        collectors.add(new SuperLinterChecker());
-        collectors.add(new LabelerActionChecker());
-        collectors.add(new LintTitleActionChecker());
-        collectors.add(new ProfanityChecker());
-        collectors.add(new BadLinksChecker());
-        collectors.add(new BuildOnCommit());
-        collectors.add(new UniqueTeamsCollector());
-        collectors.add(new TotalErrorsCounter());
-        collectors.add(new LanguagePlatformVersionChecker());
-        collectors.add(new QuarkusVersion());
-        collectors.add(new SpringBootVersion());
-        collectors.add(new SpringFrwkVersion());
+        COLLECTORS_ORDERED_EXECUTION.add(new TeamKnownNames());
+        COLLECTORS_ORDERED_EXECUTION.add(new ListAllRepositories());
+        COLLECTORS_ORDERED_EXECUTION.add(new CountNumberOfCommitsPerUser());
+        COLLECTORS_ORDERED_EXECUTION.add(new NumberOfCommitsPerWeekPerUser());
+        COLLECTORS_ORDERED_EXECUTION.add(new TopicAndTeamPerRepository());
+        COLLECTORS_ORDERED_EXECUTION.add(new SonarCodeCoverage());
+        COLLECTORS_ORDERED_EXECUTION.add(new NumberOfOpenedPullRequests());
+        COLLECTORS_ORDERED_EXECUTION.add(new LicenseFilePresence());
+        COLLECTORS_ORDERED_EXECUTION.add(new ReadmeFilePresence());
+        COLLECTORS_ORDERED_EXECUTION.add(new CLAFilePresence());
+        COLLECTORS_ORDERED_EXECUTION.add(new CodeOwnersChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new AttentionSignaturesChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new ConventionalCommitsActionChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new SuperLinterChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new LabelerActionChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new LintTitleActionChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new ProfanityChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new BadLinksChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new BuildOnCommit());
+        COLLECTORS_ORDERED_EXECUTION.add(new UniqueTeamsCollector());
+
+        COLLECTORS_ORDERED_EXECUTION.add(new LanguagePlatformVersionChecker());
+        COLLECTORS_ORDERED_EXECUTION.add(new QuarkusVersion());
+        COLLECTORS_ORDERED_EXECUTION.add(new SpringBootVersion());
+        COLLECTORS_ORDERED_EXECUTION.add(new SpringFrwkVersion());
+
+        COLLECTORS_ORDERED_EXECUTION.add(new TotalErrorsCounter()); // let it be the last
     }
 
     private final TheReportModel theReportModel;
@@ -58,7 +60,7 @@ public class CollectorsFactory {
     }
 
     public void runCollectors() {
-        for (AbstractCollector collector : collectors) {
+        for (AbstractCollector collector : COLLECTORS_ORDERED_EXECUTION) {
             collector.collectDataInto(theReportModel, gitHubFacade, parentPathForClonedRepositories);
         }
     }

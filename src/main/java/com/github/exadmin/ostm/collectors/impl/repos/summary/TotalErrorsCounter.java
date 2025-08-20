@@ -59,7 +59,7 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
 
                 for (TheColumn column : columns) {
                     TheCellValue value = column.getValue(rowIdWhichIsRepoId);
-                    if (value.getSeverityLevel().isErroneous()) errorsCount++;
+                    if (value != null && value.getSeverityLevel().isErroneous()) errorsCount++;
                 }
             }
 
