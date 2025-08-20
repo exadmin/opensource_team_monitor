@@ -20,10 +20,15 @@ import java.util.regex.Pattern;
 public abstract class AFilesContentChecker extends AbstractOneRepositoryCollector {
     @Override
     protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
-        if (column == null) throw new IllegalStateException("Column is not. Was it created in the GrandReportModel using allocateColumn() method?");
+        if (column == null) throw new IllegalStateException("Column is null. Was it created in the GrandReportModel using allocateColumn() method?");
 
-        TheCellValue cellValue = checkOneRepository(repository, gitHubFacade, repositoryPath);
-        column.addValue(repository.getId(), cellValue);
+        try {
+            TheCellValue cellValue = checkOneRepository(repository, gitHubFacade, repositoryPath);
+            column.addValue(repository.getId(), cellValue);
+        } catch (Exception ex) {
+            TheCellValue cellValue = new TheCellValue("Exception", -1, SeverityLevel.ERROR);
+            column.addValue(repository.getId(), cellValue);
+        }
     }
 
     protected abstract TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory);

@@ -16,7 +16,7 @@ public class ReadmeFilePresence extends AFilesContentChecker {
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        // there can be readme files in different capitality of letters
+        // there can be readme files in different letter case
         File dir = repoDirectory.toFile();
         File[] files = dir.listFiles();
         if (files != null) {
