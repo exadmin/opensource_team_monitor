@@ -6,7 +6,6 @@ import com.github.exadmin.ostm.uimodel.*;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ReadmeFilePresence extends AFilesContentChecker {
     @Override
