@@ -1,10 +1,44 @@
 {
-  "columns" : [ {
-    "column-id" : "C023",
-    "repositories" : [ {
-      "name" : ".github",
-      "visual-value" : "N/A",
-      "sort-by-value" : "0"
-    } ]
-  } ]
+  "columns": [
+    {
+      "column-id": "C022",
+      "repositories": [
+        {
+          "name": "chart-releaser-action",
+          "visual-value": "Apache 2.0 (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "release-drafter",
+          "visual-value": "ISC License (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "keycloak",
+          "visual-value": "Apache 2.0 (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "cassandra",
+          "visual-value": "Apache 2.0 (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "postgres",
+          "visual-value": "PostgreSQL License (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "cassandra-exporter",
+          "visual-value": "Apache 2.0 (forked)",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "pg_hint_plan",
+          "visual-value": "NTT License (forked)",
+          "sort-by-value": "5"
+        }
+      ]
+    }
+  ]
 }
