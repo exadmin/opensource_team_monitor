@@ -26,7 +26,7 @@ public class LanguagePlatformVersionChecker extends AFilesContentChecker {
     private static final String GO_SUFFIX = File.separator + "go.mod";
     private static final XmlMapper xmlMapper = new XmlMapper();
     private static final TypeReference<Map<String, Object>> TYPE_REFERENCE = new TypeReference<>() {};
-    private static final Pattern GO_LANG = Pattern.compile("^\\s*go\\s+(\\d+\\.\\d+)$", Pattern.MULTILINE);
+    private static final Pattern GO_LANG = Pattern.compile("^\\s*go\\s+(\\d+\\.\\d+(\\.\\d+)?)$", Pattern.MULTILINE);
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
