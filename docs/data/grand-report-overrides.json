@@ -39,6 +39,26 @@
           "sort-by-value": "5"
         }
       ]
+    },
+    {
+      "column-id": "C043",
+      "repositories": [
+        {
+          "name": "qubership-integration-platform",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-ui",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-vscode-extension",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        }
+      ]
     }
   ]
 }
