@@ -59,6 +59,26 @@
           "sort-by-value": "5"
         }
       ]
+    },
+    {
+      "column-id": "C020",
+      "repositories": [
+        {
+          "name": "qubership-integration-checkstyle",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-platform",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-schemas",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        }
+      ]
     }
   ]
 }
