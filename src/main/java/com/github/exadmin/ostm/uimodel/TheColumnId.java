@@ -21,10 +21,10 @@ public enum TheColumnId {
     COL_WEEK_BACK_11_ID("WEEK_11"),
     COL_WEEK_BACK_12_ID("WEEK_12"),
 
-    COL_REPO_NUMBER("C016"),
-    COL_REPO_NAME("C017"),
-    COL_REPO_TOPICS("C018"),
-    COL_REPO_TYPE("C019"),
+    COL_REPO_NUMBER("C016", false),
+    COL_REPO_NAME("C017", false),
+    COL_REPO_TOPICS("C018", false),
+    COL_REPO_TYPE("C019", false),
     COL_REPO_SONAR_CODE_COVERAGE_METRIC("C020", true),
     COL_REPO_OPENED_PULL_REQUESTS_COUNT("C021", true),
     COL_REPO_LICENSE_FILE("C022", true),
@@ -53,11 +53,11 @@ public enum TheColumnId {
 
 
     private final String id;
-    private final boolean renderId;
+    private final boolean renderIdToAllowOverrideValue;
 
-    TheColumnId(String id, boolean renderId) {
+    TheColumnId(String id, boolean renderIdToAllowOverrideValue) {
         this.id = id;
-        this.renderId = renderId;
+        this.renderIdToAllowOverrideValue = renderIdToAllowOverrideValue;
         putIntoCache(this);
     }
 
@@ -69,8 +69,8 @@ public enum TheColumnId {
         return id;
     }
 
-    public boolean isRenderId() {
-        return renderId;
+    public boolean isRenderIdToAllowOverrideValue() {
+        return renderIdToAllowOverrideValue;
     }
 
     private static Map<String, TheColumnId> cache;

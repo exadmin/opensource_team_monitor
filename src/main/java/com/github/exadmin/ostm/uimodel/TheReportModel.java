@@ -48,7 +48,7 @@ public class TheReportModel {
         if (existedColumn != null) return existedColumn;
 
         // create new column instance
-        TheColumn theColumn = new TheColumn(columnId, columnId.isRenderId());
+        TheColumn theColumn = new TheColumn(columnId, columnId.isRenderIdToAllowOverrideValue());
         listener.process(theColumn);
 
         columnsMap.put(columnId.getId(), theColumn);

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TopicAndTeamPerRepository extends AbstractManyRepositoriesCollector {
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn colTopics = theReportModel.findColumn(TheColumnId.COL_REPO_TOPICS);
 
         List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
@@ -20,7 +20,7 @@ public class TopicAndTeamPerRepository extends AbstractManyRepositoriesCollector
             String rowId = repository.getId();
             Integer sum = MiscUtils.getCharSum(repository.getTopics().toString());
             TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()), sum, SeverityLevel.INFO);
-            colTopics.addValue(rowId, cellValue);
+            colTopics.setValue(rowId, cellValue);
         }
     }
 

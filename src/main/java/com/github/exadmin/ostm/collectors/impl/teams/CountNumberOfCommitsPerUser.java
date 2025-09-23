@@ -25,7 +25,7 @@ public class CountNumberOfCommitsPerUser extends AbstractManyRepositoriesCollect
                 }""";
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         List<String> uniqueLogins = gitHubFacade.getLoginsOfTheTeam();
 
         final TheColumn theColumn = theReportModel.findColumn(TheColumnId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
@@ -48,7 +48,7 @@ public class CountNumberOfCommitsPerUser extends AbstractManyRepositoriesCollect
             TheCellValue cellValue = new TheCellValue(count, count, SeverityLevel.INFO);
             String rowId = "row:" + login;
 
-            theColumn.addValue(rowId, cellValue);
+            theColumn.setValue(rowId, cellValue);
         }
     }
 }

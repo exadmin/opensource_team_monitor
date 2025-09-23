@@ -15,22 +15,22 @@ import java.util.List;
 
 public abstract class AbstractOneRepositoryCollector extends AbstractCollector {
     @Override
-    public final void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public final void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         final TheColumn column = getColumnToAddValueInto(theReportModel);
 
         List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepositories) {
-            // here we need decide first if current check and repository exists in the grand-report-overrides settings
-
-            JsonReportOverrides overrides = theReportModel.getReportOverrides();
-            if (overrides != null) {
-                JsonOverridenValue value = overrides.findOverridenValue(column.getId(), repo.getName());
-                if (value != null) {
-                    TheCellValue overridenValue = new TheCellValue(value.getVisualValue(), value.getSortByValue(), SeverityLevel.SKIP);
-                    column.addValue(repo.getId(), overridenValue);
-                    continue;
-                }
-            }
+//            // here we need decide first if current check and repository exists in the grand-report-overrides settings
+//
+//            JsonReportOverrides overrides = theReportModel.getReportOverrides();
+//            if (overrides != null) {
+//                JsonOverridenValue value = overrides.findOverridenValue(column.getId(), repo.getName());
+//                if (value != null) {
+//                    TheCellValue overridenValue = new TheCellValue(value.getVisualValue(), value.getSortByValue(), SeverityLevel.SKIP);
+//                    column.setValue(repo.getId(), overridenValue);
+//                    continue;
+//                }
+//            }
 
             // continue check
             Path repoPath = Paths.get(parentPathForClonedRepositories.toString(), repo.getName());

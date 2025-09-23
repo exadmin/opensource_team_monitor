@@ -24,10 +24,10 @@ public abstract class AFilesContentChecker extends AbstractOneRepositoryCollecto
 
         try {
             TheCellValue cellValue = checkOneRepository(repository, gitHubFacade, repositoryPath);
-            column.addValue(repository.getId(), cellValue);
+            column.setValue(repository.getId(), cellValue);
         } catch (Exception ex) {
             TheCellValue cellValue = new TheCellValue("Exception", -1, SeverityLevel.ERROR);
-            column.addValue(repository.getId(), cellValue);
+            column.setValue(repository.getId(), cellValue);
         }
     }
 

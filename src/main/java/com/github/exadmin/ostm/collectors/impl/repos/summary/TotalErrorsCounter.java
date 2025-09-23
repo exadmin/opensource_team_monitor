@@ -34,7 +34,7 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
 
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         final TheColumn colTotalErrors = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_ERRORS);
         final TheColumn colTotalRepos = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_REPOSITORIES);
         final TheColumn colErrorsPerRepo = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY);
@@ -66,11 +66,11 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
             int numOfReposPerTeam = allRelatedRepositories.size();
             int numOfErrorsPerRepo = errorsCount / numOfReposPerTeam;
 
-            colTotalErrors.addValue(rowIdWhichIsTeam, new TheCellValue(errorsCount, errorsCount, SeverityLevel.INFO));
-            colTotalRepos.addValue(rowIdWhichIsTeam, new TheCellValue(numOfReposPerTeam, numOfReposPerTeam, SeverityLevel.INFO));
+            colTotalErrors.setValue(rowIdWhichIsTeam, new TheCellValue(errorsCount, errorsCount, SeverityLevel.INFO));
+            colTotalRepos.setValue(rowIdWhichIsTeam, new TheCellValue(numOfReposPerTeam, numOfReposPerTeam, SeverityLevel.INFO));
 
             TheCellValue cvNumOfErrorsPerRepo = new TheCellValue(numOfErrorsPerRepo, numOfErrorsPerRepo, SeverityLevel.INFO);
-            colErrorsPerRepo.addValue(rowIdWhichIsTeam, cvNumOfErrorsPerRepo);
+            colErrorsPerRepo.setValue(rowIdWhichIsTeam, cvNumOfErrorsPerRepo);
 
             // if new minimalistic value is met
             if (numOfErrorsPerRepo < minErrorsPerRepoValue) {

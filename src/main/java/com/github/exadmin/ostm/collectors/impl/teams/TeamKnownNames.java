@@ -10,7 +10,7 @@ import java.util.List;
 public class TeamKnownNames extends AbstractManyRepositoriesCollector {
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         // List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");
         List<String> uniqueUsers = gitHubFacade.getLoginsOfTheTeam();
 
@@ -22,7 +22,7 @@ public class TeamKnownNames extends AbstractManyRepositoriesCollector {
             String rowId = "row:" + login;
 
             TheCellValue cvLogin = new TheCellValue(login, login, SeverityLevel.INFO);
-            colLogin.addValue(rowId, cvLogin);
+            colLogin.setValue(rowId, cvLogin);
 
             SeverityLevel severity = SeverityLevel.INFO;
             String realName = gitHubFacade.getRealNameByLogin(login);
@@ -31,7 +31,7 @@ public class TeamKnownNames extends AbstractManyRepositoriesCollector {
                 severity = SeverityLevel.WARN;
             }
             TheCellValue cvRealName = new TheCellValue(realName, realName, severity);
-            colRealName.addValue(rowId, cvRealName);
+            colRealName.setValue(rowId, cvRealName);
         }
     }
 }

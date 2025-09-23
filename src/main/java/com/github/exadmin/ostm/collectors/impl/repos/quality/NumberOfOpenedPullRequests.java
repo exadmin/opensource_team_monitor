@@ -18,14 +18,14 @@ public class NumberOfOpenedPullRequests extends AbstractManyRepositoriesCollecto
     private static final int ERR_IF_PRS_MORE_THAN = 8;
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
 
         List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
         for (GitHubRepository repo : allRepos) {
 
             TheCellValue cellValue = getNumberOfOpenedPRs(repo);
-            column.addValue(repo.getId(), cellValue);
+            column.setValue(repo.getId(), cellValue);
         }
     }
 

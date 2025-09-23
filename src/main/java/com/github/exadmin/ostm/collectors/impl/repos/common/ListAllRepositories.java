@@ -14,7 +14,7 @@ import java.util.Map;
 public class ListAllRepositories extends AbstractManyRepositoriesCollector {
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         final TheColumn colRepoNumber = theReportModel.findColumn(TheColumnId.COL_REPO_NUMBER);
         final TheColumn colRepoName = theReportModel.findColumn(TheColumnId.COL_REPO_NAME);
         final TheColumn colRepoType = theReportModel.findColumn(TheColumnId.COL_REPO_TYPE);
@@ -56,9 +56,9 @@ public class ListAllRepositories extends AbstractManyRepositoriesCollector {
                 sortByValue = 2;
             }
 
-            colRepoNumber.addValue(me.getKey(), new TheCellValue(number, number, SeverityLevel.INFO));
-            colRepoName.addValue(me.getKey(), new TheCellValue(me.getValue(), me.getValue(), SeverityLevel.INFO).withHttpReference(refToRepo));
-            colRepoType.addValue(me.getKey(), new TheCellValue(typeText, sortByValue, repoType ));
+            colRepoNumber.setValue(me.getKey(), new TheCellValue(number, number, SeverityLevel.INFO));
+            colRepoName.setValue(me.getKey(), new TheCellValue(me.getValue(), me.getValue(), SeverityLevel.INFO).withHttpReference(refToRepo));
+            colRepoType.setValue(me.getKey(), new TheCellValue(typeText, sortByValue, repoType ));
 
             number++;
         }

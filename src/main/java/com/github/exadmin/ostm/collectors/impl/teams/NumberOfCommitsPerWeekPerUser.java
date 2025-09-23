@@ -39,9 +39,9 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesColle
                 """;
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
-        LocalDate fromDate  = todayDate.minusMonths(3).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate fromDate  = todayDate.minusWeeks(12).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         String fromStr = MiscUtils.dateToStr(fromDate);
         String toStr  = MiscUtils.dateToStr(todayDate);
@@ -121,7 +121,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesColle
                 cellValue.setToolTipText(sbTooltip.toString());
                 String rowId = "row:" + login;
 
-                theColumn.addValue(rowId, cellValue);
+                theColumn.setValue(rowId, cellValue);
             }
 
         }
@@ -131,7 +131,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesColle
                 TheCellValue cellValue = new TheCellValue("No data", "0", SeverityLevel.WARN);
                 String rowId = "row:" + login;
 
-                theColumn.addValue(rowId, cellValue);
+                theColumn.setValue(rowId, cellValue);
             }
         }
     }

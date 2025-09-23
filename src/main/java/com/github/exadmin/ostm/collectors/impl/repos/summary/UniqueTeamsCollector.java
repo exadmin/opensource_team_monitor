@@ -38,7 +38,7 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
     }
 
     @Override
-    public void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
         TheColumn colTeamName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_NAME);
         TheColumn colRedLeadName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_RED_LEAD_NAME);
         TheColumn colBlueLeadName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_BLUE_LEAD_NAME);
@@ -54,13 +54,13 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         }
 
         for (String topic : qsTopics) {
-            colTeamName.addValue(topic, new TheCellValue(topic, topic, SeverityLevel.INFO));
+            colTeamName.setValue(topic, new TheCellValue(topic, topic, SeverityLevel.INFO));
 
             String redLeadName = RED_LEADS_MAP.getOrDefault(topic, UNDEFINED_STR);
-            colRedLeadName.addValue(topic, new TheCellValue(redLeadName, 0, SeverityLevel.INFO));
+            colRedLeadName.setValue(topic, new TheCellValue(redLeadName, 0, SeverityLevel.INFO));
 
             String blueLeadName = BLUE_LEADS_MAP.getOrDefault(topic, UNDEFINED_STR);
-            colBlueLeadName.addValue(topic, new TheCellValue(blueLeadName, 0, SeverityLevel.INFO));
+            colBlueLeadName.setValue(topic, new TheCellValue(blueLeadName, 0, SeverityLevel.INFO));
         }
     }
 }

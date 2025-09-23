@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/* Note: threads-unsafe implementation */
 public class TheColumn {
     public static final String TD_CENTER_MIDDLE = "td-center-middle";
     public static final String TD_LEFT_MIDDLE = "td-left-middle";
@@ -12,6 +13,7 @@ public class TheColumn {
     private final String id;
     private String title;
     private final Map<String, TheCellValue> dataMap;
+    private final Map<String, TheCellValue> dataMapOverrides;
     private String cssClassName;
     private String helpUrl;
     private boolean renderId;
@@ -19,6 +21,7 @@ public class TheColumn {
     TheColumn(TheColumnId id, boolean renderId) {
         this.id = id.getId();
         this.dataMap = new LinkedHashMap<>();
+        this.dataMapOverrides = new LinkedHashMap<>();
         this.cssClassName = TD_CENTER_MIDDLE;
         this.renderId = renderId;
     }
@@ -40,7 +43,13 @@ public class TheColumn {
         return id;
     }
 
-    public void addValue(String rowId, TheCellValue cellValue) {
+    public void setValue(String rowId, TheCellValue cellValue) {
+        if (!dataMapOverrides.containsKey(rowId))
+            dataMap.put(rowId, cellValue);
+    }
+
+    public void setOverridenValue(String rowId, TheCellValue cellValue) {
+        dataMapOverrides.put(rowId, cellValue);
         dataMap.put(rowId, cellValue);
     }
 

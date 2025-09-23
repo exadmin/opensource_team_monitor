@@ -43,7 +43,7 @@ public abstract class QuarkusSpringParentCollector extends AbstractOneRepository
     private void processOneMavenGroup(String groupId, List<String> allPomFiles, Properties properties, TheColumn theColumn, String rowId, List<String> extraProperties) {
         Set<String> versions = findVersionsFor(groupId, allPomFiles, properties, extraProperties);
         String text = String.join("<br>", versions);
-        theColumn.addValue(rowId, new TheCellValue(text, versions.size(), SeverityLevel.INFO));
+        theColumn.setValue(rowId, new TheCellValue(text, versions.size(), SeverityLevel.INFO));
     }
 
     private Properties collectAllProperties(List<String> pomFiles) {
