@@ -80,11 +80,11 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.exadmin</groupId>
             <artifactId>sig-loader</artifactId>
             <version>1.0.0</version>
-        </dependency>
+        </dependency>-->
 
 
     </dependencies>
