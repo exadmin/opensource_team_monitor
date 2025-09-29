@@ -72,6 +72,8 @@ public class OnlyKnownUsers {
         ALIAS_TO_NAME.put("asatt", "Alexey Karasev");
         ALIAS_TO_NAME.put("denisanfimov", "Denis Anfimov");
         ALIAS_TO_NAME.put("Derananer", "Ilia Lisetckii");
+        ALIAS_TO_NAME.put("k1shk1n", "Vladislav Kishkin");
+        ALIAS_TO_NAME.put("andrewluckyguy", "Andrey Lukiyanenko");
     }
 
     static Map<String, String> getKnowUsersOnly() {
