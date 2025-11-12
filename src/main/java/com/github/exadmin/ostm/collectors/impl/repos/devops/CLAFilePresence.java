@@ -34,7 +34,7 @@ public class CLAFilePresence extends AFilesContentChecker {
         }
 
         try {
-            String content = FileUtils.readFile(claFilePath.toString());
+            String content = FileUtils.readFile(claFilePath);
 
             // check if cla.yaml is realized via reference "uses: ..."
             {

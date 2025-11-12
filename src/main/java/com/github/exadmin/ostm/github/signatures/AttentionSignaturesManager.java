@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -24,7 +25,7 @@ public class AttentionSignaturesManager {
     public static void loadExpressionsFrom(String filePath, String password, String salt) {
         // decrypt file first
         try {
-            String encryptedContent = FileUtils.readFile(filePath);
+            String encryptedContent = FileUtils.readFile(Paths.get(filePath));
             String decryptedContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
 
             loadDecryptedContent(decryptedContent);

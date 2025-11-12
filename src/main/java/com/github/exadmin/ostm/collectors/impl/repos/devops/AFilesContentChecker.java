@@ -47,7 +47,7 @@ public abstract class AFilesContentChecker extends AbstractOneRepositoryCollecto
         try {
             boolean matches = false;
             for (Pattern regExp : regExps) {
-                String fileBody = FileUtils.readFile(filePath.toString());
+                String fileBody = FileUtils.readFile(filePath);
                 Matcher matcher = regExp.matcher(fileBody);
                 if (matcher.find()) {
                     matches = true;

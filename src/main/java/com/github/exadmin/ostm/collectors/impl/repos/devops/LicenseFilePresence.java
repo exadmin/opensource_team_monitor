@@ -29,7 +29,7 @@ public class LicenseFilePresence extends AFilesContentChecker {
 
         // check file content
         try {
-            String fileContent = FileUtils.readFile(licenseFile.toString());
+            String fileContent = FileUtils.readFile(licenseFile.toPath());
             fileContent = MiscUtils.getLettersOnly(fileContent);
             String sha256 = MiscUtils.getSHA256AsBase64(fileContent);
 

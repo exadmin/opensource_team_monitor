@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.file.Paths;
+
 public class EncryptSignaturesDictionaryApp {
     private static final int ARG1_SOURCE_PROPERTIES_FILE = 0;
     private static final int ARG2_OUTPUT_ENCRYPTED_FILE  = 1;
@@ -46,7 +48,7 @@ public class EncryptSignaturesDictionaryApp {
 
         String srcContent = null;
         try {
-            srcContent = FileUtils.readFile(sourceFile);
+            srcContent = FileUtils.readFile(Paths.get(sourceFile));
 
             log.info("Testing source file for reg-exp compilation '{}'", sourceFile);
             AttentionSignaturesManager.loadDecryptedContent(srcContent);
@@ -70,7 +72,7 @@ public class EncryptSignaturesDictionaryApp {
 
         // testing result
         try {
-            String encryptedContent = FileUtils.readFile(outputFile);
+            String encryptedContent = FileUtils.readFile(Paths.get(outputFile));
             String actContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
             if (srcContent.equals(actContent)) {
                 log.info("Ecnypted string was successfully decrypted to the same content");

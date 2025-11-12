@@ -30,7 +30,7 @@ public class ConventionalCommitsActionChecker extends AFilesContentChecker {
         String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
 
         try {
-            String fileContent = FileUtils.readFile(filePath.toString());
+            String fileContent = FileUtils.readFile(filePath);
             Matcher matcher = REGEXP.matcher(fileContent);
             if (matcher.find()) {
                 return new TheCellValue("Ok", 3, SeverityLevel.OK).withHttpReference(httpRef);

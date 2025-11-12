@@ -104,7 +104,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
             final String fileContent;
             try {
-                fileContent = FileUtils.readFile(nextFileName);
+                fileContent = FileUtils.readFile(nextFileName, true);
             } catch (Exception ex) {
                 getLog().error("Error while reading file content of {}", nextFileName, ex);
                 return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);

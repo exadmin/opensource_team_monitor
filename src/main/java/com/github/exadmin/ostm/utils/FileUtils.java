@@ -14,11 +14,27 @@ import java.util.List;
 public class FileUtils {
     private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
-    public static String readFile(String filePath) throws IOException {
-        return readFile(Paths.get(filePath));
+    public static String readFile(Path filePath) throws IOException {
+        return readFile(filePath, false);
     }
 
-    public static String readFile(Path filePath) throws IOException {
+    public static String readFile(Path filePath, boolean readMetadataForImages) throws IOException {
+        // Check if this is an image file that should have metadata extracted
+        if (readMetadataForImages) {
+            String extension = getFileExtensionAsString(filePath);
+            if (ImgUtils.isSupportedImageFormat(extension)) {
+                // Extract and return metadata as searchable text
+                String metadata = ImgUtils.extractMetadataAsText(filePath);
+
+                // If metadata extraction succeeded, return it
+                // Otherwise fall back to reading file as text (empty metadata means extraction failed)
+                if (!metadata.isEmpty()) {
+                    return metadata;
+                }
+            }
+        }
+
+        // For non-image files or if metadata extraction failed, read as text
         byte[] bytes = Files.readAllBytes(filePath);
         return new String(bytes);
     }

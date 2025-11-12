@@ -38,7 +38,7 @@ public class CodeOwnersChecker extends AFilesContentChecker {
 
             // file is found - let's check its content
             try {
-                String content = FileUtils.readFile(codeOwnersFilePath.toString());
+                String content = FileUtils.readFile(codeOwnersFilePath);
                 return verifyCodeOwnersOwerWhiteList(content, loginsWhiteList);
             } catch (Exception ex) {
                 getLog().error("Error while reading CODEOWNERS file {}", codeOwnersFilePath, ex);

@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +72,7 @@ public class LanguagePlatformVersionChecker extends AFilesContentChecker {
 
             if (fileName.endsWith(GO_SUFFIX)) {
                 try {
-                    String content = FileUtils.readFile(fileName);
+                    String content = FileUtils.readFile(Paths.get(fileName));
                     Matcher matcher = GO_LANG.matcher(content);
                     if (matcher.find()) {
                         String goVer = matcher.group(1);
