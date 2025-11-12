@@ -7,6 +7,8 @@ import static com.github.exadmin.ostm.uimodel.TheSheetId.*;
 
 public class GrandReportModel {
 
+    private static final boolean RENDER_ADDITIONAL_COLUMNS = false;
+
     public static TheReportModel getGrandReportInstance() {
         TheReportModel theReportModel = new TheReportModel();
 
@@ -24,6 +26,11 @@ public class GrandReportModel {
         TheColumn colUserRealName = theReportModel.allocateColumn(COL_USER_REAL_NAME, newColumn -> {
             newColumn.setTitle("Real name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+        });
+
+        TheColumn colTeam = theReportModel.allocateColumn(COL_USER_TEAM, newColumn -> {
+            newColumn.setTitle("Team");
+            newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
         });
 
         // User contributions column
@@ -182,7 +189,9 @@ public class GrandReportModel {
         // ********************************
         sheetTeamSummary.registerColumn(colGitHubLogin, true);
         sheetTeamSummary.registerColumn(colUserRealName, false);
-        // sheetTeamSummary.registerColumn(colUserAllContribs, false);
+        sheetTeamSummary.registerColumn(colTeam, false);
+
+        if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(colUserAllContribs, false);
 
         // create 12 weeks back columns
         List<TheColumnId> weekBackColumns = List.of(
@@ -206,7 +215,7 @@ public class GrandReportModel {
 
             });
 
-            // sheetTeamSummary.registerColumn(column, false);
+            if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(column, false);
         }
 
 
