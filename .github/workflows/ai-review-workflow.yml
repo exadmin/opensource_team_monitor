@@ -15,6 +15,13 @@ on:
         required: true
         description: "Pull request number"
 
+      llm-model:
+        type: choice
+        default: "mistral"
+        options: [ mistral, deepseek-coder, deepseek-coder-v2 ]
+        required: true
+        description: "LLM Model to use"
+
 jobs:
   ai-review:
     name: Run AI Review
@@ -45,17 +52,17 @@ jobs:
 
       - name: 📦 Pull model
         run: |
-          echo "📥 Downloading model 'mistral'..."
+          echo "📥 Downloading model '${{ inputs.llm-model }}'..."
           curl -X POST http://localhost:11434/api/pull \
             -H "Content-Type: application/json" \
-            -d '{"model": "mistral"}'
+            -d '{"model": "${{ inputs.llm-model }}"}'
 
       - name: 🔥 Warm up model
         run: |
           echo "🔥 Warming up model..."
           curl -s -X POST http://localhost:11434/api/chat \
             -H "Content-Type: application/json" \
-            -d '{"model":"mistral","stream":false,"messages":[{"role":"user","content":"Hello!"}]}'
+            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"user","content":"Hello!"}]}'
           echo "✅ Warm-up complete."
 
       - name: 🚀 Run AI Review
