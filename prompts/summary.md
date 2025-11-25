@@ -1,3 +1,4 @@
-Write a short summary of the overall review in russian language.
-Mention what was done well and highlight the most important issues or improvements.
-Keep it clear and concise (2–4 sentences).
+Write a short summary of the overall review in english language.
+Provide feedback in two blocks. 
+First block start with caption "Good implementation" and describe what was done well.
+Second block start with caption "Questions/Concerns" and describe found concerns, bad-practices or questions you have.
