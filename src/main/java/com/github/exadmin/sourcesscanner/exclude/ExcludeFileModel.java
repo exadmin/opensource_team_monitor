@@ -42,11 +42,9 @@ public class ExcludeFileModel {
     }
 
     public boolean isPathFullyIgnored(String relFileOrDirNameHash) {
-        for (ExcludeSignatureItem next : signatures) {
-            if (next.getFileHash().equals(relFileOrDirNameHash) && next.getTextHash().equals(SKIP_FULL_FILE_HASH)) return true;
-        }
-
-        return false;
-    }
+    return signatures.stream()
+        .anyMatch(item -> item.getFileHash().equals(relFileOrDirNameHash) 
+            && item.getTextHash().equals(SKIP_FULL_FILE_HASH));
+}
 
 }
