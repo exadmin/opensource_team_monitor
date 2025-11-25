@@ -1,17 +1,18 @@
-# Используем локальную LLM через Ollama
 llm:
   provider: OLLAMA
-  meta:
-    model: mistral          # модель, которую будет использовать ревью
-    max_tokens: 2048        # ограничение на размер ответа
-    temperature: 0.2        # чем ниже, тем строже ответы
-  http_client:
-    api_url: http://localhost:11434  # локальный endpoint Ollama
-    timeout: 600                     # запас по времени для генерации
 
-# Подключаемся к GitHub для получения PR и публикации комментариев
+  meta:
+    model: mistral
+    max_tokens: 2048
+    temperature: 0.2
+
+  http_client:
+    timeout: 600
+    api_url: http://localhost:11434
+
 vcs:
   provider: GITHUB
+
   http_client:
-    api_url: https://api.github.com
     timeout: 120
+    api_url: https://api.github.com
