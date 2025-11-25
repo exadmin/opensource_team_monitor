@@ -10,15 +10,17 @@ llm:
     timeout: 600
     api_url: http://localhost:11434
 
-  prompt:
-    normalize_prompts: true
-  review:
-    mode: ADDED_AND_REMOVED_WITH_CONTEXT
-    inline_tag: "#ai-review:inline"
-    inline_reply_tag: "#ai-review:inline-reply"
-    summary_tag: "#ai-review:summary"
-    summary_reply_tag: "#ai-review:summary-reply"
-    context_lines: 50
+prompt:
+  normalize_prompts: true
+  summary_prompt_files: [ ./prompts/summary.md ]
+
+review:
+  mode: ADDED_AND_REMOVED_WITH_CONTEXT
+  inline_tag: "#ai-review:inline"
+  inline_reply_tag: "#ai-review:inline-reply"
+  summary_tag: "#ai-review:summary"
+  summary_reply_tag: "#ai-review:summary-reply"
+  context_lines: 50
 
 vcs:
   provider: GITHUB
