@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.collectors.impl.repos.common;
 
 import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public class TopicAndTeamPerRepository extends AbstractManyRepositoriesCollector {
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         TheColumn colTopics = theReportModel.findColumn(TheColumnId.COL_REPO_TOPICS);
 
-        List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repository : repoList) {
+        List<GitRepository> repoList = gitFacade.getAllRepositories("Netcracker");
+        for (GitRepository repository : repoList) {
             String rowId = repository.getId();
             Integer sum = MiscUtils.getCharSum(repository.getTopics().toString());
             TheCellValue cellValue = new TheCellValue(topicsListToStr(repository.getTopics()), sum, SeverityLevel.INFO);

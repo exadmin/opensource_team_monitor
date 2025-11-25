@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.exadmin</groupId>
-    <artifactId>opensource_team_monitor</artifactId>
+    <artifactId>opensource_team_monitor_gitlab</artifactId>
     <version>1.0.0</version>
 
     <properties>
@@ -90,6 +90,12 @@
             <groupId>com.drewnoakes</groupId>
             <artifactId>metadata-extractor</artifactId>
             <version>2.19.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-properties</artifactId>
+            <version>2.15.2</version>
         </dependency>
 
 

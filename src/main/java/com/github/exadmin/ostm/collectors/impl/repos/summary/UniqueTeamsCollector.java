@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.collectors.impl.repos.summary;
 
 import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
@@ -38,14 +38,14 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
     }
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         TheColumn colTeamName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_NAME);
         TheColumn colRedLeadName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_RED_LEAD_NAME);
         TheColumn colBlueLeadName = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_BLUE_LEAD_NAME);
 
         Set<String> qsTopics = new HashSet<>();
-        List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : repoList) {
+        List<GitRepository> repoList = gitFacade.getAllRepositories("Netcracker");
+        for (GitRepository repo : repoList) {
             List<String> topics = repo.getTopics();
             for (String topic : topics) {
                 topic = topic.toLowerCase();

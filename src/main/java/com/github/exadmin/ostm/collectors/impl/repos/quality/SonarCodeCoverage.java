@@ -9,8 +9,8 @@ import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
@@ -31,28 +31,28 @@ public class SonarCodeCoverage extends AbstractManyRepositoriesCollector {
     private static final TypeReference<Map<String, Object>> type = new TypeReference<>() {};
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_SONAR_CODE_COVERAGE_METRIC);
 
         // Step1: collect names of all repositories to ask statistics in the Sonar-Cloud for
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
+        List<GitRepository> allRepos = gitFacade.getAllRepositories("Netcracker");
 
         // Step2: sort repositories by names - as it will better hits requests caching (at least on the local dev machine - where cache can be persisted)
         // not very useful for production - but anyway
-        allRepos.sort(Comparator.comparing(GitHubRepository::getName));
+        allRepos.sort(Comparator.comparing(GitRepository::getName));
 
         // Step2: do bulk requests with paging & delay between requests not to fall into throttling
         Map<String, String> componentToRowIdMap = new HashMap<>(); // this map contains Sonar Component Name to RepoId
 
         while (!allRepos.isEmpty()) {
-            List<GitHubRepository> nextChunk = MiscUtils.getChunk(allRepos, PER_PAGE);
+            List<GitRepository> nextChunk = MiscUtils.getChunk(allRepos, PER_PAGE);
             if (nextChunk.isEmpty()) break;
 
             allRepos.removeAll(nextChunk);
 
             // convert names to long string and build request url
             StringBuilder sb = new StringBuilder();
-            for (GitHubRepository repo : nextChunk) {
+            for (GitRepository repo : nextChunk) {
                 String sonarComponentName = "Netcracker_" + repo.getName();
                 if (!sb.isEmpty()) sb.append("%2C"); // comma delimiter
                 sb.append(sonarComponentName);

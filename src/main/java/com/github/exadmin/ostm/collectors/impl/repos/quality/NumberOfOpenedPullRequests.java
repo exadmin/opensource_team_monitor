@@ -4,8 +4,8 @@ import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
@@ -18,18 +18,18 @@ public class NumberOfOpenedPullRequests extends AbstractManyRepositoriesCollecto
     private static final int ERR_IF_PRS_MORE_THAN = 8;
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
 
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : allRepos) {
+        List<GitRepository> allRepos = gitFacade.getAllRepositories("Netcracker");
+        for (GitRepository repo : allRepos) {
 
             TheCellValue cellValue = getNumberOfOpenedPRs(repo);
             column.setValue(repo.getId(), cellValue);
         }
     }
 
-    public TheCellValue getNumberOfOpenedPRs(GitHubRepository repo) {
+    public TheCellValue getNumberOfOpenedPRs(GitRepository repo) {
         String url = repo.getPullsUrl();
         url = url.replaceAll("\\{/number}", "") + "?state=open";
 

@@ -3,8 +3,8 @@ package com.github.exadmin.ostm.collectors.impl.repos.security;
 import com.fasterxml.jackson.core.StreamReadFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.github.signatures.AttentionSignaturesManager;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
@@ -40,7 +40,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         if ("disable".equalsIgnoreCase(System.getenv("BWC"))) return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
 
         // load exclusions configuration if exists

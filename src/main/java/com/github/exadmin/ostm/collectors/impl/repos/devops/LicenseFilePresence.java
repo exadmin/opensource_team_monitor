@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
@@ -16,7 +16,7 @@ public class LicenseFilePresence extends AFilesContentChecker {
     private static final String LICENSE_SHA256_BASE64_EXP_VALUE_v1 = "+1gg8p+90Vw4VWMz8lUTqVW1hlAbwxMr0lr2HRhKu0k=";
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         Path licenseFilePath = Paths.get(repoDirectory.toString(), "LICENSE");
         File licenseFile = licenseFilePath.toFile();
 

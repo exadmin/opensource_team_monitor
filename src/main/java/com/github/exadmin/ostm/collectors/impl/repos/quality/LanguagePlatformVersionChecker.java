@@ -3,8 +3,8 @@ package com.github.exadmin.ostm.collectors.impl.repos.quality;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.AFilesContentChecker;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
@@ -35,7 +35,7 @@ public class LanguagePlatformVersionChecker extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         List<String> filesOfInterest = new ArrayList<>();
 
         if (!repoDirectory.toFile().exists()) {

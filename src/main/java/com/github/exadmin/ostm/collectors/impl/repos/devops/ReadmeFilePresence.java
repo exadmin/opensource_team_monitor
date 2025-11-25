@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.io.File;
@@ -14,7 +14,7 @@ public class ReadmeFilePresence extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         // there can be readme files in different letter case
         File dir = repoDirectory.toFile();
         File[] files = dir.listFiles();

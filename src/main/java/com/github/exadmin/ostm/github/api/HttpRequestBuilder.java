@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.github.api;
 
-import com.github.exadmin.ostm.app.AppSettings;
+import com.github.exadmin.ostm.app.AppProperties;
 
 public abstract class HttpRequestBuilder {
     HttpRequestBuilder() {
@@ -8,12 +8,12 @@ public abstract class HttpRequestBuilder {
 
     public static GitHubHttpRequestBuilderGQL gitHubGraphQLCall() {
         ensureTokenIsSet();
-        return new GitHubHttpRequestBuilderGQL(AppSettings.getGitHubAuthenticationToken());
+        return new GitHubHttpRequestBuilderGQL(AppProperties.getGitHubAuthenticationToken());
     }
 
     public static GitHubHttpRequestBuilderREST gitHubRESTCall() {
         ensureTokenIsSet();
-        return new GitHubHttpRequestBuilderREST(AppSettings.getGitHubAuthenticationToken());
+        return new GitHubHttpRequestBuilderREST(AppProperties.getGitHubAuthenticationToken());
     }
 
     public static GitHubHttpRequestBuilderREST genericRESTCall() {
@@ -21,7 +21,7 @@ public abstract class HttpRequestBuilder {
     }
 
     private static void ensureTokenIsSet() {
-        if (AppSettings.getGitHubAuthenticationToken() == null)
+        if (AppProperties.getGitHubAuthenticationToken() == null)
             throw new IllegalStateException("Set authentication token first!");
     }
 

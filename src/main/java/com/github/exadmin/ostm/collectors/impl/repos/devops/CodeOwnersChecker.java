@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 
@@ -26,8 +26,8 @@ public class CodeOwnersChecker extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        List<String> loginsWhiteList = gitHubFacade.getLoginsOfTheTeam();
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
+        List<String> loginsWhiteList = gitFacade.getLoginsOfTheTeam();
 
         List<String> paths = List.of(".github", "", "docs");
         for (String subPath : paths) {

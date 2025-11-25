@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.TheCellValue;
 import com.github.exadmin.ostm.uimodel.TheColumn;
 import com.github.exadmin.ostm.uimodel.TheColumnId;
@@ -20,7 +20,7 @@ public class LabelerActionChecker extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         Path filePath = findYamlFile(repoDirectory, ".github", "workflows", "automatic-pr-labeler.yaml");
         String httpRef = repo.getHttpReferenceToFileInGitHub("/.github/workflows/" + filePath.getFileName());
 

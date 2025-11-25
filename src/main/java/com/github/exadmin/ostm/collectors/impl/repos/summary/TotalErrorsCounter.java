@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.collectors.impl.repos.summary;
 
 import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
@@ -34,7 +34,7 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
 
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         final TheColumn colTotalErrors = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_ERRORS);
         final TheColumn colTotalRepos = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_TOTAL_REPOSITORIES);
         final TheColumn colErrorsPerRepo = theReportModel.findColumn(TheColumnId.COL_SUMMARY_TEAM_ERRS_PER_REPOSITORY);
@@ -48,13 +48,13 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
         int minErrorsPerRepoValue = Integer.MAX_VALUE;
         List<TheCellValue> listMinErrorsPerRepoCellValues = new ArrayList<>();
 
-        Map<String, List<GitHubRepository>> teamsMap = getRepositoriesMappedByTeams(gitHubFacade);
+        Map<String, List<GitRepository>> teamsMap = getRepositoriesMappedByTeams(gitFacade);
         for (String rowIdWhichIsTeam : teamsMap.keySet()) {
             // calculate total number of errors per all repositories and metrics
             int errorsCount = 0;
 
-            List<GitHubRepository> allRelatedRepositories = teamsMap.get(rowIdWhichIsTeam);
-            for (GitHubRepository repo : allRelatedRepositories) {
+            List<GitRepository> allRelatedRepositories = teamsMap.get(rowIdWhichIsTeam);
+            for (GitRepository repo : allRelatedRepositories) {
                 String rowIdWhichIsRepoId = repo.getId();
 
                 for (TheColumn column : columns) {
@@ -93,16 +93,16 @@ public class TotalErrorsCounter extends AbstractManyRepositoriesCollector {
      * Returns map of repositories which belongs to the teams
      * @return Map of team-names which linked to list of repositories
      */
-    private Map<String, List<GitHubRepository>> getRepositoriesMappedByTeams(GitHubFacade gitHubFacade) {
-        Map<String, List<GitHubRepository>> resultMap = new HashMap<>();
+    private Map<String, List<GitRepository>> getRepositoriesMappedByTeams(GitFacade gitFacade) {
+        Map<String, List<GitRepository>> resultMap = new HashMap<>();
 
-        List<GitHubRepository> repoList = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : repoList) {
+        List<GitRepository> repoList = gitFacade.getAllRepositories("Netcracker");
+        for (GitRepository repo : repoList) {
             List<String> topics = repo.getTopics();
             for (String topic : topics) {
                 topic = topic.toLowerCase();
                 if (topic.startsWith("qubership-")) {
-                    List<GitHubRepository> list = resultMap.computeIfAbsent(topic, k -> new ArrayList<>());
+                    List<GitRepository> list = resultMap.computeIfAbsent(topic, k -> new ArrayList<>());
                     list.add(repo);
                 }
             }

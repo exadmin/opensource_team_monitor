@@ -3,8 +3,8 @@ package com.github.exadmin.ostm.collectors.impl.repos.quality;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.github.exadmin.ostm.collectors.api.AbstractOneRepositoryCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.SeverityLevel;
 import com.github.exadmin.ostm.uimodel.TheCellValue;
 import com.github.exadmin.ostm.uimodel.TheColumn;
@@ -26,7 +26,7 @@ public abstract class QuarkusSpringParentCollector extends AbstractOneRepository
     protected abstract List<String> getExtraProperties();
 
     @Override
-    protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
+    protected void processRepository(TheReportModel theReportModel, GitFacade gitFacade, Path repositoryPath, GitRepository repository, TheColumn column) {
         // Algorithm
         // 1. select next repository
         // 2. list all pom.xml inside all folders

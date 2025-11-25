@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.teams;
 
 import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
+import com.github.exadmin.ostm.git.GitFacade;
 import com.github.exadmin.ostm.github.facade.OnlyKnownUsers;
 import com.github.exadmin.ostm.uimodel.*;
 
@@ -11,9 +11,9 @@ import java.util.List;
 public class TeamKnownNames extends AbstractManyRepositoriesCollector {
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         // List<String> uniqueUsers = gitHubFacade.getUniqueUsers("Netcracker");
-        List<String> uniqueUsers = gitHubFacade.getLoginsOfTheTeam();
+        List<String> uniqueUsers = gitFacade.getLoginsOfTheTeam();
 
         // create report
         final TheColumn colLogin = theReportModel.findColumn(TheColumnId.COL_USER_LOGIN);
@@ -27,7 +27,7 @@ public class TeamKnownNames extends AbstractManyRepositoriesCollector {
             colLogin.setValue(rowId, cvLogin);
 
             SeverityLevel severity = SeverityLevel.INFO;
-            String realName = gitHubFacade.getRealNameByLogin(login);
+            String realName = gitFacade.getRealNameByLogin(login);
             if (realName == null) {
                 realName = "---";
                 severity = SeverityLevel.WARN;

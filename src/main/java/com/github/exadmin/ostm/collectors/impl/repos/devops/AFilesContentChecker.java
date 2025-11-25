@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
 import com.github.exadmin.ostm.collectors.api.AbstractOneRepositoryCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.SeverityLevel;
 import com.github.exadmin.ostm.uimodel.TheCellValue;
 import com.github.exadmin.ostm.uimodel.TheColumn;
@@ -19,11 +19,11 @@ import java.util.regex.Pattern;
 
 public abstract class AFilesContentChecker extends AbstractOneRepositoryCollector {
     @Override
-    protected void processRepository(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path repositoryPath, GitHubRepository repository, TheColumn column) {
+    protected void processRepository(TheReportModel theReportModel, GitFacade gitFacade, Path repositoryPath, GitRepository repository, TheColumn column) {
         if (column == null) throw new IllegalStateException("Column is null. Was it created in the GrandReportModel using allocateColumn() method?");
 
         try {
-            TheCellValue cellValue = checkOneRepository(repository, gitHubFacade, repositoryPath);
+            TheCellValue cellValue = checkOneRepository(repository, gitFacade, repositoryPath);
             column.setValue(repository.getId(), cellValue);
         } catch (Exception ex) {
             TheCellValue cellValue = new TheCellValue("Exception", -1, SeverityLevel.ERROR);
@@ -31,7 +31,7 @@ public abstract class AFilesContentChecker extends AbstractOneRepositoryCollecto
         }
     }
 
-    protected abstract TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory);
+    protected abstract TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory);
 
     protected TheCellValue checkOneFileForContent(Path filePath, String httpReference, Pattern ... regExps) {
         File file = filePath.toFile();

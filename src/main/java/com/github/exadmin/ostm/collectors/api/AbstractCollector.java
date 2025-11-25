@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.api;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.persistence.overrides.JsonOverridenValue;
 import com.github.exadmin.ostm.persistence.overrides.JsonRepoColumn;
 import com.github.exadmin.ostm.persistence.overrides.JsonReportOverrides;
@@ -15,9 +15,9 @@ import java.util.List;
 abstract class AbstractCollector {
     private Logger log;
 
-    public final void collectDataInto(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public final void collectDataInto(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
 
-        List<GitHubRepository> allRepositories = gitHubFacade.getAllRepositories("Netcracker");
+        List<GitRepository> allRepositories = gitFacade.getAllRepositories("Netcracker");
 
         JsonReportOverrides overrides = theReportModel.getReportOverrides();
         if (overrides != null) {
@@ -33,10 +33,10 @@ abstract class AbstractCollector {
             }
         }
 
-        collectDataIntoImpl(theReportModel, gitHubFacade, parentPathForClonedRepositories);
+        collectDataIntoImpl(theReportModel, gitFacade, parentPathForClonedRepositories);
     }
 
-    public abstract void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories);
+    public abstract void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories);
 
     protected Logger getLog() {
         if (log == null) {
@@ -46,8 +46,8 @@ abstract class AbstractCollector {
         return log;
     }
 
-    private static String getRepoId(String repoShortName, List<GitHubRepository> allRepos) {
-        for (GitHubRepository repo : allRepos) {
+    private static String getRepoId(String repoShortName, List<GitRepository> allRepos) {
+        for (GitRepository repo : allRepos) {
             if (repo.getName().equals(repoShortName)) return repo.getId();
         }
 

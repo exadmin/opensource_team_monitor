@@ -5,7 +5,7 @@ import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
 import com.github.exadmin.ostm.github.facade.GitHubCommitsForPeriod;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
+import com.github.exadmin.ostm.git.GitFacade;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
@@ -39,14 +39,14 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesColle
                 """;
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         LocalDate todayDate = LocalDate.now().with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
         LocalDate fromDate  = todayDate.minusWeeks(12).with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
 
         String fromStr = MiscUtils.dateToStr(fromDate);
         String toStr  = MiscUtils.dateToStr(todayDate);
 
-        List<String> uniqueUsers = gitHubFacade.getLoginsOfTheTeam();
+        List<String> uniqueUsers = gitFacade.getLoginsOfTheTeam();
 
         // there can be no respose for some users - but we need to fulfill them with zeros or some other stubs
         // so let's remember such users and all the table columns to fulfill
@@ -98,7 +98,7 @@ public class NumberOfCommitsPerWeekPerUser extends AbstractManyRepositoriesColle
 
                 columns.add(theColumn);
 
-                GitHubCommitsForPeriod info = gitHubFacade.getNumberOfCommitsForPeriod(login, weekBeginingDate, weekBeginingDate.plusWeeks(1));
+                GitHubCommitsForPeriod info = gitFacade.getNumberOfCommitsForPeriod(login, weekBeginingDate, weekBeginingDate.plusWeeks(1));
                 StringBuilder sbTooltip = new StringBuilder();
                 sbTooltip.append(login).append("<br><br>");
 

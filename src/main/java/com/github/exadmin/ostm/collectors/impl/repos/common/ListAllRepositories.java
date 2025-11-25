@@ -1,8 +1,8 @@
 package com.github.exadmin.ostm.collectors.impl.repos.common;
 
 import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
@@ -14,18 +14,18 @@ import java.util.Map;
 public class ListAllRepositories extends AbstractManyRepositoriesCollector {
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
         final TheColumn colRepoNumber = theReportModel.findColumn(TheColumnId.COL_REPO_NUMBER);
         final TheColumn colRepoName = theReportModel.findColumn(TheColumnId.COL_REPO_NAME);
         final TheColumn colRepoType = theReportModel.findColumn(TheColumnId.COL_REPO_TYPE);
 
         // Collect known repositories into the map
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
+        List<GitRepository> allRepos = gitFacade.getAllRepositories("Netcracker");
         Map<String, String> repoNames           = new HashMap<>();
         Map<String, String> repoRefs            = new HashMap<>();
-        Map<String, GitHubRepository> reposMap  = new HashMap<>();
+        Map<String, GitRepository> reposMap  = new HashMap<>();
 
-        for (GitHubRepository nextRepo : allRepos) {
+        for (GitRepository nextRepo : allRepos) {
             reposMap.put(nextRepo.getId(), nextRepo);
             repoNames.put(nextRepo.getId(), nextRepo.getName().toLowerCase());
             repoRefs.put(nextRepo.getId(), nextRepo.getUrl());
@@ -38,7 +38,7 @@ public class ListAllRepositories extends AbstractManyRepositoriesCollector {
         for (Map.Entry<String, String> me : repoNames.entrySet()) {
             String refToRepo = repoRefs.get(me.getKey());
 
-            GitHubRepository repo = reposMap.get(me.getKey());
+            GitRepository repo = reposMap.get(me.getKey());
 
             SeverityLevel repoType = SeverityLevel.INFO_PUBLIC;
             String typeText = "public";

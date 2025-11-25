@@ -4,7 +4,7 @@ import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
+import com.github.exadmin.ostm.git.GitFacade;
 import com.github.exadmin.ostm.uimodel.*;
 
 import java.nio.file.Path;
@@ -25,8 +25,8 @@ public class CountNumberOfCommitsPerUser extends AbstractManyRepositoriesCollect
                 }""";
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        List<String> uniqueLogins = gitHubFacade.getLoginsOfTheTeam();
+    public void collectDataIntoImpl(TheReportModel theReportModel, GitFacade gitFacade, Path parentPathForClonedRepositories) {
+        List<String> uniqueLogins = gitFacade.getLoginsOfTheTeam();
 
         final TheColumn theColumn = theReportModel.findColumn(TheColumnId.COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID);
 

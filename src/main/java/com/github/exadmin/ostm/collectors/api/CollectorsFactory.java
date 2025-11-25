@@ -10,7 +10,7 @@ import com.github.exadmin.ostm.collectors.impl.repos.summary.UniqueTeamsCollecto
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
 import com.github.exadmin.ostm.collectors.impl.teams.NumberOfCommitsPerWeekPerUser;
 import com.github.exadmin.ostm.collectors.impl.teams.TeamKnownNames;
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
+import com.github.exadmin.ostm.git.GitFacade;
 import com.github.exadmin.ostm.uimodel.TheReportModel;
 
 import java.nio.file.Path;
@@ -50,18 +50,18 @@ public class CollectorsFactory {
     }
 
     private final TheReportModel theReportModel;
-    private final GitHubFacade gitHubFacade;
+    private final GitFacade gitFacade;
     private final Path parentPathForClonedRepositories;
 
     public CollectorsFactory(TheReportModel theReportModel, Path parentPathForClonedRepositories) {
         this.theReportModel = theReportModel;
-        this.gitHubFacade = new GitHubFacade();
+        this.gitFacade = new GitFacade();
         this.parentPathForClonedRepositories = parentPathForClonedRepositories;
     }
 
     public void runCollectors() {
         for (AbstractCollector collector : COLLECTORS_ORDERED_EXECUTION) {
-            collector.collectDataInto(theReportModel, gitHubFacade, parentPathForClonedRepositories);
+            collector.collectDataInto(theReportModel, gitFacade, parentPathForClonedRepositories);
         }
     }
 }

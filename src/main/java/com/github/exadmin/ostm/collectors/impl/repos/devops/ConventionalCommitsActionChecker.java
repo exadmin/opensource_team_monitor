@@ -1,7 +1,7 @@
 package com.github.exadmin.ostm.collectors.impl.repos.devops;
 
-import com.github.exadmin.ostm.github.facade.GitHubFacade;
-import com.github.exadmin.ostm.github.facade.GitHubRepository;
+import com.github.exadmin.ostm.git.GitFacade;
+import com.github.exadmin.ostm.git.GitRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.FileUtils;
 
@@ -19,7 +19,7 @@ public class ConventionalCommitsActionChecker extends AFilesContentChecker {
     }
 
     @Override
-    protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
+    protected TheCellValue checkOneRepository(GitRepository repo, GitFacade gitFacade, Path repoDirectory) {
         Path filePath = findYamlFile(repoDirectory, ".github", "workflows", "pr-conventional-commits.yaml");
         File file = filePath.toFile();
 
