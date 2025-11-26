@@ -20,6 +20,7 @@ review:
 
 logger:
   level: DEBUG
+  format: "{time:YYYY-MM-DD HH:mm:ss} | {level} | {extra[logger_name]} | {message}"
 
 vcs:
   provider: GITHUB
