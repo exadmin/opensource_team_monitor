@@ -2,7 +2,7 @@ llm:
   provider: OPENAI
 
   meta:
-    model: gpt-4o-mini
+    model: mistral
     max_tokens: 2048
     temperature: 0.2
 
