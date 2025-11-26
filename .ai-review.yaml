@@ -1,8 +1,8 @@
 llm:
-  provider: OLLAMA
+  provider: OPENAI
 
   meta:
-    model: mistral
+    model: gpt-4o-mini
     max_tokens: 2048
     temperature: 0.2
 
@@ -28,3 +28,4 @@ vcs:
   http_client:
     timeout: 120
     api_url: https://api.github.com
+    

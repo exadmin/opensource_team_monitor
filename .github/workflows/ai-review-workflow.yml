@@ -17,8 +17,8 @@ on:
 
       llm-model:
         type: choice
-        default: "mistral"
-        options: [ mistral, deepseek-coder, deepseek-coder-v2 ]
+        default: "gpt-4o-mini"
+        options: [ gpt-4o-mini, mistral, deepseek-coder, deepseek-coder-v2 ]
         required: true
         description: "LLM Model to use"
 
