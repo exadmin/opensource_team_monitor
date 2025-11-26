@@ -60,10 +60,16 @@ jobs:
       - name: 🔥 Warm up model
         run: |
           echo "🔥 Warming up model..."
-          curl -s -X POST http://localhost:11434/api/chat \
+          RESPONSE=$(curl -s -X POST http://localhost:11434/api/chat \
             -H "Content-Type: application/json" \
-            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"user","content":"Hello!"}]}'
-          echo "✅ Warm-up complete."
+            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"user","content":"Answer with a single word: Hello"}]}')
+          
+          if [ "$RESPONSE" = "Hello" ]; then
+             echo "✅ Warm-up complete. LLM responded correctly."
+          else
+          echo "❌ Warm-up failed. Expected 'Hello', but got: '$RESPONSE'"
+             exit 1
+          fi                      
 
       - name: 🚀 Run AI Review
         uses: Nikita-Filonov/ai-review@v0.43.0
