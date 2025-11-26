@@ -7,7 +7,7 @@ llm:
     temperature: 0.2
 
 prompt:
-  normalize_prompts: true
+  normalize_prompts: false
   summary_prompt_files: [ ./prompts/summary.md ]
 
 review:
