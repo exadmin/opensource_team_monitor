@@ -17,8 +17,8 @@ on:
 
       llm-model:
         type: choice
-        default: "gpt-4o-mini"
-        options: [ gpt-4o-mini, mistral, deepseek-coder, deepseek-coder-v2 ]
+        default: "mistral"
+        options: [ mistral, deepseek-coder, deepseek-coder-v2 ]
         required: true
         description: "LLM Model to use"
 
@@ -62,9 +62,9 @@ jobs:
           echo "🔥 Warming up model..."
           RESPONSE=$(curl -s -X POST http://localhost:11434/api/chat \
             -H "Content-Type: application/json" \
-            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"AI Assistant","content":"Answer to this message with a single word: ```Hello```"}]}')
+            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"AI Assistant","content":"Hello!"}]}')
           
-          if [ "$RESPONSE" = "Hello" ]; then
+          if [ "$RESPONSE" = *"Hello"* ]; then
              echo "✅ Warm-up complete. LLM responded correctly."
           else
           echo "❌ Warm-up failed. Expected 'Hello', but got: '$RESPONSE'"
