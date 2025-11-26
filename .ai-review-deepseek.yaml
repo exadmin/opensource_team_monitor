@@ -12,11 +12,11 @@ prompt:
 
 review:
   mode: ADDED_AND_REMOVED_WITH_CONTEXT
-  inline_tag: "#ai-review:inline"
-  inline_reply_tag: "#ai-review:inline-reply"
-  summary_tag: "#ai-review:summary"
-  summary_reply_tag: "#ai-review:summary-reply"
-  context_lines: 50
+  inline_tag: "#ai-review-ds:inline"
+  inline_reply_tag: "#ai-review-ds:inline-reply"
+  summary_tag: "#ai-review-ds:summary"
+  summary_reply_tag: "#ai-review-ds:summary-reply"
+  context_lines: 25
 
 vcs:
   provider: GITHUB
