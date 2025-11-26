@@ -1,7 +1,9 @@
 Write a short summary of the overall review in english language.
 The answer must be provided in the following format:
-**Good Things**
+Good Things
 ${Describe here what good and strength things were discovered in the changes}
 
-**Questions/Concerns**
+Questions/Concerns
 ${Describes found concerns, bad-practices or questions you have}
+
+Note: "Good Things" and "Questions/Concerns" must be surrounded with "**" to apply boldness in Markdown syntax.
