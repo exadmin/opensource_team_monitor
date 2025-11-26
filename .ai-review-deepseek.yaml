@@ -16,7 +16,7 @@ review:
   inline_reply_tag: "#deepseek-review:inline-reply"
   summary_tag: "#deepseek-review:summary"
   summary_reply_tag: "#deepseek-review:summary-reply"
-  context_lines: 25
+  context_lines: 100
 
 logger:
   level: DEBUG
