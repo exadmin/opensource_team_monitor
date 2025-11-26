@@ -62,7 +62,7 @@ jobs:
           echo "🔥 Warming up model..."
           RESPONSE=$(curl -s -X POST http://localhost:11434/api/chat \
             -H "Content-Type: application/json" \
-            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"user","content":"Answer with a single word: Hello"}]}')
+            -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"AI Assistant","content":"Answer to this message with a single word: ```Hello```"}]}')
           
           if [ "$RESPONSE" = "Hello" ]; then
              echo "✅ Warm-up complete. LLM responded correctly."
