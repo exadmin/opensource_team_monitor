@@ -12,6 +12,10 @@ on:
         type: string
         required: true
         description: "Pull Number"
+env:
+  AI_REVIEW_CONFIG_FILE_YAML: ".ai-review-deepseek.yaml"
+
+
 jobs:
   ai-review:
     runs-on: ubuntu-latest
