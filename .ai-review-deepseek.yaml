@@ -12,10 +12,10 @@ prompt:
 
 review:
   mode: ADDED_AND_REMOVED_WITH_CONTEXT
-  inline_tag: "#ai-review-ds:inline"
-  inline_reply_tag: "#ai-review-ds:inline-reply"
-  summary_tag: "#ai-review-ds:summary"
-  summary_reply_tag: "#ai-review-ds:summary-reply"
+  inline_tag: "#deepseek-review:inline"
+  inline_reply_tag: "#deepseek-review:inline-reply"
+  summary_tag: "#deepseek-review:summary"
+  summary_reply_tag: "#deepseek-review:summary-reply"
   context_lines: 25
 
 vcs:
