@@ -18,6 +18,9 @@ review:
   summary_reply_tag: "#deepseek-review:summary-reply"
   context_lines: 25
 
+logger:
+  DEBUG
+
 vcs:
   provider: GITHUB
 
