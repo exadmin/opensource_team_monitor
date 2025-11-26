@@ -64,7 +64,7 @@ jobs:
             -H "Content-Type: application/json" \
             -d '{"model":"${{ inputs.llm-model }}","stream":false,"messages":[{"role":"user","content":"Answer with a single word: Hello"}]}')
           
-          if [ "$RESPONSE" = *"Hello"* ]; then
+          if [[ "$RESPONSE" = *"Hello"* ]]; then
              echo "✅ Warm-up complete. LLM responded correctly."
           else
           echo "❌ Warm-up failed. Expected 'Hello', but got: '$RESPONSE'"
