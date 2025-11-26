@@ -1,4 +1,4 @@
-name: 🤖 AI Review
+name: 🤖 AI Review using GitHub
 
 on:
   workflow_dispatch:
