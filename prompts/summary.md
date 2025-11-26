@@ -5,5 +5,5 @@ The answer must be provided in the following format:
 **Well done**
 ${Put well done changes here}
 
-**Questions/Concerns**
+**Questions & Concerns**
 ${Put found concerns and issues here}
