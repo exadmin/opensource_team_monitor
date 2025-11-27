@@ -79,6 +79,31 @@
           "sort-by-value": "5"
         }
       ]
+    },
+    {
+      "column-id": "C033",
+      "repositories": [
+        {
+          "name": "cassandra",
+          "visual-value": "Not applicable for forks",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "kafka",
+          "visual-value": "Not applicable for forks",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "keycloak",
+          "visual-value": "Not applicable for forks",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "postgres",
+          "visual-value": "Not applicable for forks",
+          "sort-by-value": "5"
+        }
+      ]
     }
   ]
 }
