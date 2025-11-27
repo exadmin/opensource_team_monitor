@@ -26,8 +26,8 @@ jobs:
 
       - name: Download centralized configs of AI Review tool
         run: |
-          curl -O https://github.com/exadmin/ai-review-configs/blob/main/.ai-review-centralized.yml
-          curl -O https://github.com/exadmin/ai-review-configs/blob/main/.prompt-summary-centralized.md
+          curl -O https://raw.githubusercontent.com/exadmin/ai-review-configs/main/.ai-review-centralized.yml
+          curl -O https://raw.githubusercontent.com/exadmin/ai-review-configs/main/.prompt-summary-centralized.md
 
       - uses: Nikita-Filonov/ai-review@v0.43.0
         with:
