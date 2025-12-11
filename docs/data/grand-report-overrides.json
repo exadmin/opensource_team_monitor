@@ -77,6 +77,21 @@
           "name": "qubership-integration-schemas",
           "visual-value": "Non testable",
           "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-catalog-library",
+          "visual-value": "Legacy Repository",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-designtime-catalog",
+          "visual-value": "Legacy Repository",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-integration-variables-management",
+          "visual-value": "Legacy Repository",
+          "sort-by-value": "5"
         }
       ]
     },
