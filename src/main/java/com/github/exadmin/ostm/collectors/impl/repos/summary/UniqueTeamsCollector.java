@@ -21,7 +21,10 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         RED_LEADS_MAP.put("qubership-devops", "Pavel Anikin");
         RED_LEADS_MAP.put("qubership-apihub", "Alexander Agishev");
         RED_LEADS_MAP.put("qubership-landscape", "Ilya Smirnov");
-        RED_LEADS_MAP.put("qubership-infra", UNDEFINED_STR);
+        RED_LEADS_MAP.put("qubership-infra", "Pavel Iadrov");
+        RED_LEADS_MAP.put("qubership-infra-fork", "Pavel Iadrov");
+        RED_LEADS_MAP.put("qubership-generic", "Ilya Smirnov");
+        RED_LEADS_MAP.put("qubership-cm", "Evgeniy A. Popov");
     }
 
     private static final Map<String, String> BLUE_LEADS_MAP = new HashMap<>();
@@ -34,7 +37,10 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         BLUE_LEADS_MAP.put("qubership-devops", "Mikhail Gushchin");
         BLUE_LEADS_MAP.put("qubership-apihub", "Andrei Chekalin");
         BLUE_LEADS_MAP.put("qubership-landscape", UNDEFINED_STR);
-        BLUE_LEADS_MAP.put("qubership-infra", "Sergei I. Ivanov");
+        BLUE_LEADS_MAP.put("qubership-infra", "Dmitrii Rabenok");
+        BLUE_LEADS_MAP.put("qubership-infra-fork", "Dmitrii Rabenok");
+        BLUE_LEADS_MAP.put("qubership-generic", UNDEFINED_STR);
+        BLUE_LEADS_MAP.put("qubership-cm", "Aleksandr Val. Vasiliev");
     }
 
     @Override
