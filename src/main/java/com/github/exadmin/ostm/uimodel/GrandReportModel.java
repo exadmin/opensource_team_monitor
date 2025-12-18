@@ -61,6 +61,7 @@ public class GrandReportModel {
         TheColumn colTopics = theReportModel.allocateColumn(COL_REPO_TOPICS, newColumn -> {
             newColumn.setTitle("Topics");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
+            newColumn.setHelpUrl("https://github.com/Netcracker/.github/blob/main/config/topics.json");
         });
 
         TheColumn colSonarMetric = theReportModel.allocateColumn(COL_REPO_SONAR_CODE_COVERAGE_METRIC, newColumn -> {
