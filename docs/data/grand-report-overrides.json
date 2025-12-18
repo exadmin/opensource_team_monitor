@@ -57,6 +57,161 @@
           "name": "qubership-integration-vscode-extension",
           "visual-value": "Not a Java project",
           "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-api-linter-service",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-agent",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-agents-backend",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-diff",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-doc-viewer",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-processor",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-unifier",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-visitor",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-apispec-view",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-aux-tools",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-backend",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-build-task-consumer",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ci",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-class-view",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-commons-go",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-compatibility-suites",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-graphapi",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-http-spec",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-jest-chrome-in-docker-environment",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-json-crawl",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-nodejs-dev-image",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-npm-gitflow",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-postman-collections",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-rest-playground",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-sniffer-agent",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-test-service",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-traffic-analyzer",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ui",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ui-tests",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-vscode",
+          "visual-value": "Not a Java project",
+          "sort-by-value": "5"
         }
       ]
     },
@@ -92,6 +247,71 @@
           "name": "qubership-integration-variables-management",
           "visual-value": "Legacy Repository",
           "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-aux-tools",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ci",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-commons-go",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-compatibility-suites",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-jest-chrome-in-docker-environment",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-nodejs-dev-image",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-npm-gitflow",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-postman-collections",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-sniffer-agent",
+          "visual-value": "The service is on hold",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-test-service",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-traffic-analyzer",
+          "visual-value": "The service is on hold",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ui-tests",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
         }
       ]
     },
@@ -116,6 +336,166 @@
         {
           "name": "postgres",
           "visual-value": "Not applicable for forks",
+          "sort-by-value": "5"
+        }
+      ]
+    }
+    {
+      "column-id": "C030",
+      "repositories": [
+        {
+          "name": "qubership-api-linter-service",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-agent",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-agents-backend",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-diff",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-doc-viewer",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-processor",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-unifier",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-api-visitor",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-apispec-view",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-aux-tools",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-backend",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-build-task-consumer",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ci",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-class-view",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-commons-go",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-compatibility-suites",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-graphapi",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-http-spec",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-jest-chrome-in-docker-environment",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-json-crawl",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-nodejs-dev-image",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-npm-gitflow",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-postman-collections",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-rest-playground",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-sniffer-agent",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-test-service",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-traffic-analyzer",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ui",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-ui-tests",
+          "visual-value": "The workflow is obsolete",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-apihub-vscode",
+          "visual-value": "The workflow is obsolete",
           "sort-by-value": "5"
         }
       ]
