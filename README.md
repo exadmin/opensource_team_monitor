@@ -1,4 +1,4 @@
-# opensource_team_monitor
+# Opensource Team Monitor
 Allows building reports about open-source team effectiveness
 
 # Setup local-dev env:
