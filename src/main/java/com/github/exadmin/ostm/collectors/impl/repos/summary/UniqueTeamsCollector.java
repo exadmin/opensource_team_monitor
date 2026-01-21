@@ -14,10 +14,10 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
     private static final Map<String, String> RED_LEADS_MAP = new HashMap<>();
     static {
         RED_LEADS_MAP.put("qubership-nifi", "Dmitriy Myasnikov");
-        RED_LEADS_MAP.put("qubership-integration", "Ivan Sviridov");
+        RED_LEADS_MAP.put("qubership-integration", "Andrei Chumak");
         RED_LEADS_MAP.put("qubership-observability", "Ildar Minaev");
         RED_LEADS_MAP.put("qubership-tp", "Denis Arychkov");
-        RED_LEADS_MAP.put("qubership-core", "Ilya Smirnov");
+        RED_LEADS_MAP.put("qubership-core", "Sergei S. Aleksandrov");
         RED_LEADS_MAP.put("qubership-devops", "Pavel Anikin");
         RED_LEADS_MAP.put("qubership-apihub", "Alexander Agishev");
         RED_LEADS_MAP.put("qubership-landscape", "Ilya Smirnov");
@@ -35,12 +35,12 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         BLUE_LEADS_MAP.put("qubership-tp", "Irina Ismagilova & Elena Kurganova");
         BLUE_LEADS_MAP.put("qubership-core", "Sergey Lisovoy");
         BLUE_LEADS_MAP.put("qubership-devops", "Mikhail Gushchin");
-        BLUE_LEADS_MAP.put("qubership-apihub", "Andrei Chekalin");
+        BLUE_LEADS_MAP.put("qubership-apihub", "Alena Novikova");
         BLUE_LEADS_MAP.put("qubership-landscape", UNDEFINED_STR);
         BLUE_LEADS_MAP.put("qubership-infra", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-infra-fork", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-generic", UNDEFINED_STR);
-        BLUE_LEADS_MAP.put("qubership-cm", "Aleksandr Val. Vasiliev");
+        BLUE_LEADS_MAP.put("qubership-cm", "Mikhail Guschin");
     }
 
     @Override
