@@ -327,6 +327,11 @@
           "name": "qubership-envgene-instance",
           "visual-value": "Non testable",
           "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-envgene-template",
+          "visual-value": "Non testable",
+          "sort-by-value": "5"
         }
       ]
     },
