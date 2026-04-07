@@ -22,11 +22,11 @@ public class AttentionSignaturesManager {
 
     private static String dictionaryVersion = "undefined";
 
-    public static void loadExpressionsFrom(String filePath, String password, String salt) {
+    public static void loadExpressionsFrom(String filePath, String password) {
         // decrypt file first
         try {
             String encryptedContent = FileUtils.readFile(Paths.get(filePath));
-            String decryptedContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
+            String decryptedContent = PasswordBasedEncryption.decrypt(encryptedContent, password);
 
             loadDecryptedContent(decryptedContent);
         } catch (Exception ex) {

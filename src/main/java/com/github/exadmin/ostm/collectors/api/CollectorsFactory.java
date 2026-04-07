@@ -5,6 +5,7 @@ import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepos
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
 import com.github.exadmin.ostm.collectors.impl.repos.quality.*;
 import com.github.exadmin.ostm.collectors.impl.repos.security.AttentionSignaturesChecker;
+import com.github.exadmin.ostm.collectors.impl.repos.security.GrandReportExclusionsChecker;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.TotalErrorsCounter;
 import com.github.exadmin.ostm.collectors.impl.repos.summary.UniqueTeamsCollector;
 import com.github.exadmin.ostm.collectors.impl.teams.CountNumberOfCommitsPerUser;
@@ -45,6 +46,8 @@ public class CollectorsFactory {
         COLLECTORS_ORDERED_EXECUTION.add(new QuarkusVersion());
         COLLECTORS_ORDERED_EXECUTION.add(new SpringBootVersion());
         COLLECTORS_ORDERED_EXECUTION.add(new SpringFrwkVersion());
+
+        COLLECTORS_ORDERED_EXECUTION.add(new GrandReportExclusionsChecker());
 
         COLLECTORS_ORDERED_EXECUTION.add(new TotalErrorsCounter()); // let it be the last
     }

@@ -14,74 +14,63 @@ public class EncryptSignaturesDictionaryApp {
     private static final int ARG1_SOURCE_PROPERTIES_FILE = 0;
     private static final int ARG2_OUTPUT_ENCRYPTED_FILE  = 1;
     private static final int ARG3_PASSWORD_OR_FILE_WITH_PASSWORD = 2;
-    private static final int ARG4_SALT_OR_FILE_WITH_SALT = 3;
 
     private static final Logger log = LoggerFactory.getLogger(EncryptSignaturesDictionaryApp.class);
 
     public static void main(String[] args) {
-        String sourceFile = args[ARG1_SOURCE_PROPERTIES_FILE];
-        String outputFile = args[ARG2_OUTPUT_ENCRYPTED_FILE];
-        String password   = MiscUtils.getTokenFromArg(args[ARG3_PASSWORD_OR_FILE_WITH_PASSWORD]);
-        String salt       = MiscUtils.getTokenFromArg(args[ARG4_SALT_OR_FILE_WITH_SALT]);
-
-        if (StringUtils.isEmpty(sourceFile)) {
-            log.error("Source file path to read for encryption is not set. Terminating...");
+        if (!validateArgs(args)) {
             System.exit(-1);
         }
 
-        if (StringUtils.isEmpty(outputFile)) {
+        String sourceFile = args[ARG1_SOURCE_PROPERTIES_FILE];
+        String outputFile = args[ARG2_OUTPUT_ENCRYPTED_FILE];
+        String password   = MiscUtils.getTokenFromArg(args[ARG3_PASSWORD_OR_FILE_WITH_PASSWORD]);
+
+        try {
+            processFiles(sourceFile, outputFile, password);
+        } catch (Exception ex) {
+            log.error("An error occurred during processing. Terminating...", ex);
+            System.exit(-1);
+        }
+    }
+
+    private static boolean validateArgs(String[] args) {
+        if (StringUtils.isEmpty(args[ARG1_SOURCE_PROPERTIES_FILE])) {
+            log.error("Source file path to read for encryption is not set. Terminating...");
+            return false;
+        }
+
+        if (StringUtils.isEmpty(args[ARG2_OUTPUT_ENCRYPTED_FILE])) {
             log.error("Output file path to create is not set. Terminating...");
-            System.exit(-2);
+            return false;
         }
 
-        if (StringUtils.isEmpty(password)) {
+        if (StringUtils.isEmpty(MiscUtils.getTokenFromArg(args[ARG3_PASSWORD_OR_FILE_WITH_PASSWORD]))) {
             log.error("Password is not set. Terminating...");
-            System.exit(-3);
+            return false;
         }
 
-        if (StringUtils.isEmpty(salt)) {
-            log.error("Salt for password is not set. Terminating...");
-            System.exit(-4);
+        return true;
+    }
+
+    private static void processFiles(String sourceFile, String outputFile, String password) throws Exception {
+        String srcContent = FileUtils.readFile(Paths.get(sourceFile));
+
+        log.info("Testing source file for reg-exp compilation '{}'", sourceFile);
+        AttentionSignaturesManager.loadDecryptedContent(srcContent);
+
+        String encContent = PasswordBasedEncryption.encrypt(srcContent, password);
+        if (encContent != null) {
+            FileUtils.saveToFile(encContent, outputFile);
+        } else {
+            throw new Exception("Encryption result is null.");
         }
 
-
-
-        String srcContent = null;
-        try {
-            srcContent = FileUtils.readFile(Paths.get(sourceFile));
-
-            log.info("Testing source file for reg-exp compilation '{}'", sourceFile);
-            AttentionSignaturesManager.loadDecryptedContent(srcContent);
-        } catch (Exception ex) {
-            log.error("Error while reading source file {}", sourceFile, ex);
-            System.exit(-5);
-        }
-
-        try {
-            String encContent = PasswordBasedEncryption.encrypt(srcContent, password, salt);
-            if (encContent != null) FileUtils.saveToFile(encContent, outputFile);
-
-            if (encContent == null) {
-                log.error("Encryption result is null. Terminating...");
-                System.exit(-7);
-            }
-        } catch (Exception ex) {
-            log.error("Error while writing output file {}", outputFile, ex);
-            System.exit(-6);
-        }
-
-        // testing result
-        try {
-            String encryptedContent = FileUtils.readFile(Paths.get(outputFile));
-            String actContent = PasswordBasedEncryption.decrypt(encryptedContent, password, salt);
-            if (srcContent.equals(actContent)) {
-                log.info("Ecnypted string was successfully decrypted to the same content");
-            } else {
-                throw new Exception("Decrypted string differs to original one!");
-            }
-        } catch (Exception ex) {
-            log.error("Error while testing created results. Do not use output file {}", outputFile, ex);
-            System.exit(-8);
+        // Testing result
+        String encryptedContent = FileUtils.readFile(Paths.get(outputFile));
+        String actContent = PasswordBasedEncryption.decrypt(encryptedContent, password);
+        if (!srcContent.equals(actContent)) {
+            throw new Exception("Decrypted string differs to original one!");
         }
 
         log.info("Encryption is done. Find results at {}", outputFile);

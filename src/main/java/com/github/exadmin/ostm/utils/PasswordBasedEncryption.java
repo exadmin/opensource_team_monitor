@@ -20,14 +20,15 @@ public class PasswordBasedEncryption {
     private static final int ITERATION_COUNT = 65536;
     private static final int KEY_LENGTH = 256;
     private static final byte[] IV = {0, 2, 3, 4, 5, 4, 3, 2, 1, 0, 1, 2, 3, 4, 5, 0};
+    private static final String DEFAULT_SALT = "bsd87918hediu"; // hard coded salt for bwc - we don't use it anymore
 
     private static final Logger log = LoggerFactory.getLogger(PasswordBasedEncryption.class);
 
-    public static String encrypt(String strToEncrypt, String password, String salt) {
+    public static String encrypt(String strToEncrypt, String password) {
         try {
             // Create secret key from password
             SecretKeyFactory factory = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM);
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), ITERATION_COUNT, KEY_LENGTH);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), DEFAULT_SALT.getBytes(StandardCharsets.UTF_8), ITERATION_COUNT, KEY_LENGTH);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), ALGORITHM);
 
@@ -45,11 +46,11 @@ public class PasswordBasedEncryption {
         }
     }
 
-    public static String decrypt(String strToDecrypt, String password, String salt) {
+    public static String decrypt(String strToDecrypt, String password) {
         try {
             // Create secret key from password
             SecretKeyFactory factory = SecretKeyFactory.getInstance(SECRET_KEY_ALGORITHM);
-            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), ITERATION_COUNT, KEY_LENGTH);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), DEFAULT_SALT.getBytes(StandardCharsets.UTF_8), ITERATION_COUNT, KEY_LENGTH);
             SecretKey tmp = factory.generateSecret(spec);
             SecretKeySpec secretKey = new SecretKeySpec(tmp.getEncoded(), ALGORITHM);
 
@@ -67,20 +68,4 @@ public class PasswordBasedEncryption {
         }
         return null;
     }
-
-    /*public static void main(String[] args) {
-        String originalString = "This is a secret message!";
-        String password = "MyStrongPassword123";
-        String salt = "hello!";
-
-        System.out.println("Original String: " + originalString);
-
-        // Encryption
-        String encryptedString = encrypt(originalString, password, salt);
-        System.out.println("Encrypted String: " + encryptedString);
-
-        // Decryption
-        String decryptedString = decrypt(encryptedString, password, salt);
-        System.out.println("Decrypted String: " + decryptedString);
-    }*/
 }

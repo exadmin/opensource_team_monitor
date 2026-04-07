@@ -133,13 +133,16 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
                                     // if current signature is in the exclusion list
                                     if (efModel != null && efModel.contains(textHash, fileHash)) {
-                                        getLog().debug("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
+                                        getLog().trace("Pattern-id {} was skipped for the file {} as it was found in the exclusion lists", me.getKey(), nextFileName);
                                         return null;
                                     } else {
                                         String hash = calculateSignatureHash(repoDir, nextFileName.toString(), matcher);
                                         foundSigs.put(me.getKey(), hash);
                                         numberOfWarnings.incrementAndGet();
-                                        getLog().debug("Pattern-id {} was detected in a file {}", me.getKey(), nextFileName);
+
+                                        int pos = fileContent.indexOf(foundText);
+                                        int lineNum = FileUtils.getLineNumber(fileContent, pos);
+                                        getLog().debug("Pattern-id {}='{}' was found in a file {}:{}", me.getKey(), foundText, nextFileName, lineNum);
                                     }
                                 }
 
@@ -173,38 +176,6 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
         if (fileExt == null) return false;
 
         return list.contains(fileExt);
-    }
-
-    /**
-     * Makes double-check - if found value is not false-positive.
-     * For instance, there is "IP-Address" reg-exp, but some addresses are valid to be published in the repository.
-     * This listener allows not make additional check without complication of initial regexp.
-     * @param filePath
-     * @param fileContent
-     * @param patternId
-     * @param regExp
-     * @param matcher
-     * @return
-     */
-    protected boolean approveFoundPattern(String filePath, String fileContent, String patternId, Pattern regExp, Matcher matcher) {
-        // analyze IP addresses for false-positives
-        if ("OTH-IP-ADDR".equals(patternId)) {
-            String ipAddressValue = matcher.group();
-            getLog().debug("Checking IP Address value = {}", ipAddressValue);
-            if ("0.0.0.0".equals(ipAddressValue) || "127.0.0.1".equals(ipAddressValue)) return false;
-        }
-
-        if ("INT-004".equals(patternId)) {
-            String value = matcher.group().toLowerCase();
-            if ("pages.netcracker.com".equalsIgnoreCase(value)) return false;
-        }
-
-        if ("INT-006".equals(patternId)) {
-            String value = matcher.group().toLowerCase();
-            if ("opensourcegroup@netcracker.com".equals(value)) return false;
-        }
-
-        return true;
     }
 
     private static String calculateSignatureHash(String repoDir, String fullFileName, Matcher matcher) {

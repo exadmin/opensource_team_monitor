@@ -29,11 +29,14 @@ public class OpenSourceTeamMonitorApp {
     private static final int ARG5 = 4;
     private static final int ARG6 = 5;
     private static final int ARG7 = 6;
-    private static final int ARG8 = 7;
 
     public static void main(String[] args) {
+        if (!log.isDebugEnabled()) {
+            System.out.println("Logging debug level is not enabled");
+            System.exit(1);
+        }
         // Step1: Initiate application
-        if (args.length != 8) {
+        if (args.length != 7) {
             log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
                     "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
                     "arg2 - parent directory where all necessary repositories are cloned into (into personal subfolders)\n" +
@@ -41,8 +44,7 @@ public class OpenSourceTeamMonitorApp {
                     "arg4 - cache directory (read-write) to store responses from github\n" +
                     "arg5 - encrypted properties file with signatures to detect\n" +
                     "arg6 - password to encrypt properties file\n" +
-                    "arg7 - salt to encrypt properties file\n" +
-                    "arg8 - path to file with report overrides (json)");
+                    "arg7 - path to file with report overrides (json)");
             System.exit(-1);
         }
 
@@ -64,19 +66,18 @@ public class OpenSourceTeamMonitorApp {
 
         String badWordsFile = args[ARG5];
         String password = MiscUtils.getTokenFromArg(args[ARG6]);
-        String salt = MiscUtils.getTokenFromArg(args[ARG7]);
 
-        AttentionSignaturesManager.loadExpressionsFrom(badWordsFile, password, salt);
+        AttentionSignaturesManager.loadExpressionsFrom(badWordsFile, password);
 
         // load report overrides from external json file
         JsonReportOverrides reportOverrides = null;
         try {
-            File jsonFile = new File(args[ARG8]);
+            File jsonFile = new File(args[ARG7]);
             ObjectMapper mapper = new ObjectMapper(new JsonFactory());
             mapper.enable(StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION.mappedFeature());
             reportOverrides = mapper.readValue(jsonFile, JsonReportOverrides.class);
         } catch (Exception ex) {
-            log.error("Can't load report overrides configuration from {}", args[ARG8], ex);
+            log.error("Can't load report overrides configuration from {}", args[ARG7], ex);
         }
 
         // Step2: Run collectors

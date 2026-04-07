@@ -89,4 +89,18 @@ public class FileUtils {
                 ? fileName.substring(dotIndex + 1)
                 : null;
     }
+
+    public static int getLineNumber(String fileBody, int index) {
+        int lineNumber = 0;
+        int charsCount = 0;
+        List<String> lines = fileBody.lines().toList();
+        for (String line : lines) {
+            charsCount = charsCount + line.length();
+            if (index < charsCount) return lineNumber;
+
+            lineNumber++;
+        }
+
+        return lineNumber;
+    }
 }

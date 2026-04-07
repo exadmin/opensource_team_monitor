@@ -123,6 +123,10 @@ public class GrandReportModel {
             newColumn.setTitle("Attention signatures");
         });
 
+        TheColumn colGrandRreportFile = theReportModel.allocateColumn(COL_REPO_SECURITY_GRAND_REPORT, newColumn -> {
+            newColumn.setTitle("grand-report.json");
+        });
+
         TheColumn colConventionalCommits = theReportModel.allocateColumn(COL_REPO_CONVENTIONAL_COMMITS_ACTION, newCol -> {
             newCol.setTitle("Conventional Commits");
             newCol.setHelpUrl("https://github.com/Netcracker/.github/blob/main/docs/workflows/pr-conventional-commits.md");
@@ -239,6 +243,7 @@ public class GrandReportModel {
         sheetCheckList.registerColumn(colRepoName, false);
         sheetCheckList.registerColumn(colTopics, false);
         sheetCheckList.registerColumn(colAttSignatures, false);
+        sheetCheckList.registerColumn(colGrandRreportFile, false);
 
 
         devOpsWorkflowsSheet.registerColumn(colRepoNumber, true);
