@@ -30,9 +30,9 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
     private static final Map<String, String> BLUE_LEADS_MAP = new HashMap<>();
     static {
         BLUE_LEADS_MAP.put("qubership-nifi", "Sagar Shah");
-        BLUE_LEADS_MAP.put("qubership-integration", "Pavels Kletnojs");
+        BLUE_LEADS_MAP.put("qubership-integration", "Alena Novikova");
         BLUE_LEADS_MAP.put("qubership-observability", "Alexey Karasev");
-        BLUE_LEADS_MAP.put("qubership-tp", "Irina Ismagilova & Elena Kurganova");
+        BLUE_LEADS_MAP.put("qubership-tp", "Elena Kurganova");
         BLUE_LEADS_MAP.put("qubership-core", "Sergey Lisovoy");
         BLUE_LEADS_MAP.put("qubership-devops", "Mikhail Gushchin");
         BLUE_LEADS_MAP.put("qubership-apihub", "Alena Novikova");
