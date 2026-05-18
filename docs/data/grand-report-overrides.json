@@ -224,6 +224,21 @@
           "sort-by-value": "5"
         },
         {
+          "name": "qubership-landscape-config",
+          "visual-value": "Forked repository",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-ai-packages",
+          "visual-value": "Does not contain code",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "netcracker.github.io",
+          "visual-value": "Does not contain code",
+          "sort-by-value": "5"
+        },
+        {
           "name": "qubership-integration-platform",
           "visual-value": "Non testable",
           "sort-by-value": "5"
