@@ -16,6 +16,10 @@ public class CLAFilePresence extends AFilesContentChecker {
     private static final Pattern REQUIRED_CONTENT_APPROACH2_PART1 = Pattern.compile("\\buses\\s*:\\s*contributor-assistant\\/github-action@");
     private static final Pattern REQUIRED_CONTENT_APPROACH2_PART2 = Pattern.compile("\\bpath-to-document\\s*:\\s*'https:\\/\\/github.com\\/Netcracker\\/qubership-github-workflows\\/blob\\/main\\/CLA\\/cla.md'");
 
+    private static final Pattern REQUIRED_CONTENT_APPROACH3_PART1 = Pattern.compile("\\buses\\s*:\\s*Netcracker/qubership-workflow-hub/actions/cla-assistant@");
+    private static final Pattern REQUIRED_CONTENT_APPROACH3_PART2 = Pattern.compile("\\bpath-to-document\\s*:\\s*'https://github.com/Netcracker/qubership-workflow-hub/blob/release/");
+
+
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
@@ -49,6 +53,17 @@ public class CLAFilePresence extends AFilesContentChecker {
                 Matcher matcher = REQUIRED_CONTENT_APPROACH2_PART1.matcher(content);
                 if (matcher.find()) {
                     Matcher matcher2 = REQUIRED_CONTENT_APPROACH2_PART2.matcher(content);
+                    if (matcher2.find()) {
+                        return new TheCellValue("Ok", 4, SeverityLevel.OK).withHttpReference(httpRef);
+                    }
+                }
+            }
+
+            // check 3rd format of the action
+            {
+                Matcher matcher = REQUIRED_CONTENT_APPROACH3_PART1.matcher(content);
+                if (matcher.find()) {
+                    Matcher matcher2 = REQUIRED_CONTENT_APPROACH3_PART2.matcher(content);
                     if (matcher2.find()) {
                         return new TheCellValue("Ok", 4, SeverityLevel.OK).withHttpReference(httpRef);
                     }
