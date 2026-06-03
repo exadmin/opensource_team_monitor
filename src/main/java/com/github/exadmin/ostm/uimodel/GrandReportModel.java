@@ -160,6 +160,16 @@ public class GrandReportModel {
             newCol.setTitle("Build on Commit");
         });
 
+        // APM Check List Sheet
+        TheSheet sheetAPM = theReportModel.allocateSheet(SHEET_APM, newSheet -> {
+            newSheet.setTitle("APM");
+        });
+
+        TheColumn colAPMFilePresense = theReportModel.allocateColumn(COL_APM_FILE, newColumn -> {
+            newColumn.setTitle("apm.yml");
+            newColumn.setHelpUrl("https://github.com/Netcracker/qubership-ai-packages");
+        });
+
         // SUMMARY SHEET
         TheSheet sheetSummary = theReportModel.allocateSheet(SHEET_SUMMARY, newSheet-> {
             newSheet.setTitle("Summary by teams");
@@ -266,6 +276,13 @@ public class GrandReportModel {
         sheetSummary.registerColumn(colTotalErrors, false);
         sheetSummary.registerColumn(colTotalRepositories, false);
         sheetSummary.registerColumn(colErrorsPerRepository, false);
+
+        sheetAPM.registerColumn(colRepoNumber, true);
+        sheetAPM.registerColumn(colRepoType, false);
+        sheetAPM.registerColumn(colRepoName, false);
+        sheetAPM.registerColumn(colTopics, false);
+        sheetAPM.registerColumn(colAPMFilePresense, false);
+
 
         return theReportModel;
     }

@@ -27,6 +27,24 @@ public class TheCellValue {
         }
     }
 
+    /**
+     * Create cell-value to be rendered in the report, the sorting value is selected automatically by SeverityLevel
+     * @param visualValue visual value how it will look like
+     */
+    public TheCellValue(Object visualValue, SeverityLevel severityLevel) {
+        this.visualValue = visualValue.toString();
+        this.severityLevel = severityLevel;
+
+        switch (severityLevel) {
+            case OK -> sortByValue = "5";
+            case WARN -> sortByValue = "3";
+            case SKIP -> sortByValue = "2";
+            case ERROR -> sortByValue = "1";
+            case SECURITY_WARN -> sortByValue = "4";
+            default -> sortByValue = "6";
+        }
+    }
+
     public String getVisualValue() {
         return visualValue;
     }

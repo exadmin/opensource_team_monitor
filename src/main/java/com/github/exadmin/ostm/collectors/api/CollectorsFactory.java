@@ -1,5 +1,6 @@
 package com.github.exadmin.ostm.collectors.api;
 
+import com.github.exadmin.ostm.collectors.impl.repos.apm.APMFilePresence;
 import com.github.exadmin.ostm.collectors.impl.repos.common.ListAllRepositories;
 import com.github.exadmin.ostm.collectors.impl.repos.common.TopicAndTeamPerRepository;
 import com.github.exadmin.ostm.collectors.impl.repos.devops.*;
@@ -48,6 +49,8 @@ public class CollectorsFactory {
         COLLECTORS_ORDERED_EXECUTION.add(new SpringFrwkVersion());
 
         COLLECTORS_ORDERED_EXECUTION.add(new GrandReportExclusionsChecker());
+
+        COLLECTORS_ORDERED_EXECUTION.add(new APMFilePresence());
 
         COLLECTORS_ORDERED_EXECUTION.add(new TotalErrorsCounter()); // let it be the last
     }

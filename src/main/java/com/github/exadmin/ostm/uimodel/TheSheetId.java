@@ -4,6 +4,7 @@ public enum TheSheetId {
     SHEET_TEAM_SUMMARY_ID("sheet:qubership-team"),
     SHEET_ALL_REPOSITORIES("sheet:code-quality"),
     SHEET_REPOS_CHECK_LIST("sheet:repos-check-list"),
+    SHEET_APM("sheet:apm"),
     SHEET_REPOS_SECURITY("sheet:repos-security-checks"),
     SHEET_SUMMARY("sheet:summary");
 
