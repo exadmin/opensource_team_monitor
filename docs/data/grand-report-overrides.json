@@ -44,21 +44,6 @@
       "column-id": "C034",
       "repositories": [
         {
-          "name": "qubership-integration-platform",
-          "visual-value": "Not a Java project",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-ui",
-          "visual-value": "Not a Java project",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-vscode-extension",
-          "visual-value": "Not a Java project",
-          "sort-by-value": "5"
-        },
-        {
           "name": "qubership-api-linter-service",
           "visual-value": "Not a Java project",
           "sort-by-value": "5"
@@ -219,11 +204,6 @@
       "column-id": "C020",
       "repositories": [
         {
-          "name": "qubership-integration-checkstyle",
-          "visual-value": "Non testable",
-          "sort-by-value": "5"
-        },
-        {
           "name": "qubership-landscape-config",
           "visual-value": "Forked repository",
           "sort-by-value": "5"
@@ -236,31 +216,6 @@
         {
           "name": "netcracker.github.io",
           "visual-value": "Does not contain code",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-platform",
-          "visual-value": "Non testable",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-schemas",
-          "visual-value": "Non testable",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-catalog-library",
-          "visual-value": "Legacy Repository",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-designtime-catalog",
-          "visual-value": "Legacy Repository",
-          "sort-by-value": "5"
-        },
-        {
-          "name": "qubership-integration-variables-management",
-          "visual-value": "Legacy Repository",
           "sort-by-value": "5"
         },
         {
