@@ -1,0 +1,18 @@
+name: Validate Grand Report Overrides
+
+on:
+  pull_request:
+    paths:
+      - docs/data/grand-report-overrides.json
+
+permissions:
+  contents: read
+
+jobs:
+  validate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate JSON syntax
+        run: python3 -m json.tool docs/data/grand-report-overrides.json > /dev/null
