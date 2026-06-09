@@ -1,9 +1,12 @@
-name: Validate Grand Report Overrides
+name: Validate json syntax for grand-report-overrides.json file
 
 on:
   pull_request:
     paths:
       - docs/data/grand-report-overrides.json
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
