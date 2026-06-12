@@ -8,13 +8,13 @@ import com.github.exadmin.ostm.utils.FileUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.FileVisitResult;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class AllowedEmailsChecker extends AFilesContentChecker {
     // Align RegExp with CyberFerret Dictionary
@@ -38,40 +38,59 @@ public class AllowedEmailsChecker extends AFilesContentChecker {
             return new TheCellValue("Was not downloaded", 0, SeverityLevel.ERROR);
         }
 
-        int notAllowedEmailsCount = 0;
+        int[] notAllowedEmailsCount = {0};
 
-        try (Stream<Path> stream = Files.walk(repoDirectory)) {
-            List<Path> files = stream.filter(Files::isRegularFile).toList();
-            notAllowedEmailsCount = files
-                    .parallelStream()
-                    .filter(filePath -> {
-                        if (FileUtils.isBinaryFile(filePath)) return false;
+        try {
+            Files.walkFileTree(repoDirectory, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+                    if (".git".equals(dir.getFileName().toString())) {
+                        return FileVisitResult.SKIP_SUBTREE;
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
 
-                        String content = FileUtils.readFile(filePath);
-                        return content.contains("@");
-                    })
-                    .mapToInt(filePath -> {
-                        String content = FileUtils.readFile(filePath);
-                        Matcher matcher = EMAIL_PATTERN.matcher(content);
-                        int count = 0;
-                        while (matcher.find()) {
-                            String email = matcher.group().toLowerCase();
-                            if (!ALLOWED_EMAILS.contains(email)) {
-                                count++;
-                            }
-                        }
-                        return count;
-                    })
-                    .sum();
-        } catch (IOException ex) {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                    if (attrs.isRegularFile()) {
+                        notAllowedEmailsCount[0] += countNotAllowedEmails(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                    getLog().warn("Cannot visit file {}", file, exc);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (Exception ex) {
             getLog().error("Error while processing repo {}", repo, ex);
-            return new TheCellValue("Exception", SeverityLevel.ERROR);
+            return new TheCellValue("Exception", 100000, SeverityLevel.ERROR);
         }
 
-        if (notAllowedEmailsCount == 0) {
-            return new TheCellValue("Ok", SeverityLevel.OK);
+        if (notAllowedEmailsCount[0] == 0) {
+            return new TheCellValue("Ok", 0, SeverityLevel.OK);
         }
 
-        return new TheCellValue("" + notAllowedEmailsCount, notAllowedEmailsCount, SeverityLevel.ERROR);
+        return new TheCellValue("" + notAllowedEmailsCount[0], notAllowedEmailsCount[0], SeverityLevel.ERROR);
+    }
+
+    private int countNotAllowedEmails(Path filePath) {
+        if (FileUtils.isBinaryFile(filePath)) return 0;
+
+        String content = FileUtils.readFile(filePath);
+        if (!content.contains("@")) return 0;
+
+        Matcher matcher = EMAIL_PATTERN.matcher(content);
+        int count = 0;
+        while (matcher.find()) {
+            String email = matcher.group().toLowerCase();
+            if (!ALLOWED_EMAILS.contains(email)) {
+                count++;
+            }
+        }
+
+        return count;
     }
 }
