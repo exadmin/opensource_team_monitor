@@ -53,7 +53,8 @@ public enum TheColumnId {
     COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION("C044", true),
     COL_REPO_SECURITY_GRAND_REPORT("C045", false),
 
-    COL_APM_FILE("C050", true);
+    COL_APM_FILE("C050", true),
+    COL_EMAIL_IS_GOOD("C055", true);
 
 
     private final String id;

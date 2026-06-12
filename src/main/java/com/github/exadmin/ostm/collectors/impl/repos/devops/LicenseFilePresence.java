@@ -7,7 +7,7 @@ import com.github.exadmin.ostm.utils.FileUtils;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -38,7 +38,7 @@ public class LicenseFilePresence extends AFilesContentChecker {
             } else {
                 return new TheCellValue("Non Apache 2.0", 2, SeverityLevel.WARN).withHttpReference(htmlUrl);
             }
-        } catch (IOException ex) {
+        } catch (UncheckedIOException ex) {
             getLog().error("Error while reading license file {}", licenseFile, ex);
             return new TheCellValue("Error while reading", 1, SeverityLevel.ERROR);
         }

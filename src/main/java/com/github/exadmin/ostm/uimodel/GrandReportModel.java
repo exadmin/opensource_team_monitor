@@ -162,12 +162,17 @@ public class GrandReportModel {
 
         // APM Check List Sheet
         TheSheet sheetAPM = theReportModel.allocateSheet(SHEET_APM, newSheet -> {
-            newSheet.setTitle("APM");
+            newSheet.setTitle("APM/Emails");
         });
 
         TheColumn colAPMFilePresense = theReportModel.allocateColumn(COL_APM_FILE, newColumn -> {
             newColumn.setTitle("apm.yml");
             newColumn.setHelpUrl("https://github.com/Netcracker/qubership-ai-packages");
+        });
+
+        TheColumn colEmails = theReportModel.allocateColumn(COL_EMAIL_IS_GOOD, newColumn -> {
+            newColumn.setTitle("Invalid emails");
+            // newColumn.setHelpUrl("");
         });
 
         // SUMMARY SHEET
@@ -282,6 +287,7 @@ public class GrandReportModel {
         sheetAPM.registerColumn(colRepoName, false);
         sheetAPM.registerColumn(colTopics, false);
         sheetAPM.registerColumn(colAPMFilePresense, false);
+        sheetAPM.registerColumn(colEmails, false);
 
 
         return theReportModel;

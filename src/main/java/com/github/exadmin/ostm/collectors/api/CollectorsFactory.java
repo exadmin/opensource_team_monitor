@@ -51,6 +51,7 @@ public class CollectorsFactory {
         COLLECTORS_ORDERED_EXECUTION.add(new GrandReportExclusionsChecker());
 
         COLLECTORS_ORDERED_EXECUTION.add(new APMFilePresence());
+        COLLECTORS_ORDERED_EXECUTION.add(new AllowedEmailsChecker());
 
         COLLECTORS_ORDERED_EXECUTION.add(new TotalErrorsCounter()); // let it be the last
     }

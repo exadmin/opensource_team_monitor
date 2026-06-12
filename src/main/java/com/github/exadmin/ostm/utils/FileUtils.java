@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,8 +15,12 @@ import java.util.List;
 public class FileUtils {
     private static final Logger log = LoggerFactory.getLogger(FileUtils.class);
 
-    public static String readFile(Path filePath) throws IOException {
-        return readFile(filePath, false);
+    public static String readFile(Path filePath) {
+        try {
+            return readFile(filePath, false);
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
     }
 
     public static String readFile(Path filePath, boolean readMetadataForImages) throws IOException {
@@ -102,5 +107,58 @@ public class FileUtils {
         }
 
         return lineNumber;
+    }
+
+    private static final int SAMPLE_SIZE = 8192;
+    private static final double BINARY_THRESHOLD = 0.30;
+
+    public static boolean isBinaryFile(Path file) {
+        try {
+            if (!Files.isRegularFile(file)) {
+                return false;
+            }
+
+            long size = Files.size(file);
+            if (size == 0) {
+                return false; // empty file is marked as non-binary
+            }
+
+            byte[] data;
+            try (var in = Files.newInputStream(file)) {
+                data = in.readNBytes(SAMPLE_SIZE);
+            }
+
+            int suspicious = 0;
+
+            for (byte b : data) {
+                int c = b & 0xFF;
+
+                // NUL means binary
+                if (c == 0) {
+                    return true;
+                }
+
+                // ok chars
+                if (c == '\n' || c == '\r' || c == '\t' || c == '\f') {
+                    continue;
+                }
+
+                // ASCII printable
+                if (c >= 32 && c <= 126) {
+                    continue;
+                }
+
+                // UTF-8 non-ASCII are ok
+                if (c >= 128) {
+                    continue;
+                }
+
+                suspicious++;
+            }
+
+            return ((double) suspicious / data.length) > BINARY_THRESHOLD;
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
     }
 }
