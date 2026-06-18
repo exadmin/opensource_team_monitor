@@ -40,7 +40,7 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         BLUE_LEADS_MAP.put("qubership-infra", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-infra-fork", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-generic", UNDEFINED_STR);
-        BLUE_LEADS_MAP.put("qubership-cm", "Mikhail Guschin");
+        BLUE_LEADS_MAP.put("qubership-cm", "Mikhail Gushchin");
     }
 
     @Override
