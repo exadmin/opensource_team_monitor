@@ -52,9 +52,12 @@ public record CyberFerretSettings(Path cliJar, Path cacheParent, String password
         try {
             long seconds = Long.parseLong(value);
             if (seconds <= 0) throw new NumberFormatException();
-            return Duration.ofSeconds(seconds);
+            Duration timeout = Duration.ofSeconds(seconds);
+            timeout.toMillis();
+            return timeout;
         } catch (RuntimeException exception) {
-            throw new IllegalArgumentException("CyberFerret timeout must be a positive number of seconds.");
+            throw new IllegalArgumentException(
+                    "CyberFerret timeout must be a positive number of seconds within the supported range.");
         }
     }
 }

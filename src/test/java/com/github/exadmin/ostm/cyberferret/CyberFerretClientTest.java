@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayDeque;
@@ -69,6 +70,22 @@ public class CyberFerretClientTest {
         assertEquals(Optional.empty(), client.dictionaryVersion());
         assertEquals(CyberFerretScanResult.CLEAN, client.scan(repository));
         assertTrue(client.hasOperationalFailures());
+    }
+
+    @Test
+    public void closeDeletesTheRunSpecificCacheRecursively() throws Exception {
+        CyberFerretSettings settings = settings();
+        CyberFerretClient client = new CyberFerretClient(settings, new FakeExecutor());
+        Path runDirectory;
+        try (var children = Files.list(settings.cacheParent())) {
+            runDirectory = children.findFirst().orElseThrow();
+        }
+        Path nestedDirectory = Files.createDirectories(runDirectory.resolve("nested"));
+        Files.writeString(nestedDirectory.resolve("dictionary-cache"), "encrypted");
+
+        client.close();
+
+        assertFalse(Files.exists(runDirectory));
     }
 
     private CyberFerretSettings settings() throws Exception {

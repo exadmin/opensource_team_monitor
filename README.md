@@ -39,8 +39,10 @@ CyberFerret is configured through environment variables:
 - `CYBER_FERRET_PASSWORD` is the required dictionary password. OSTM passes it to CyberFerret through the child
   process environment, not as a command-line argument.
 - `CYBER_FERRET_CACHE_DIR` is an optional absolute parent directory for the run-specific dictionary snapshot. The
-  system temporary directory is used when this variable is absent.
-- `CYBER_FERRET_TIMEOUT_SECONDS` is an optional positive per-command timeout. The default is 300 seconds.
+  system temporary directory is used when this variable is absent. OSTM removes its run-specific snapshot when the
+  run completes.
+- `CYBER_FERRET_TIMEOUT_SECONDS` is an optional positive per-command timeout that must be representable in
+  milliseconds. The default is 300 seconds.
 
 OSTM asks CyberFerret for the dictionary version once, then scans every repository in offline quick mode against the
 same run-specific snapshot. Findings appear as warnings in the report and do not make OSTM fail. Exit code `2` means

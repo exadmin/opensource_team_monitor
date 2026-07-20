@@ -69,20 +69,21 @@ public class OpenSourceTeamMonitorApp {
         CyberFerretSettings cyberFerretSettings = CyberFerretSettings.from(
                 System.getenv(),
                 Path.of(System.getProperty("java.io.tmpdir")));
-        CyberFerretClient cyberFerretClient = new CyberFerretClient(cyberFerretSettings);
-        cyberFerretClient.dictionaryVersion();
+        try (CyberFerretClient cyberFerretClient = new CyberFerretClient(cyberFerretSettings)) {
+            cyberFerretClient.dictionaryVersion();
 
-        TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
-        reportModel.setReportOverrides(reportOverrides);
-        CollectorsFactory collectorsFactory = new CollectorsFactory(
-                reportModel,
-                repositoriesParent,
-                cyberFerretClient);
-        collectorsFactory.runCollectors();
+            TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
+            reportModel.setReportOverrides(reportOverrides);
+            CollectorsFactory collectorsFactory = new CollectorsFactory(
+                    reportModel,
+                    repositoriesParent,
+                    cyberFerretClient);
+            collectorsFactory.runCollectors();
 
-        ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
-        reportModelPersister.saveToFile(outputFile);
-        return cyberFerretClient.hasOperationalFailures() ? 2 : 0;
+            ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
+            reportModelPersister.saveToFile(outputFile);
+            return cyberFerretClient.hasOperationalFailures() ? 2 : 0;
+        }
     }
 
     private static JsonReportOverrides loadReportOverrides(String fileName) {

@@ -5,13 +5,16 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 public class ProcessExecutorTest {
@@ -49,6 +52,21 @@ public class ProcessExecutorTest {
         assertTrue(result.cleanupComplete());
     }
 
+    @Test
+    public void rejectsOverflowingTimeoutBeforeStartingChild() throws Exception {
+        Path marker = workingDirectory().resolve("started");
+
+        assertThrows(ArithmeticException.class, () -> executor().execute(
+                command("marker", marker.toString()),
+                workingDirectory(),
+                Map.of(),
+                Duration.ofSeconds(Long.MAX_VALUE),
+                true));
+        Thread.sleep(200);
+
+        assertFalse(Files.exists(marker));
+    }
+
     private ProcessExecutor executor() {
         return new ProcessExecutor(64 * 1024, Duration.ofSeconds(1), Duration.ofSeconds(1), Duration.ofSeconds(1));
     }
@@ -57,13 +75,14 @@ public class ProcessExecutorTest {
         return temporaryFolder.getRoot().toPath();
     }
 
-    private static List<String> command(String mode) {
-        return List.of(
-                Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+    private static List<String> command(String... arguments) {
+        List<String> command = new ArrayList<>(List.of(
+                javaExecutable(),
                 "-cp",
                 System.getProperty("java.class.path"),
-                Child.class.getName(),
-                mode);
+                Child.class.getName()));
+        command.addAll(List.of(arguments));
+        return command;
     }
 
     private static String text(byte[] bytes) {
@@ -83,8 +102,13 @@ public class ProcessExecutorTest {
                     System.out.print("TAIL_MARKER");
                 }
                 case "sleep" -> Thread.sleep(Duration.ofMinutes(1));
+                case "marker" -> Files.writeString(Path.of(args[1]), "started");
                 default -> throw new IllegalArgumentException("Unknown mode");
             }
         }
+    }
+
+    private static String javaExecutable() {
+        return Path.of(System.getProperty("java.home"), "bin", "java").toString();
     }
 }

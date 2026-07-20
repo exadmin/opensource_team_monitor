@@ -8,14 +8,17 @@ import java.nio.ByteBuffer;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-public class CyberFerretClient {
+public class CyberFerretClient implements AutoCloseable {
     private static final Logger log = LoggerFactory.getLogger(CyberFerretClient.class);
     private static final Pattern VERSION = Pattern.compile("[A-Za-z0-9][A-Za-z0-9._+\\-]{0,63}");
     private static final int MAX_METADATA_BYTES = 8 * 1024;
@@ -98,6 +101,28 @@ public class CyberFerretClient {
 
     public boolean hasOperationalFailures() {
         return operationalFailures;
+    }
+
+    @Override
+    public void close() {
+        try {
+            Files.walkFileTree(runCacheDirectory, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) throws IOException {
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
+                }
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path directory, IOException exception) throws IOException {
+                    if (exception != null) throw exception;
+                    Files.delete(directory);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException exception) {
+            log.warn("Cannot remove the CyberFerret run cache directory {}.", runCacheDirectory, exception);
+        }
     }
 
     private Optional<String> parseVersion(byte[] bytes) {

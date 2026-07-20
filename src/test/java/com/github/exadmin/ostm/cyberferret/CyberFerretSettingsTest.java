@@ -60,4 +60,15 @@ public class CyberFerretSettingsTest {
 
         assertFalse(exception.getMessage().contains(password));
     }
+
+    @Test
+    public void rejectsTimeoutThatCannotBeRepresentedInMilliseconds() throws Exception {
+        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
+
+        assertThrows(IllegalArgumentException.class, () -> CyberFerretSettings.from(Map.of(
+                "CYBER_FERRET_CLI_PATH", jar.toString(),
+                "CYBER_FERRET_PASSWORD", "password",
+                "CYBER_FERRET_TIMEOUT_SECONDS", Long.toString(Long.MAX_VALUE)),
+                temporaryFolder.getRoot().toPath()));
+    }
 }

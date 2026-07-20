@@ -43,6 +43,7 @@ public class ProcessExecutor {
             Map<String, String> environment,
             Duration timeout,
             boolean mergeErrorStream) throws IOException, InterruptedException {
+        long timeoutMillis = timeout.toMillis();
         ProcessBuilder builder = new ProcessBuilder(command)
                 .directory(workingDirectory.toFile())
                 .redirectErrorStream(mergeErrorStream);
@@ -56,14 +57,16 @@ public class ProcessExecutor {
         futures.add(drainers.submit(() -> drain(process.getInputStream(), stdout)));
         if (!mergeErrorStream) futures.add(drainers.submit(() -> drain(process.getErrorStream(), stderr)));
 
-        boolean timedOut = !process.waitFor(timeout.toMillis(), TimeUnit.MILLISECONDS);
+        boolean timedOut = !process.waitFor(timeoutMillis, TimeUnit.MILLISECONDS);
         Set<ProcessHandle> observed = new HashSet<>();
+        Set<ProcessHandle> gracefullySignaled = new HashSet<>();
         boolean processesStopped = true;
         if (timedOut) {
             process.toHandle().descendants().forEach(observed::add);
             process.destroy();
-            cleanup(process.toHandle(), observed, terminationGrace, false);
-            cleanup(process.toHandle(), observed, forceGrace, true);
+            gracefullySignaled.add(process.toHandle());
+            cleanup(process.toHandle(), observed, gracefullySignaled, terminationGrace, false);
+            cleanup(process.toHandle(), observed, gracefullySignaled, forceGrace, true);
             processesStopped = !process.isAlive() && observed.stream().noneMatch(ProcessHandle::isAlive);
             closeProcessStreams(process);
         }
@@ -89,20 +92,32 @@ public class ProcessExecutor {
         }
     }
 
-    private static void cleanup(ProcessHandle root, Set<ProcessHandle> observed, Duration duration, boolean force)
-            throws InterruptedException {
+    private static void cleanup(
+            ProcessHandle root,
+            Set<ProcessHandle> observed,
+            Set<ProcessHandle> gracefullySignaled,
+            Duration duration,
+            boolean force) throws InterruptedException {
         long deadline = System.nanoTime() + duration.toNanos();
         do {
-            root.descendants().forEach(observed::add);
             observed.add(root);
+            discoverDescendants(observed);
             for (ProcessHandle handle : observed) {
                 if (!handle.isAlive()) continue;
                 if (force) handle.destroyForcibly();
-                else if (!handle.equals(root)) handle.destroy();
+                else if (gracefullySignaled.add(handle)) handle.destroy();
             }
             if (observed.stream().noneMatch(ProcessHandle::isAlive)) return;
             Thread.sleep(20);
         } while (System.nanoTime() < deadline);
+    }
+
+    private static void discoverDescendants(Set<ProcessHandle> observed) {
+        Set<ProcessHandle> discovered = new HashSet<>();
+        for (ProcessHandle handle : List.copyOf(observed)) {
+            if (handle.isAlive()) handle.descendants().forEach(discovered::add);
+        }
+        observed.addAll(discovered);
     }
 
     private static boolean awaitDrainers(List<Future<?>> futures, Duration grace) throws InterruptedException {
