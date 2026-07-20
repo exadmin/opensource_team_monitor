@@ -98,7 +98,7 @@ public class ProcessExecutor {
             for (ProcessHandle handle : observed) {
                 if (!handle.isAlive()) continue;
                 if (force) handle.destroyForcibly();
-                else handle.destroy();
+                else if (!handle.equals(root)) handle.destroy();
             }
             if (observed.stream().noneMatch(ProcessHandle::isAlive)) return;
             Thread.sleep(20);
