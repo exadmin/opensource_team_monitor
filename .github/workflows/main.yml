@@ -1,81 +1,175 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Generate Grand Report
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #  branches: [ "main" ]
-  # pull_request:
-  #  branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
-  # note - time in UTC
   schedule:
     - cron: "25 3 * * *"
 
-  # todo: apply new java code in the github actions
-
 permissions:
   contents: write
+
+concurrency:
+  group: grand-report
+  cancel-in-progress: false
+
+env:
+  CYBERFERRET_VERSION: SET_AFTER_CYBERFERRET_RELEASE
+  CYBERFERRET_SHA256: SET_AFTER_CYBERFERRET_RELEASE
+  CYBER_FERRET_TIMEOUT_SECONDS: "300"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Set up JDK 24
         uses: actions/setup-java@v4
         with:
-          java-version: '24'
-          distribution: 'temurin'
-          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-          settings-path: ${{ github.workspace }} # location for the settings.xml file
+          java-version: "24"
+          distribution: temurin
+          server-id: github
+          settings-path: ${{ github.workspace }}
 
-      - name: Prepare settings.xml to use github registry
+      - name: Prepare Maven settings
         uses: s4u/maven-settings-action@v4.0.0
 
-      - name: Build with Maven
+      - name: Build OSTM
+        run: mvn -B package --file pom.xml
+
+      - name: Prepare isolated runtime
         run: |
-          CURRENT_DIR=$(pwd)
-          echo "Git clone directory is ${CURRENT_DIR}"
-          mvn -B package --file pom.xml
-          mkdir -p /tmp/WORKDIR
-          cp ./target/ostm.jar /tmp/WORKDIR/ostm.jar          
+          set -euo pipefail
+          run_dir="$(mktemp -d "${RUNNER_TEMP}/ostm.XXXXXX")"
+          mkdir -p "${run_dir}/cache-parent" "${run_dir}/github-cache" "${run_dir}/repositories"
+          {
+            echo "OSTM_RUN_DIR=${run_dir}"
+            echo "OSTM_REPORT_PATH=${run_dir}/data.json"
+            echo "OSTM_TOKEN_FILE=${run_dir}/github-token"
+            echo "CYBER_FERRET_CLI_PATH=${run_dir}/cyberferret-cli.jar"
+            echo "CYBER_FERRET_CACHE_DIR=${run_dir}/cache-parent"
+          } >> "${GITHUB_ENV}"
+
+      - name: Download pinned CyberFerret CLI
+        run: |
+          set -euo pipefail
+          if [[ "${CYBERFERRET_VERSION}" == "SET_AFTER_CYBERFERRET_RELEASE" || \
+                "${CYBERFERRET_SHA256}" == "SET_AFTER_CYBERFERRET_RELEASE" ]]; then
+            echo "Replace the CyberFerret release placeholders before enabling this workflow." >&2
+            exit 1
+          fi
+          release_base="https://github.com/exadmin/CyberFerret/releases/download"
+          release_url="${release_base}/${CYBERFERRET_VERSION}/cyberferret-cli.jar"
+          curl --fail --location --retry 3 --output "${CYBER_FERRET_CLI_PATH}" "${release_url}"
+          echo "${CYBERFERRET_SHA256}  ${CYBER_FERRET_CLI_PATH}" | sha256sum --check --strict
 
       - name: Download all repositories
         run: |
-          mkdir -p /tmp/WORKDIR/ALL_REPOSITORIES
-          cp ./clone_all.sh /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
-          cp ./clone_or_pull.sh /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
-          chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_all.sh
-          chmod +x /tmp/WORKDIR/ALL_REPOSITORIES/clone_or_pull.sh
-          cd /tmp/WORKDIR/ALL_REPOSITORIES/
-          ./clone_all.sh          
+          set -euo pipefail
+          cp ./clone_all.sh ./clone_or_pull.sh "${OSTM_RUN_DIR}/repositories/"
+          chmod +x "${OSTM_RUN_DIR}/repositories/clone_all.sh" \
+            "${OSTM_RUN_DIR}/repositories/clone_or_pull.sh"
+          cd "${OSTM_RUN_DIR}/repositories"
+          ./clone_all.sh
 
-      - name: Run reports
+      - name: Prepare GitHub token file
+        env:
+          OSTM_TOKEN: ${{ secrets.OSTM_TOKEN }}
         run: |
-          CURRENT_DIR=$(pwd)
-          echo "Current directory is ${CURRENT_DIR}"
-          cd /tmp/WORKDIR
-          
-          curl -o dictionary-latest-downloaded.encrypted https://raw.githubusercontent.com/exadmin/CyberFerretDictionary/main/dictionary-latest.encrypted
-          
-          java -jar ostm.jar ${{secrets.OSTM_TOKEN}} /tmp/WORKDIR/ALL_REPOSITORIES ./data.json ./cache /tmp/WORKDIR/dictionary-latest-downloaded.encrypted ${{secrets.OSTM_PASSWORD}} ${CURRENT_DIR}/docs/data/grand-report-overrides.json
-          cp ./data.json ${CURRENT_DIR}/docs/data/data.json
-          
-          cd ${CURRENT_DIR}
-          
-          cp -f ./docs/index_template.html ./docs/index.html
+          set -euo pipefail
+          printf '%s' "${OSTM_TOKEN}" > "${OSTM_TOKEN_FILE}"
+          chmod 600 "${OSTM_TOKEN_FILE}"
+
+      - name: Generate report
+        id: generate
+        env:
+          CYBER_FERRET_PASSWORD: ${{ secrets.OSTM_PASSWORD }}
+        run: |
+          set -uo pipefail
+          rm -f "${OSTM_REPORT_PATH}"
+
+          set +e
+          java -jar ./target/ostm.jar \
+            "${OSTM_TOKEN_FILE}" \
+            "${OSTM_RUN_DIR}/repositories" \
+            "${OSTM_REPORT_PATH}" \
+            "${OSTM_RUN_DIR}/github-cache" \
+            "${GITHUB_WORKSPACE}/docs/data/grand-report-overrides.json"
+          ostm_exit=$?
+          set -e
+
+          if [[ -f "${OSTM_REPORT_PATH}" ]]; then
+            report_generated=true
+          else
+            report_generated=false
+          fi
+          echo "ostm_exit=${ostm_exit}" >> "${GITHUB_OUTPUT}"
+          echo "report_generated=${report_generated}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish report
+        id: publish
+        if: >-
+          ${{ always() && steps.generate.outputs.report_generated == 'true' &&
+              (steps.generate.outputs.ostm_exit == '0' || steps.generate.outputs.ostm_exit == '2') }}
+        env:
+          PUBLISH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cp "${OSTM_REPORT_PATH}" ./docs/data/data.json
+          cp ./docs/index_template.html ./docs/index.html
           sed -i "s/{{DATE}}/$(date)/g" ./docs/index.html
 
           git config user.name github-actions
           git config user.email github-actions@github.com
-                    
-          git add ./docs/data/data.json          
-          git add ./docs/index.html          
-                    
+          git add ./docs/data/data.json ./docs/index.html
+          if git diff --cached --quiet; then
+            echo "The generated report is unchanged."
+            exit 0
+          fi
           git commit -m "Grand Report generation at $(date)"
-          git push
+          # Git expands PUBLISH_TOKEN only inside the credential helper, not in the git process arguments.
+          # shellcheck disable=SC2016
+          git \
+            -c credential.helper= \
+            -c credential.helper='!f() { echo "username=x-access-token"; echo "password=${PUBLISH_TOKEN}"; }; f' \
+            push
+
+      - name: Summarize and enforce final status
+        if: always()
+        env:
+          OSTM_EXIT: ${{ steps.generate.outputs.ostm_exit }}
+          REPORT_GENERATED: ${{ steps.generate.outputs.report_generated }}
+          PUBLISH_OUTCOME: ${{ steps.publish.outcome }}
+        run: |
+          set -euo pipefail
+          {
+            echo "## Grand Report"
+            echo
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| OSTM exit code | ${OSTM_EXIT:-not available} |"
+            echo "| Fresh report generated | ${REPORT_GENERATED:-false} |"
+            echo "| Publication step | ${PUBLISH_OUTCOME:-not run} |"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+          if [[ "${OSTM_EXIT:-}" == "0" && "${REPORT_GENERATED:-}" == "true" && \
+                "${PUBLISH_OUTCOME:-}" == "success" ]]; then
+            echo "Report publication completed successfully." >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          if [[ "${OSTM_EXIT:-}" == "2" && "${REPORT_GENERATED:-}" == "true" && \
+                "${PUBLISH_OUTCOME:-}" == "success" ]]; then
+            echo "The partial report was published, but one or more scans were incomplete. Inspect the job log." \
+              >> "${GITHUB_STEP_SUMMARY}"
+            exit 1
+          fi
+          if { [[ "${OSTM_EXIT:-}" == "0" ]] || [[ "${OSTM_EXIT:-}" == "2" ]]; } && \
+                [[ "${REPORT_GENERATED:-}" == "true" ]]; then
+            echo "Report publication failed. Inspect the publish step." >> "${GITHUB_STEP_SUMMARY}"
+            exit 1
+          fi
+          echo "Report generation failed or did not produce a fresh report. Inspect the preceding steps." \
+            >> "${GITHUB_STEP_SUMMARY}"
+          exit 1
