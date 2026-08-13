@@ -13,8 +13,6 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  CYBERFERRET_VERSION: SET_AFTER_CYBERFERRET_RELEASE
-  CYBERFERRET_SHA256: SET_AFTER_CYBERFERRET_RELEASE
   CYBER_FERRET_TIMEOUT_SECONDS: "300"
 
 jobs:
@@ -43,27 +41,20 @@ jobs:
         run: |
           set -euo pipefail
           run_dir="$(mktemp -d "${RUNNER_TEMP}/ostm.XXXXXX")"
-          mkdir -p "${run_dir}/cache-parent" "${run_dir}/github-cache" "${run_dir}/repositories"
+          mkdir -p "${run_dir}/github-cache" "${run_dir}/repositories"
           {
             echo "OSTM_RUN_DIR=${run_dir}"
             echo "OSTM_REPORT_PATH=${run_dir}/data.json"
             echo "OSTM_TOKEN_FILE=${run_dir}/github-token"
-            echo "CYBER_FERRET_CLI_PATH=${run_dir}/cyberferret-cli.jar"
-            echo "CYBER_FERRET_CACHE_DIR=${run_dir}/cache-parent"
+            echo "OSTM_CFCLI_PATH=${run_dir}/cfcli"
           } >> "${GITHUB_ENV}"
 
-      - name: Download pinned CyberFerret CLI
+      - name: Download latest CyberFerret CLI
         run: |
           set -euo pipefail
-          if [[ "${CYBERFERRET_VERSION}" == "SET_AFTER_CYBERFERRET_RELEASE" || \
-                "${CYBERFERRET_SHA256}" == "SET_AFTER_CYBERFERRET_RELEASE" ]]; then
-            echo "Replace the CyberFerret release placeholders before enabling this workflow." >&2
-            exit 1
-          fi
-          release_base="https://github.com/exadmin/CyberFerret/releases/download"
-          release_url="${release_base}/${CYBERFERRET_VERSION}/cyberferret-cli.jar"
-          curl --fail --location --retry 3 --output "${CYBER_FERRET_CLI_PATH}" "${release_url}"
-          echo "${CYBERFERRET_SHA256}  ${CYBER_FERRET_CLI_PATH}" | sha256sum --check --strict
+          release_url="https://github.com/exadmin/CyberFerret/releases/latest/download/cfcli-linux-amd64"
+          curl --fail --location --retry 3 --output "${OSTM_CFCLI_PATH}" "${release_url}"
+          chmod 0755 "${OSTM_CFCLI_PATH}"
 
       - name: Download all repositories
         run: |
@@ -96,7 +87,8 @@ jobs:
             "${OSTM_RUN_DIR}/repositories" \
             "${OSTM_REPORT_PATH}" \
             "${OSTM_RUN_DIR}/github-cache" \
-            "${GITHUB_WORKSPACE}/docs/data/grand-report-overrides.json"
+            "${GITHUB_WORKSPACE}/docs/data/grand-report-overrides.json" \
+            "${OSTM_CFCLI_PATH}"
           ostm_exit=$?
           set -e
 

@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayDeque;
@@ -13,10 +12,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CyberFerretClientTest {
@@ -24,74 +21,41 @@ public class CyberFerretClientTest {
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
-    public void preparesOneSnapshotAndReusesItOffline() throws Exception {
-        FakeExecutor executor = new FakeExecutor(result(0, "1.4\n"), result(0, ""));
+    public void runsCfcliInQuickMode() throws Exception {
+        FakeExecutor executor = new FakeExecutor(result(0, ""));
         CyberFerretClient client = new CyberFerretClient(settings(), executor);
         Path repository = temporaryFolder.newFolder("repository").toPath();
 
-        assertEquals(Optional.of("1.4"), client.dictionaryVersion());
         assertEquals(CyberFerretScanResult.CLEAN, client.scan(repository));
 
-        Invocation metadata = executor.invocations.get(0);
-        Invocation scan = executor.invocations.get(1);
-        assertTrue(metadata.command().contains("--dictionary-version"));
-        assertFalse(metadata.mergeErrorStream());
+        Invocation scan = executor.invocations.get(0);
         assertTrue(scan.command().contains("--mode=quick"));
-        assertTrue(scan.command().contains("--offline"));
+        assertTrue(scan.command().contains(repository.toAbsolutePath().normalize().toString()));
+        assertEquals(repository.toAbsolutePath().normalize(), scan.workingDirectory());
+        assertEquals(Map.of("CYBER_FERRET_PASSWORD", "secret-password"), scan.environment());
         assertTrue(scan.mergeErrorStream());
-        assertEquals(metadata.workingDirectory(), scan.workingDirectory());
-        assertEquals(metadata.command().stream().filter(value -> value.startsWith("--cache-dir=")).findFirst(),
-                scan.command().stream().filter(value -> value.startsWith("--cache-dir=")).findFirst());
     }
 
     @Test
     public void mapsExitCodesToTypedResults() throws Exception {
         FakeExecutor executor = new FakeExecutor(
-                result(0, "1.4\n"),
-                result(1, "Findings detected\n"),
-                result(2, "Scan failed\n"),
+                result(2, "Findings detected\n"),
+                result(1, "Scan failed\n"),
+                result(3, "Dictionary failed\n"),
                 result(9, "Unexpected\n"));
         CyberFerretClient client = new CyberFerretClient(settings(), executor);
         Path repository = temporaryFolder.newFolder("repository").toPath();
 
-        client.dictionaryVersion();
         assertEquals(CyberFerretScanResult.FINDINGS, client.scan(repository));
         assertEquals(CyberFerretScanResult.FAILED, client.scan(repository));
         assertEquals(CyberFerretScanResult.FAILED, client.scan(repository));
+        assertEquals(CyberFerretScanResult.FAILED, client.scan(repository));
         assertTrue(client.hasOperationalFailures());
-    }
-
-    @Test
-    public void invalidMetadataRemainsAnOperationalFailure() throws Exception {
-        FakeExecutor executor = new FakeExecutor(result(0, "unsafe version\n"), result(0, ""));
-        CyberFerretClient client = new CyberFerretClient(settings(), executor);
-        Path repository = temporaryFolder.newFolder("repository").toPath();
-
-        assertEquals(Optional.empty(), client.dictionaryVersion());
-        assertEquals(CyberFerretScanResult.CLEAN, client.scan(repository));
-        assertTrue(client.hasOperationalFailures());
-    }
-
-    @Test
-    public void closeDeletesTheRunSpecificCacheRecursively() throws Exception {
-        CyberFerretSettings settings = settings();
-        CyberFerretClient client = new CyberFerretClient(settings, new FakeExecutor());
-        Path runDirectory;
-        try (var children = Files.list(settings.cacheParent())) {
-            runDirectory = children.findFirst().orElseThrow();
-        }
-        Path nestedDirectory = Files.createDirectories(runDirectory.resolve("nested"));
-        Files.writeString(nestedDirectory.resolve("dictionary-cache"), "encrypted");
-
-        client.close();
-
-        assertFalse(Files.exists(runDirectory));
     }
 
     private CyberFerretSettings settings() throws Exception {
-        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
-        Path cache = temporaryFolder.newFolder("cache").toPath();
-        return new CyberFerretSettings(jar, cache, "secret-password", Duration.ofSeconds(5));
+        Path cli = temporaryFolder.newFile("cfcli").toPath();
+        return new CyberFerretSettings(cli, "secret-password", Duration.ofSeconds(5));
     }
 
     private static ProcessResult result(int exitCode, String stdout) {

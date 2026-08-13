@@ -39,13 +39,8 @@ public class OpenSourceTeamMonitorApp {
             System.out.println("Logging debug level is not enabled");
             return 1;
         }
-        if (args.length != 5) {
-            log.error("Usage: OpenSourceTeamMonitorApp ARGS\n" +
-                    "arg1 - file (readonly) with GitHub token to use or 'gph_...' token itself\n" +
-                    "arg2 - parent directory where all necessary repositories are cloned into\n" +
-                    "arg3 - output file (read-write) to write results into\n" +
-                    "arg4 - cache directory (read-write) to store responses from GitHub\n" +
-                    "arg5 - path to file with report overrides (JSON)");
+        if (args.length != 6) {
+            log.error(usageText());
             return 1;
         }
 
@@ -66,24 +61,43 @@ public class OpenSourceTeamMonitorApp {
         NewCacheManager.setCacheDirectoryPath(args[3]);
         JsonReportOverrides reportOverrides = loadReportOverrides(args[4]);
 
-        CyberFerretSettings cyberFerretSettings = CyberFerretSettings.from(
-                System.getenv(),
-                Path.of(System.getProperty("java.io.tmpdir")));
-        try (CyberFerretClient cyberFerretClient = new CyberFerretClient(cyberFerretSettings)) {
-            cyberFerretClient.dictionaryVersion();
-
-            TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
-            reportModel.setReportOverrides(reportOverrides);
-            CollectorsFactory collectorsFactory = new CollectorsFactory(
-                    reportModel,
-                    repositoriesParent,
-                    cyberFerretClient);
-            collectorsFactory.runCollectors();
-
-            ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
-            reportModelPersister.saveToFile(outputFile);
-            return cyberFerretClient.hasOperationalFailures() ? 2 : 0;
+        CyberFerretSettings cyberFerretSettings;
+        try {
+            cyberFerretSettings = CyberFerretSettings.from(args[5], System.getenv());
+        } catch (IllegalArgumentException exception) {
+            log.error("{}\n{}", exception.getMessage(), usageText());
+            return 1;
         }
+        CyberFerretClient cyberFerretClient = new CyberFerretClient(cyberFerretSettings);
+        TheReportModel reportModel = GrandReportModel.getGrandReportInstance();
+        reportModel.setReportOverrides(reportOverrides);
+        CollectorsFactory collectorsFactory = new CollectorsFactory(
+                reportModel,
+                repositoriesParent,
+                cyberFerretClient);
+        collectorsFactory.runCollectors();
+
+        ReportModelPersister reportModelPersister = new ReportModelPersister(reportModel);
+        reportModelPersister.saveToFile(outputFile);
+        return cyberFerretClient.hasOperationalFailures() ? 2 : 0;
+    }
+
+    private static String usageText() {
+        return "Usage: OpenSourceTeamMonitorApp " +
+                "GITHUB_TOKEN_OR_FILE CLONED_REPOSITORIES_DIRECTORY OUTPUT_REPORT_FILE " +
+                "GITHUB_RESPONSE_CACHE_DIRECTORY REPORT_OVERRIDES_FILE CYBER_FERRET_CLI_PATH\n" +
+                "\n" +
+                "Arguments:\n" +
+                "  GITHUB_TOKEN_OR_FILE             File with a GitHub token, or the token value itself.\n" +
+                "  CLONED_REPOSITORIES_DIRECTORY    Parent directory where repositories are cloned.\n" +
+                "  OUTPUT_REPORT_FILE               File to write the generated report to.\n" +
+                "  GITHUB_RESPONSE_CACHE_DIRECTORY  Directory for cached GitHub responses.\n" +
+                "  REPORT_OVERRIDES_FILE            JSON file with report overrides.\n" +
+                "  CYBER_FERRET_CLI_PATH            Absolute path to a readable cfcli executable.\n" +
+                "\n" +
+                "Environment:\n" +
+                "  CYBER_FERRET_PASSWORD            Required dictionary decryption password.\n" +
+                "  CYBER_FERRET_TIMEOUT_SECONDS     Optional positive per-command timeout. Default: 300.";
     }
 
     private static JsonReportOverrides loadReportOverrides(String fileName) {

@@ -19,56 +19,45 @@ public class CyberFerretSettingsTest {
 
     @Test
     public void parsesRequiredAndOptionalSettings() throws Exception {
-        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
-        Path cache = temporaryFolder.newFolder("cache").toPath();
+        Path cli = temporaryFolder.newFile("cfcli").toPath();
         Map<String, String> environment = new HashMap<>();
-        environment.put("CYBER_FERRET_CLI_PATH", jar.toString());
         environment.put("CYBER_FERRET_PASSWORD", "secret-password");
-        environment.put("CYBER_FERRET_CACHE_DIR", cache.toString());
         environment.put("CYBER_FERRET_TIMEOUT_SECONDS", "17");
 
-        CyberFerretSettings settings = CyberFerretSettings.from(environment, temporaryFolder.getRoot().toPath());
+        CyberFerretSettings settings = CyberFerretSettings.from(cli.toString(), environment);
 
-        assertEquals(jar.toAbsolutePath().normalize(), settings.cliJar());
-        assertEquals(cache.toAbsolutePath().normalize(), settings.cacheParent());
+        assertEquals(cli.toAbsolutePath().normalize(), settings.cliPath());
         assertEquals("secret-password", settings.password());
         assertEquals(Duration.ofSeconds(17), settings.timeout());
     }
 
     @Test
-    public void usesProvidedTemporaryDirectoryAndDefaultTimeout() throws Exception {
-        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
-        Path temporaryDirectory = temporaryFolder.newFolder("runtime").toPath();
+    public void usesDefaultTimeout() throws Exception {
+        Path cli = temporaryFolder.newFile("cfcli").toPath();
+        CyberFerretSettings settings = CyberFerretSettings.from(cli.toString(), Map.of(
+                "CYBER_FERRET_PASSWORD", "password"));
 
-        CyberFerretSettings settings = CyberFerretSettings.from(Map.of(
-                "CYBER_FERRET_CLI_PATH", jar.toString(),
-                "CYBER_FERRET_PASSWORD", "password"), temporaryDirectory);
-
-        assertEquals(temporaryDirectory.toAbsolutePath().normalize(), settings.cacheParent());
         assertEquals(Duration.ofSeconds(300), settings.timeout());
     }
 
     @Test
     public void rejectsUnsafeSettingsWithoutEchoingPassword() throws Exception {
-        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
+        Path cli = temporaryFolder.newFile("cfcli").toPath();
         String password = "DO_NOT_ECHO_THIS";
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-                CyberFerretSettings.from(Map.of(
-                        "CYBER_FERRET_CLI_PATH", jar.toString(),
+                CyberFerretSettings.from(cli.toString(), Map.of(
                         "CYBER_FERRET_PASSWORD", password,
-                        "CYBER_FERRET_TIMEOUT_SECONDS", "0"), temporaryFolder.getRoot().toPath()));
+                        "CYBER_FERRET_TIMEOUT_SECONDS", "0")));
 
         assertFalse(exception.getMessage().contains(password));
     }
 
     @Test
     public void rejectsTimeoutThatCannotBeRepresentedInMilliseconds() throws Exception {
-        Path jar = temporaryFolder.newFile("cyberferret.jar").toPath();
+        Path cli = temporaryFolder.newFile("cfcli").toPath();
 
-        assertThrows(IllegalArgumentException.class, () -> CyberFerretSettings.from(Map.of(
-                "CYBER_FERRET_CLI_PATH", jar.toString(),
+        assertThrows(IllegalArgumentException.class, () -> CyberFerretSettings.from(cli.toString(), Map.of(
                 "CYBER_FERRET_PASSWORD", "password",
-                "CYBER_FERRET_TIMEOUT_SECONDS", Long.toString(Long.MAX_VALUE)),
-                temporaryFolder.getRoot().toPath()));
+                "CYBER_FERRET_TIMEOUT_SECONDS", Long.toString(Long.MAX_VALUE))));
     }
 }

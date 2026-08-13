@@ -1,17 +1,17 @@
 name: 🤖 AI-Review using DeepSeek (centralized)
 
-on:
-  workflow_dispatch:
-    inputs:
-      review-command:
-        type: choice
-        default: run
-        options: [ run, run-inline, run-context, run-summary, run-inline-reply, run-summary-reply ]
-        description: "Review Type"
-      pull-request-number:
-        type: string
-        required: true
-        description: "Pull Number"
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       review-command:
+#         type: choice
+#         default: run
+#         options: [ run, run-inline, run-context, run-summary, run-inline-reply, run-summary-reply ]
+#         description: "Review Type"
+#       pull-request-number:
+#         type: string
+#         required: true
+#         description: "Pull Number"
 env:
   AI_REVIEW_CONFIG_FILE_YAML: ".ai-review-centralized.yml"
 

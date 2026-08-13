@@ -22,17 +22,12 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
 
     @Override
     protected TheColumn getColumnToAddValueInto(TheReportModel theReportModel) {
-        TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
-        String title = cyberFerretClient.dictionaryVersion()
-                .map(version -> "Attention signatures (v." + version + ")")
-                .orElse("Attention signatures (version unavailable)");
-        column.setTitle(title);
-        return column;
+        return theReportModel.findColumn(TheColumnId.COL_REPO_SEC_SIGNATURES_CHECKER);
     }
 
     @Override
     protected TheCellValue checkOneRepository(GitHubRepository repo, GitHubFacade gitHubFacade, Path repoDirectory) {
-        if ("disable".equalsIgnoreCase(System.getenv("BWC"))) {
+        if ("disable".equalsIgnoreCase(System.getenv("CYBERFERRET_CHECK_SIGNATURES"))) {
             return new TheCellValue("Disabled", 0, SeverityLevel.WARN);
         }
         return toCellValue(cyberFerretClient.scan(repoDirectory));
