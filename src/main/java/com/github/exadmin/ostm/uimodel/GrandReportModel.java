@@ -13,20 +13,20 @@ public class GrandReportModel {
         TheReportModel theReportModel = new TheReportModel();
 
         // ***** "TEAM SUMMARY" SHEET *****
-        TheSheet sheetTeamSummary = theReportModel.allocateSheet(SHEET_TEAM_SUMMARY_ID,
-                newInstance -> newInstance.setTitle("Qubership Team Members"));
+        /*TheSheet sheetTeamSummary = theReportModel.allocateSheet(SHEET_TEAM_SUMMARY_ID,
+                newInstance -> newInstance.setTitle("Qubership Team Members"));*/
 
         // User login column
-        TheColumn colGitHubLogin = theReportModel.allocateColumn(COL_USER_LOGIN, newColumn -> {
+        /*TheColumn colGitHubLogin = theReportModel.allocateColumn(COL_USER_LOGIN, newColumn -> {
             newColumn.setTitle("GitHub Login");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-        });
+        });*/
 
         // User real name column
-        TheColumn colUserRealName = theReportModel.allocateColumn(COL_USER_REAL_NAME, newColumn -> {
+        /*TheColumn colUserRealName = theReportModel.allocateColumn(COL_USER_REAL_NAME, newColumn -> {
             newColumn.setTitle("Real name");
             newColumn.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
-        });
+        });*/
 
         TheColumn colTeam = theReportModel.allocateColumn(COL_USER_TEAM, newColumn -> {
             newColumn.setTitle("Team");
@@ -34,10 +34,10 @@ public class GrandReportModel {
         });
 
         // User contributions column
-        TheColumn colUserAllContribs = theReportModel.allocateColumn(COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID, newColumn -> {
+        /*TheColumn colUserAllContribs = theReportModel.allocateColumn(COL_CONTRIBUTIONS_FOR_ALL_TIMES_ID, newColumn -> {
             newColumn.setTitle("User contributions for All Times");
             newColumn.setCssClassName(TheColumn.TD_CENTER_MIDDLE);
-        });
+        });*/
 
         // ***** "ALL REPOSITORIES" SHEET *****
         TheSheet sheetCodeQuality = theReportModel.allocateSheet(SHEET_ALL_REPOSITORIES,
@@ -79,17 +79,17 @@ public class GrandReportModel {
             newCol.setTitle("Platform Version");
         });
 
-        TheColumn colSpringFrwkVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
+        /*TheColumn colSpringFrwkVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Spring Framework");
-        });
+        });*/
 
-        TheColumn colSpringBootVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_BOOT_VERSION, newCol -> {
+        /*TheColumn colSpringBootVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_SPRING_BOOT_VERSION, newCol -> {
             newCol.setTitle("Spring Boot");
-        });
+        });*/
 
-        TheColumn colQuarkusVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION, newCol -> {
+        /*TheColumn colQuarkusVersion = theReportModel.allocateColumn(COL_REPO_QUALITY_QUARKUS_FRAMEWORK_VERSION, newCol -> {
             newCol.setTitle("Quarkus Framework");
-        });
+        });*/
 
         TheSheet sheetCheckList = theReportModel.allocateSheet(SHEET_REPOS_CHECK_LIST, newSheet -> {
             newSheet.setTitle("Security check list");
@@ -212,11 +212,11 @@ public class GrandReportModel {
         // ********************************
         // * Build Grand report structure *
         // ********************************
-        sheetTeamSummary.registerColumn(colGitHubLogin, true);
+        /*sheetTeamSummary.registerColumn(colGitHubLogin, true);
         sheetTeamSummary.registerColumn(colUserRealName, false);
-        sheetTeamSummary.registerColumn(colTeam, false);
+        sheetTeamSummary.registerColumn(colTeam, false);*/
 
-        if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(colUserAllContribs, false);
+        // if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(colUserAllContribs, false);
 
         // create 12 weeks back columns
         List<TheColumnId> weekBackColumns = List.of(
@@ -240,7 +240,7 @@ public class GrandReportModel {
 
             });
 
-            if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(column, false);
+            // if (RENDER_ADDITIONAL_COLUMNS) sheetTeamSummary.registerColumn(column, false);
         }
 
 
@@ -252,9 +252,9 @@ public class GrandReportModel {
         sheetCodeQuality.registerColumn(colSonarMetric, false);
         sheetCodeQuality.registerColumn(colOpenedPRs, false);
         sheetCodeQuality.registerColumn(colPlatformVersion, false);
-        sheetCodeQuality.registerColumn(colSpringFrwkVersion, false);
-        sheetCodeQuality.registerColumn(colSpringBootVersion, false);
-        sheetCodeQuality.registerColumn(colQuarkusVersion, false);
+        // sheetCodeQuality.registerColumn(colSpringFrwkVersion, false);
+        // sheetCodeQuality.registerColumn(colSpringBootVersion, false);
+        // sheetCodeQuality.registerColumn(colQuarkusVersion, false);
         sheetCodeQuality.registerColumn(colBuildOnCommit, false);
 
 

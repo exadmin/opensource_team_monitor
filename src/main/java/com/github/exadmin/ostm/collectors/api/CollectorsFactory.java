@@ -44,10 +44,10 @@ public class CollectorsFactory {
 
     private static List<AbstractCollector> createCollectors(CyberFerretClient cyberFerretClient) {
         List<AbstractCollector> collectors = new ArrayList<>();
-        collectors.add(new TeamKnownNames());
+        // collectors.add(new TeamKnownNames());
         collectors.add(new ListAllRepositories());
-        collectors.add(new CountNumberOfCommitsPerUser());
-        collectors.add(new NumberOfCommitsPerWeekPerUser());
+        // collectors.add(new CountNumberOfCommitsPerUser());
+        // collectors.add(new NumberOfCommitsPerWeekPerUser());
         collectors.add(new TopicAndTeamPerRepository());
         collectors.add(new SonarCodeCoverage());
         collectors.add(new NumberOfOpenedPullRequests());
@@ -66,9 +66,9 @@ public class CollectorsFactory {
         collectors.add(new BuildOnCommit());
         collectors.add(new UniqueTeamsCollector());
         collectors.add(new LanguagePlatformVersionChecker());
-        collectors.add(new QuarkusVersion());
-        collectors.add(new SpringBootVersion());
-        collectors.add(new SpringFrwkVersion());
+        // collectors.add(new QuarkusVersion());
+        // collectors.add(new SpringBootVersion());
+        // collectors.add(new SpringFrwkVersion());
         collectors.add(new GrandReportExclusionsChecker());
         collectors.add(new APMFilePresence());
         collectors.add(new AllowedEmailsChecker());
