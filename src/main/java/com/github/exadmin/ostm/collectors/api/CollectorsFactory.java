@@ -62,6 +62,7 @@ public class CollectorsFactory {
         collectors.add(new LintTitleActionChecker());
         collectors.add(new ProfanityChecker());
         collectors.add(new BadLinksChecker());
+        collectors.add(new MavenPublishingChecker());
         collectors.add(new BuildOnCommit());
         collectors.add(new UniqueTeamsCollector());
         collectors.add(new LanguagePlatformVersionChecker());

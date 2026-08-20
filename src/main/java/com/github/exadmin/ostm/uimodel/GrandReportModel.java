@@ -160,6 +160,11 @@ public class GrandReportModel {
             newCol.setTitle("Build on Commit");
         });
 
+        TheColumn colMavenCentral = theReportModel.allocateColumn(COL_REPO_MAVEN_CENTRAL, newCol -> {
+            newCol.setTitle("Don't publish to Maven Central");
+            newCol.setHelpUrl("https://wiki.qubership.org/en/DevOps/MavenCentralVsGitHubContainerRegistry");
+        });
+
         // APM Check List Sheet
         TheSheet sheetAPM = theReportModel.allocateSheet(SHEET_APM, newSheet -> {
             newSheet.setTitle("APM/Emails");
@@ -274,6 +279,7 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colLintTitle, false);
         devOpsWorkflowsSheet.registerColumn(colProfanity, false);
         devOpsWorkflowsSheet.registerColumn(colBadLinks, false);
+        devOpsWorkflowsSheet.registerColumn(colMavenCentral, false);
 
         sheetSummary.registerColumn(colTeamName, true);
         sheetSummary.registerColumn(colRedTeamLead, false);
