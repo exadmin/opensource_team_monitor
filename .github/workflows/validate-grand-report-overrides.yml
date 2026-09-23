@@ -1,7 +1,12 @@
 name: Validate grand-report-overrides.json
 
-on:
+"on":
   pull_request:
+    paths:
+      - docs/data/grand-report-overrides.json
+      - .github/scripts/validate-grand-report-overrides.py
+
+  push:
     paths:
       - docs/data/grand-report-overrides.json
       - .github/scripts/validate-grand-report-overrides.py
