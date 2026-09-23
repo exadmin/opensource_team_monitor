@@ -18,5 +18,9 @@ public class AboutCollector extends AbstractManyRepositoriesCollector {
 
         parameterColumn.setValue("row1", new TheCellValue("How to add exclusion", SeverityLevel.INFO));
         valueColumn.setValue("row1", new TheCellValue("Push PR to https://github.com/exadmin/opensource_team_monitor/blob/main/docs/data/grand-report-overrides.json", SeverityLevel.INFO));
+
+        //  qubership-repository-compliance
+        parameterColumn.setValue("row2", new TheCellValue("How to audit repository with AI", SeverityLevel.INFO));
+        valueColumn.setValue("row2", new TheCellValue("Run `apm install qubership-repository-compliance@qubership-ai-packages -g`. Then ask AI to perform audit.", SeverityLevel.INFO));
     }
 }

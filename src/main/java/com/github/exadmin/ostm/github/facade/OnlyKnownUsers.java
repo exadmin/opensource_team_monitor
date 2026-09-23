@@ -71,6 +71,10 @@ public class OnlyKnownUsers {
         ALIAS_TO_NAME_BLUE.put("GlimmerCape", "Nurlybek Kamelov");
         ALIAS_TO_NAME_BLUE.put("chethana-shastry-p", "Chethana Shastry");
         ALIAS_TO_NAME_BLUE.put("dmitriikazanin", "Dmitrii Kazanin");
+        ALIAS_TO_NAME_BLUE.put("neliia", "Nelia Loginova");
+        ALIAS_TO_NAME_BLUE.put("mrMigles", "Sergey Ivanov");
+        ALIAS_TO_NAME_BLUE.put("mr-joom", "Mikhail Erdman");
+        ALIAS_TO_NAME_BLUE.put("arkuNC", "Artem Kuleshov");
     }
 
     private static Map<String, String> ALIAS_TO_NAME_ALL = new HashMap<>();

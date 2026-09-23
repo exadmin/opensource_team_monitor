@@ -210,17 +210,19 @@ public class GrandReportModel {
         });
 
         TheSheet sheetAbout = theReportModel.allocateSheet(SHEET_ABOUT, newSheet -> {
-            newSheet.setTitle("About");
+            newSheet.setTitle("How to's");
         });
 
         TheColumn colAboutParameter = theReportModel.allocateColumn(COL_ABOUT_PARAMETER, newCol -> {
-            newCol.setTitle("Parameter");
+            newCol.setTitle("Necessity");
             newCol.setWidth("20%");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         TheColumn colAboutValue = theReportModel.allocateColumn(COL_ABOUT_VALUE, newCol -> {
-            newCol.setTitle("Value");
+            newCol.setTitle("Description");
             newCol.setWidth("80%");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         // ********************************
