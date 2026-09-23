@@ -15,6 +15,9 @@ public class JsonColumn {
     @JsonProperty("className")
     private String className;
 
+    @JsonProperty("width")
+    private String width;
+
     @JsonProperty("sType")
     private String sType = "only-numbers";  // this type is needed for DataTables to enable sorting by number value, see
                                             // report.js "jQuery.extend( jQuery.fn.dataTableExt.oSort"
@@ -52,6 +55,14 @@ public class JsonColumn {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
     }
 
     public String getsType() {

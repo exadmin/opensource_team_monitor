@@ -209,6 +209,20 @@ public class GrandReportModel {
             newCol.setTitle("Blue lead name");
         });
 
+        TheSheet sheetAbout = theReportModel.allocateSheet(SHEET_ABOUT, newSheet -> {
+            newSheet.setTitle("About");
+        });
+
+        TheColumn colAboutParameter = theReportModel.allocateColumn(COL_ABOUT_PARAMETER, newCol -> {
+            newCol.setTitle("Parameter");
+            newCol.setWidth("20%");
+        });
+
+        TheColumn colAboutValue = theReportModel.allocateColumn(COL_ABOUT_VALUE, newCol -> {
+            newCol.setTitle("Value");
+            newCol.setWidth("80%");
+        });
+
         // ********************************
         // * Build Grand report structure *
         // ********************************
@@ -287,6 +301,9 @@ public class GrandReportModel {
         sheetSummary.registerColumn(colTotalErrors, false);
         sheetSummary.registerColumn(colTotalRepositories, false);
         sheetSummary.registerColumn(colErrorsPerRepository, false);
+
+        sheetAbout.registerColumn(colAboutParameter, true);
+        sheetAbout.registerColumn(colAboutValue, false);
 
         sheetAPM.registerColumn(colRepoNumber, true);
         sheetAPM.registerColumn(colRepoType, false);

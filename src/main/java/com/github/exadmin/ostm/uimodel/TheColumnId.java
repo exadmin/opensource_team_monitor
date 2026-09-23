@@ -55,7 +55,10 @@ public enum TheColumnId {
 
     COL_APM_FILE("C050", true),
     COL_EMAIL_IS_GOOD("C055", true),
-    COL_REPO_MAVEN_CENTRAL("C056", true);
+    COL_REPO_MAVEN_CENTRAL("C056", true),
+
+    COL_ABOUT_PARAMETER("C057"),
+    COL_ABOUT_VALUE("C058");
 
 
     private final String id;

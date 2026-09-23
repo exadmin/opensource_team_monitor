@@ -6,7 +6,8 @@ public enum TheSheetId {
     SHEET_REPOS_CHECK_LIST("sheet:repos-check-list"),
     SHEET_APM("sheet:apm"),
     SHEET_REPOS_SECURITY("sheet:repos-security-checks"),
-    SHEET_SUMMARY("sheet:summary");
+    SHEET_SUMMARY("sheet:summary"),
+    SHEET_ABOUT("sheet:about");
 
     private final String id;
 

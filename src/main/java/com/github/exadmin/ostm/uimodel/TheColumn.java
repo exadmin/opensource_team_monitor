@@ -15,6 +15,7 @@ public class TheColumn {
     private final Map<String, TheCellValue> dataMap;
     private final Map<String, TheCellValue> dataMapOverrides;
     private String cssClassName;
+    private String width;
     private String helpUrl;
     private boolean renderId;
 
@@ -59,6 +60,14 @@ public class TheColumn {
 
     public void setCssClassName(String cssClassName) {
         this.cssClassName = cssClassName;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
     }
 
     public TheCellValue getValue(String rowId) {
