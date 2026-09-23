@@ -209,6 +209,16 @@
           "sort-by-value": "5"
         },
         {
+          "name": "qubership-landscape-config-processor",
+          "visual-value": "Auxiliary non-production functionality",
+          "sort-by-value": "5"
+        },
+        {
+          "name": "qubership-virtual-secretary",
+          "visual-value": "Auxiliary non-production functionality",
+          "sort-by-value": "5"
+        },
+        {
           "name": "qubership-ai-packages",
           "visual-value": "Does not contain code",
           "sort-by-value": "5"
