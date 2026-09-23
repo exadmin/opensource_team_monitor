@@ -1,9 +1,10 @@
-name: Validate json syntax for grand-report-overrides.json file
+name: Validate grand-report-overrides.json
 
 on:
   pull_request:
     paths:
       - docs/data/grand-report-overrides.json
+      - .github/scripts/validate-grand-report-overrides.py
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,5 +18,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate JSON syntax
-        run: python3 -m json.tool docs/data/grand-report-overrides.json > /dev/null
+      - name: Validate JSON structure
+        run: python3 .github/scripts/validate-grand-report-overrides.py docs/data/grand-report-overrides.json
