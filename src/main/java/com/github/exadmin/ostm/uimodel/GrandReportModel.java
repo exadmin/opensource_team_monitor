@@ -187,6 +187,12 @@ public class GrandReportModel {
 
         TheColumn colTeamName = theReportModel.allocateColumn(COL_SUMMARY_TEAM_NAME, newCol -> {
             newCol.setTitle("Team Name");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
+        });
+
+        TheColumn colStreamSupportRepo = theReportModel.allocateColumn(COL_SUMMARY_TEAM_SUPPORT_UMBRELLA_REPO, newCol -> {
+            newCol.setTitle("Support Point");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         TheColumn colTotalErrors = theReportModel.allocateColumn(COL_SUMMARY_TEAM_TOTAL_ERRORS, newCol -> {
@@ -203,10 +209,12 @@ public class GrandReportModel {
 
         TheColumn colRedTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_RED_LEAD_NAME, newCol -> {
             newCol.setTitle("Red lead name");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         TheColumn colBlueTeamLead = theReportModel.allocateColumn(COL_SUMMARY_TEAM_BLUE_LEAD_NAME, newCol -> {
             newCol.setTitle("Blue lead name");
+            newCol.setCssClassName(TheColumn.TD_LEFT_MIDDLE);
         });
 
         TheSheet sheetAbout = theReportModel.allocateSheet(SHEET_ABOUT, newSheet -> {
@@ -298,6 +306,7 @@ public class GrandReportModel {
         devOpsWorkflowsSheet.registerColumn(colMavenCentral, false);
 
         sheetSummary.registerColumn(colTeamName, true);
+        sheetSummary.registerColumn(colStreamSupportRepo, false);
         sheetSummary.registerColumn(colRedTeamLead, false);
         sheetSummary.registerColumn(colBlueTeamLead, false);
         sheetSummary.registerColumn(colTotalErrors, false);
