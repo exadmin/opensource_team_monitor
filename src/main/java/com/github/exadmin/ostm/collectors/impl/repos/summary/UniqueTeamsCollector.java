@@ -20,7 +20,6 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         RED_LEADS_MAP.put("qubership-core", "Sergei S. Aleksandrov");
         RED_LEADS_MAP.put("qubership-devops", "Pavel Anikin");
         RED_LEADS_MAP.put("qubership-apihub", "Alexander Agishev");
-        RED_LEADS_MAP.put("qubership-landscape", "Ilya Smirnov");
         RED_LEADS_MAP.put("qubership-infra", UNDEFINED_STR);
         RED_LEADS_MAP.put("qubership-infra-fork", UNDEFINED_STR);
         RED_LEADS_MAP.put("qubership-generic", "Ilya Smirnov");
@@ -37,7 +36,6 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         BLUE_LEADS_MAP.put("qubership-core", "Sergey Lisovoy");
         BLUE_LEADS_MAP.put("qubership-devops", "Mikhail Gushchin");
         BLUE_LEADS_MAP.put("qubership-apihub", "Alena Novikova");
-        BLUE_LEADS_MAP.put("qubership-landscape", UNDEFINED_STR);
         BLUE_LEADS_MAP.put("qubership-infra", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-infra-fork", "Dmitrii Rabenok");
         BLUE_LEADS_MAP.put("qubership-generic", UNDEFINED_STR);
@@ -56,9 +54,8 @@ public class UniqueTeamsCollector extends AbstractManyRepositoriesCollector {
         SUPPORT_REPO_MAP.put("qubership-observability", "<a href=\"https://github.com/Netcracker/qubership-profiler-agent/\">qubership-profiler-agent</a>");
         SUPPORT_REPO_MAP.put("qubership-tp", UNDEFINED_STR);
         SUPPORT_REPO_MAP.put("qubership-core", "<a href=\"https://github.com/Netcracker/qubership-core-infra\">qubership-core-infra</a>");
-        SUPPORT_REPO_MAP.put("qubership-devops", UNDEFINED_STR);
+        SUPPORT_REPO_MAP.put("qubership-devops", "<a href=\"https://github.com/Netcracker/qubership-workflow-hub/issues\">qubership-devops</a>");
         SUPPORT_REPO_MAP.put("qubership-apihub", "<a href=\"https://github.com/Netcracker/qubership-apihub\">qubership-apihub</a>");
-        SUPPORT_REPO_MAP.put("qubership-landscape", UNDEFINED_STR);
         SUPPORT_REPO_MAP.put("qubership-infra", UNDEFINED_STR);
         SUPPORT_REPO_MAP.put("qubership-infra-fork", UNDEFINED_STR);
         SUPPORT_REPO_MAP.put("qubership-generic", UNDEFINED_STR);

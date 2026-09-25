@@ -7,6 +7,7 @@ import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.github.exadmin.ostm.utils.MiscUtils.getIntValue;
 import static com.github.exadmin.ostm.utils.MiscUtils.getStrValue;
@@ -138,8 +139,15 @@ public class GitHubFacade {
         return new ArrayList<>(uniqueLogins);
     }
 
+    /**
+     * Returns list of know user aliases in lowercase.
+     * @return List of String
+     */
     public List<String> getLoginsOfTheTeam() {
-        return new ArrayList<>(OnlyKnownUsers.getKnowUsersOnly().keySet());
+        Set<String> knownLogins = OnlyKnownUsers.getKnowUsersOnly().keySet();
+        return knownLogins.stream()
+                .map(String::toLowerCase)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String getRealNameByLogin(String login) {

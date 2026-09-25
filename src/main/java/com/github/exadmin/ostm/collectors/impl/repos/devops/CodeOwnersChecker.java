@@ -70,7 +70,7 @@ public class CodeOwnersChecker extends AFilesContentChecker {
             Matcher matcher = REGEXP_CATCH_LOGIN.matcher(line);
             while (matcher.find()) {
                 String foundLogin = matcher.group(1);
-                if (!loginsWhiteList.contains(foundLogin)) {
+                if (!loginsWhiteList.contains(foundLogin.toLowerCase())) {
                     unknownLogins.add(foundLogin);
                 }
             }
