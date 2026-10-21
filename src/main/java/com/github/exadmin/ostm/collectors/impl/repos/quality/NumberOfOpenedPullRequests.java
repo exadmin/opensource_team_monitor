@@ -1,6 +1,6 @@
 package com.github.exadmin.ostm.collectors.impl.repos.quality;
 
-import com.github.exadmin.ostm.collectors.api.AbstractManyRepositoriesCollector;
+import com.github.exadmin.ostm.collectors.api.AbstractOneRepositoryCollector;
 import com.github.exadmin.ostm.github.api.GitHubRequest;
 import com.github.exadmin.ostm.github.api.GitHubResponse;
 import com.github.exadmin.ostm.github.api.HttpRequestBuilder;
@@ -10,23 +10,21 @@ import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
 import java.nio.file.Path;
-import java.util.List;
 
-public class NumberOfOpenedPullRequests extends AbstractManyRepositoriesCollector {
+public class NumberOfOpenedPullRequests extends AbstractOneRepositoryCollector {
     private static final int SLEEP_BEFORE_NEXT_TRY_MILLIS = 5000;
     private static final int WARN_IF_PRS_MORE_THAN = 5;
     private static final int ERR_IF_PRS_MORE_THAN = 8;
 
     @Override
-    public void collectDataIntoImpl(TheReportModel theReportModel, GitHubFacade gitHubFacade, Path parentPathForClonedRepositories) {
-        TheColumn column = theReportModel.findColumn(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
+    protected TheColumn getColumnToAddValueInto(TheReportModel report) {
+        return report.findColumn(TheColumnId.COL_REPO_OPENED_PULL_REQUESTS_COUNT);
+    }
 
-        List<GitHubRepository> allRepos = gitHubFacade.getAllRepositories("Netcracker");
-        for (GitHubRepository repo : allRepos) {
-
-            TheCellValue cellValue = getNumberOfOpenedPRs(repo);
-            column.setValue(repo.getId(), cellValue);
-        }
+    @Override
+    protected void processRepository(TheReportModel report, GitHubFacade gitHub, Path repositoryPath,
+                                     GitHubRepository repository, TheColumn column) {
+        column.setValue(repository.getId(), getNumberOfOpenedPRs(repository));
     }
 
     public TheCellValue getNumberOfOpenedPRs(GitHubRepository repo) {
