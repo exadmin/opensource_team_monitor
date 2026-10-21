@@ -44,6 +44,18 @@ public class ProcessExecutorTest {
     }
 
     @Test
+    public void deliversAllLinesBeyondDiagnosticBufferIncludingFinalUnterminatedLine() throws Exception {
+        List<String> lines = new ArrayList<>();
+        ProcessResult result = executor().execute(command("lines"), workingDirectory(), Map.of(),
+                Duration.ofSeconds(5), true, lines::add);
+        assertEquals(10001, lines.size());
+        assertEquals("JSON: {\"type\":\"found\",\"key\":\"EMAIL\"}", lines.get(0).strip());
+        assertEquals("FINAL", lines.get(10000));
+        assertTrue(result.stdout().length <= 64 * 1024);
+        assertTrue(result.cleanupComplete());
+    }
+
+    @Test
     public void timesOutWithoutWaitingIndefinitely() throws Exception {
         ProcessResult result = executor().execute(command("sleep"), workingDirectory(), Map.of(),
                 Duration.ofMillis(100), true);
@@ -102,6 +114,12 @@ public class ProcessExecutorTest {
                     System.out.print("TAIL_MARKER");
                 }
                 case "sleep" -> Thread.sleep(Duration.ofMinutes(1));
+                case "lines" -> {
+                    for (int index = 0; index < 10000; index++) {
+                        System.out.println("JSON: {\"type\":\"found\",\"key\":\"EMAIL\"}");
+                    }
+                    System.out.print("FINAL");
+                }
                 case "marker" -> Files.writeString(Path.of(args[1]), "started");
                 default -> throw new IllegalArgumentException("Unknown mode");
             }

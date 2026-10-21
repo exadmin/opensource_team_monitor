@@ -34,10 +34,11 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
     }
 
     static TheCellValue toCellValue(CyberFerretScanResult result) {
-        return switch (result) {
-            case CLEAN -> new TheCellValue("Ok", 0, SeverityLevel.OK);
-            case FINDINGS -> new TheCellValue("Warnings found", 1, SeverityLevel.WARN);
-            case FAILED -> new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
-        };
+        if (result.status() == CyberFerretScanResult.ScanStatus.FAILED) {
+            return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
+        }
+        return result.otherFindings() == 0
+                ? new TheCellValue("Ok", 0, SeverityLevel.OK)
+                : new TheCellValue("Warnings found", 1, SeverityLevel.WARN);
     }
 }

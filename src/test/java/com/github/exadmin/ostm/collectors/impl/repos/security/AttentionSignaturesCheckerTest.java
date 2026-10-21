@@ -10,8 +10,9 @@ import static org.junit.Assert.assertEquals;
 public class AttentionSignaturesCheckerTest {
     @Test
     public void mapsCyberFerretResultsToReportCells() {
-        assertCell(CyberFerretScanResult.CLEAN, "Ok", SeverityLevel.OK);
-        assertCell(CyberFerretScanResult.FINDINGS, "Warnings found", SeverityLevel.WARN);
+        assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.COMPLETED, 0, 0), "Ok", SeverityLevel.OK);
+        assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.COMPLETED, 0, 2), "Warnings found", SeverityLevel.WARN);
+        assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.COMPLETED, 3, 0), "Ok", SeverityLevel.OK);
         assertCell(CyberFerretScanResult.FAILED, "Internal error", SeverityLevel.ERROR);
     }
 

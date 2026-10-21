@@ -72,7 +72,7 @@ public class CollectorsFactory {
         // collectors.add(new SpringFrwkVersion());
         collectors.add(new GrandReportExclusionsChecker());
         collectors.add(new APMFilePresence());
-        collectors.add(new AllowedEmailsChecker());
+        collectors.add(new AllowedEmailsChecker(cyberFerretClient));
         collectors.add(new TotalErrorsCounter());
         collectors.add(new AboutCollector());
         return collectors;

@@ -1,7 +1,9 @@
 package com.github.exadmin.ostm.cyberferret;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 public class ProcessExecutor {
     private static final int DEFAULT_BUFFER_BYTES = 64 * 1024;
@@ -43,6 +46,12 @@ public class ProcessExecutor {
             Map<String, String> environment,
             Duration timeout,
             boolean mergeErrorStream) throws IOException, InterruptedException {
+        return execute(command, workingDirectory, environment, timeout, mergeErrorStream, line -> {});
+    }
+
+    public ProcessResult execute(
+            List<String> command, Path workingDirectory, Map<String, String> environment,
+            Duration timeout, boolean mergeErrorStream, Consumer<String> stdoutLine) throws IOException, InterruptedException {
         long timeoutMillis = timeout.toMillis();
         ProcessBuilder builder = new ProcessBuilder(command)
                 .directory(workingDirectory.toFile())
@@ -54,8 +63,8 @@ public class ProcessExecutor {
         BoundedByteBuffer stderr = new BoundedByteBuffer(bufferBytes);
         ExecutorService drainers = Executors.newVirtualThreadPerTaskExecutor();
         List<Future<?>> futures = new ArrayList<>();
-        futures.add(drainers.submit(() -> drain(process.getInputStream(), stdout)));
-        if (!mergeErrorStream) futures.add(drainers.submit(() -> drain(process.getErrorStream(), stderr)));
+        futures.add(drainers.submit(() -> drain(process.getInputStream(), stdout, stdoutLine)));
+        if (!mergeErrorStream) futures.add(drainers.submit(() -> drain(process.getErrorStream(), stderr, line -> {})));
 
         boolean timedOut = !process.waitFor(timeoutMillis, TimeUnit.MILLISECONDS);
         Set<ProcessHandle> observed = new HashSet<>();
@@ -82,11 +91,23 @@ public class ProcessExecutor {
                 processesStopped && drainersStopped);
     }
 
-    private static void drain(InputStream input, BoundedByteBuffer output) {
+    private static void drain(InputStream input, BoundedByteBuffer output, Consumer<String> onLine) {
         byte[] chunk = new byte[8192];
+        ByteArrayOutputStream line = new ByteArrayOutputStream();
         try (input) {
             int read;
-            while ((read = input.read(chunk)) != -1) output.write(chunk, 0, read);
+            while ((read = input.read(chunk)) != -1) {
+                output.write(chunk, 0, read);
+                for (int index = 0; index < read; index++) {
+                    if (chunk[index] == '\n') {
+                        onLine.accept(line.toString(StandardCharsets.UTF_8));
+                        line.reset();
+                    } else {
+                        line.write(chunk[index]);
+                    }
+                }
+            }
+            if (line.size() > 0) onLine.accept(line.toString(StandardCharsets.UTF_8));
         } catch (IOException ignored) {
             // Closing process streams is part of bounded timeout cleanup.
         }

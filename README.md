@@ -43,8 +43,12 @@ CyberFerret also uses these environment variables:
 - `CYBER_FERRET_TIMEOUT_SECONDS` is an optional positive per-command timeout that must be representable in
   milliseconds. The default is 300 seconds.
 
-OSTM runs `cfcli --mode=quick` for every repository. Findings appear as warnings in the report and do not make OSTM
-fail. Exit code `2` means one or more scans were incomplete; OSTM still writes the partial report before exiting.
+OSTM runs `cfcli` once per repository in full mode and shares the result between two report columns.
+`Invalid Emails` counts every `JSON:` message with `type="found"` and `key="EMAIL"`, including repeated addresses.
+`Attention signatures` shows a warning for findings with other keys. Email findings appear as errors in the report.
+Setting `CYBERFERRET_CHECK_SIGNATURES=disable` disables only `Attention signatures`; email checks still run.
+Findings do not make OSTM fail. Exit code `2` means one or more scans were incomplete; OSTM still writes the partial
+report before exiting.
 
 ## Scheduled report workflow
 
