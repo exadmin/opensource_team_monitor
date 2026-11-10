@@ -57,7 +57,11 @@ $(document).ready(function() {
         }
     } );
 
-    $.getJSON('./data/data.json', function(data) {
+    $.ajax({
+        url: './data/data.json',
+        dataType: 'json',
+        cache: false
+    }).done(function(data) {
         const reportName = data.reportName;
         const reportDate = data.reportDate;
         const tables = data.tables;
