@@ -77,7 +77,6 @@ public class CyberFerretClientTest {
     @Test
     public void cachesFailuresAndRejectsMalformedJsonAndIncompleteScans() throws Exception {
         FakeExecutor executor = new FakeExecutor(result(2, "JSON: broken"),
-                new ProcessResult(2, true, new byte[0], new byte[0], true),
                 new ProcessResult(2, false, new byte[0], new byte[0], false));
         CyberFerretClient client = new CyberFerretClient(settings(), executor);
         Path repository = temporaryFolder.newFolder().toPath();
@@ -85,7 +84,18 @@ public class CyberFerretClientTest {
         assertEquals(CyberFerretScanResult.FAILED, client.scan(repository));
         assertEquals(1, executor.invocations.size());
         assertEquals(CyberFerretScanResult.FAILED, client.scan(temporaryFolder.newFolder().toPath()));
-        assertEquals(CyberFerretScanResult.FAILED, client.scan(temporaryFolder.newFolder().toPath()));
+    }
+
+    @Test
+    public void preservesFindingsAndConfiguredDurationOnTimeout() throws Exception {
+        String output = "JSON: {\"type\":\"found\",\"key\":\"EMAIL\"}\n";
+        FakeExecutor executor = new FakeExecutor(
+                new ProcessResult(2, true, output.getBytes(StandardCharsets.UTF_8), new byte[0], true));
+        CyberFerretClient client = new CyberFerretClient(settings(), executor);
+
+        assertEquals(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.TIMED_OUT, 1, 0, 5),
+                client.scan(temporaryFolder.getRoot().toPath()));
+        assertTrue(client.hasOperationalFailures());
     }
 
     private static ProcessResult result(int exitCode, String stdout) {

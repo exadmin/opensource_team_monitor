@@ -15,6 +15,10 @@ public class AllowedEmailsCheckerTest {
         assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.COMPLETED, 3, 4),
                 "3", 3, SeverityLevel.ERROR);
         assertCell(CyberFerretScanResult.FAILED, "Internal error", 1, SeverityLevel.ERROR);
+        assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.TIMED_OUT, 14, 4, 123),
+                "14 (timed out)", 14, SeverityLevel.ERROR);
+        assertCell(new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.TIMED_OUT, 0, 4, 123),
+                "Scan timed out (123 secs)", 0, SeverityLevel.ERROR);
     }
 
     private static void assertCell(CyberFerretScanResult result, String value, int numericValue, SeverityLevel severity) {

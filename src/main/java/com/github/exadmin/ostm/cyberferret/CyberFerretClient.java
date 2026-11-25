@@ -60,9 +60,13 @@ public class CyberFerretClient {
                             invalidOutput[0] = true;
                         }
                     });
-            if (result.timedOut() || !result.cleanupComplete()) {
-                return scanFailure(normalizedRepository, result.timedOut() ? "timed out" : "cleanup was incomplete",
-                        result.stdout());
+            if (result.timedOut()) {
+                reportFailure(normalizedRepository, "timed out", result.stdout());
+                return new CyberFerretScanResult(CyberFerretScanResult.ScanStatus.TIMED_OUT,
+                        counts[0], counts[1], settings.timeout().toSeconds());
+            }
+            if (!result.cleanupComplete()) {
+                return scanFailure(normalizedRepository, "cleanup was incomplete", result.stdout());
             }
             if (invalidOutput[0]) {
                 return scanFailure(normalizedRepository, "returned invalid JSON output", new byte[0]);
@@ -85,11 +89,15 @@ public class CyberFerretClient {
     }
 
     private CyberFerretScanResult scanFailure(Path repository, String category, byte[] diagnostic) {
+        reportFailure(repository, category, diagnostic);
+        return CyberFerretScanResult.FAILED;
+    }
+
+    private void reportFailure(Path repository, String category, byte[] diagnostic) {
         operationalFailures = true;
         String safeDiagnostic = safeDiagnostic(diagnostic);
         if (safeDiagnostic.isEmpty()) log.error("CyberFerret scan for {} {}.", repository.getFileName(), category);
         else log.error("CyberFerret scan for {} {}: {}", repository.getFileName(), category, safeDiagnostic);
-        return CyberFerretScanResult.FAILED;
     }
 
     private String safeDiagnostic(byte[] bytes) {

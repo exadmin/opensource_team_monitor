@@ -31,6 +31,12 @@ public class AllowedEmailsChecker extends AFilesContentChecker {
             return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
         }
         int count = result.emailFindings();
+        if (result.status() == CyberFerretScanResult.ScanStatus.TIMED_OUT) {
+            String value = count == 0
+                    ? "Scan timed out (" + result.timeoutSeconds() + " secs)"
+                    : count + " (timed out)";
+            return new TheCellValue(value, count, SeverityLevel.ERROR);
+        }
         return count == 0
                 ? new TheCellValue("Ok", 0, SeverityLevel.OK)
                 : new TheCellValue(Integer.toString(count), count, SeverityLevel.ERROR);

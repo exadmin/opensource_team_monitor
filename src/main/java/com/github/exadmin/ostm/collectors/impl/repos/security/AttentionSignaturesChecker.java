@@ -34,7 +34,7 @@ public class AttentionSignaturesChecker extends AFilesContentChecker {
     }
 
     static TheCellValue toCellValue(CyberFerretScanResult result) {
-        if (result.status() == CyberFerretScanResult.ScanStatus.FAILED) {
+        if (result.status() != CyberFerretScanResult.ScanStatus.COMPLETED) {
             return new TheCellValue("Internal error", 1, SeverityLevel.ERROR);
         }
         return result.otherFindings() == 0
