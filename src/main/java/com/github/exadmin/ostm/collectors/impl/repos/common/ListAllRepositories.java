@@ -6,6 +6,7 @@ import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
 import com.github.exadmin.ostm.utils.MiscUtils;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +55,12 @@ public class ListAllRepositories extends AbstractManyRepositoriesCollector {
                 repoType = SeverityLevel.INFO_PRIVATE;
                 typeText = "private";
                 sortByValue = 2;
+            }
+
+            if (!Files.isDirectory(parentPathForClonedRepositories.resolve(repo.getName()))) {
+                repoType = SeverityLevel.INFO;
+                typeText = "Not downloaded";
+                sortByValue = 3;
             }
 
             colRepoNumber.setValue(me.getKey(), new TheCellValue(number, number, SeverityLevel.INFO));

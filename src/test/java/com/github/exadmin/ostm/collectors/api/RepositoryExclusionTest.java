@@ -6,7 +6,9 @@ import com.github.exadmin.ostm.collectors.impl.repos.quality.SonarCodeCoverage;
 import com.github.exadmin.ostm.github.facade.GitHubFacade;
 import com.github.exadmin.ostm.github.facade.GitHubRepository;
 import com.github.exadmin.ostm.uimodel.*;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -17,6 +19,25 @@ import static org.junit.Assert.*;
 
 public class RepositoryExclusionTest {
     private static final Path ROOT = Path.of("missing-repositories");
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Test
+    public void reportIncludesRepositoriesWithoutLocalCopies() throws Exception {
+        GitHubRepository downloaded = repository("1", List.of());
+        GitHubRepository missing = repository("2", List.of());
+        temporaryFolder.newFolder(downloaded.getName());
+        TheReportModel report = GrandReportModel.getGrandReportInstance();
+
+        new ListAllRepositories().collectDataInto(report, facade(List.of(downloaded, missing)),
+                temporaryFolder.getRoot().toPath());
+
+        TheColumn types = report.findColumn(TheColumnId.COL_REPO_TYPE);
+        assertEquals("public", types.getValue("1").getVisualValue());
+        assertEquals("Not downloaded", types.getValue("2").getVisualValue());
+        assertNotNull(report.findColumn(TheColumnId.COL_REPO_NUMBER).getValue("2"));
+    }
 
     @Test
     public void singleChecksSkipMovedRepositoriesAndPreserveReportRowsAndOverrides() {
