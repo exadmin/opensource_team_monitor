@@ -5,13 +5,14 @@ on:
     branches:
       - '**'
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   build:
-    name: ${{ github.event_name == 'pull_request' && 'Maven build (PR)' || 'Maven build (push)' }}
+    name: ${{ github.event_name == 'pull_request' && 'Maven build (PR)' || format('Maven build ({0})', github.event_name) }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
